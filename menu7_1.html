@@ -1,0 +1,41 @@
+<h1 style="text-align: center;">템플릿 메서드 정의 </h1>
+
+<h3></h3>
+<pre><code id="source-code" class="language-java">
+    public abstract class AbstractClass {
+        public final void templateMethod() {
+            ...
+            method1();
+            ...
+            method2();
+            ...
+        }
+    
+        protected abstract void method1();
+        protected abstract void method2();
+    }
+    
+    public class ConcreteClass1 extends AbstractClass {
+        @Override
+        protected void method1() {
+            ...
+        }
+    
+        @Override
+        protected void method2() {
+            ...
+        }
+    }
+    
+    public class ConcreteClass2 extends AbstractClass {
+        @Override
+        protected void method1() {
+            ...
+        }
+    
+        @Override
+        protected void method2() {
+            ...
+        }
+    }
+</code></pre>    

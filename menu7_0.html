@@ -1,0 +1,107 @@
+<link href="card.css" rel="stylesheet">
+<style>
+  table {
+    width: 80%;
+    margin: 40px auto;
+    border-collapse: collapse;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+  }
+  th, td {
+    padding: 12px 20px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background-color: #f9fafb;
+    font-weight: bold;
+  }
+  tr:hover {
+    background-color: #f1f5f9;
+  }
+</style>
+<div class="card">
+  <h1>emplate Method Pattern</h1>
+  <p>
+    "템플릿 메서드 패턴은 상위 클래스에서 알고리즘의 골격을 정의하고,
+    일부 단계를 하위 클래스에서 구현하도록 하는 행동(Behavioral) 패턴이다.
+    템플릿 메서드는 알고리즘의 구조를 변경하지 않으면서,
+    알고리즘의 특정 단계를 하위 클래스가 재정의할 수 있도록 한다."
+  </p>
+
+  <div class="info">
+    <div class="info-row">
+      <div class="info-title">설명</div>
+      <div class="info-content">
+        객체에 "기능을 추가"하는 데 초점을 맞추고 <br>
+        상속을 사용하지 않고, 런타임에 원하는 기능을 자유롭게 덧붙일 수 있고<br>
+        기본 객체를 "포장(wrapping)"해서 기능을 확장하는 구조이다.
+      </div>
+    </div>
+  </div>
+</div>  
+
+<h3>🔵 데커레이터 패턴을 사용하는 이유</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>이유</th>
+          <th>설명</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>기능 확장</td>
+          <td>기존 코드를 변경하지 않고 새로운 기능을 추가할수 있다.</td>
+        </tr>
+        <tr>
+          <td>조합 가능성</td>
+          <td>여러 기능을 조합해서 사용할 수 있게 만들수 있다.</td>
+        </tr>
+        <tr>
+          <td>유연성</td>
+          <td>상속보다 더 유연하게 기능을 추가할수 있다.</td>
+        </tr>
+        <tr>
+          <td>OCP(Open-Closed Principle) 준수</td>
+          <td>"코드는 확장에는 열려 있고, 변경에는 닫혀 있어야 한다"는 원칙을 따를수 있다.</td>
+        </tr>
+        <tr>
+          <td>런타입 기능 추가</td>
+          <td>프로그램 실행 중에 기능을 동적으로 추가할수 있다.</td>
+        </tr>
+      </tbody>
+    </table>    
+    
+<h3>🟠 데커레이터 패턴의 활용 사례</h3>
+<table>
+  <thead>
+    <tr>
+      <th>활용 분야</th>
+      <th>구체적 설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Java IO 라이브러리</td>
+      <td>InputStream을 BufferedInputStream, DataInputStream 등으로 감싸며 기능 추가</td>
+    </tr>
+    <tr>
+      <td>Spring Framework</td>
+      <td>Bean 객체를 데커레이터 패턴으로 감싸서 기능을 추가(예: 프록시, AOP)</td>
+    </tr>
+    <tr>
+      <td>GUI 컴포넌트</td>
+      <td>버튼, 텍스트박스 등에 스크롤, 테두리(border) 기능을 데커레이터로 추가</td>
+    </tr>
+    <tr>
+      <td>암호화, 압축 기능 추가</td>
+      <td>파일 저장 시, 데이터를 암호화하거나 압축하는 기능을 데커레이터로 추가</td>
+    </tr>
+    <tr>
+      <td>로깅 기능 추가</td>
+      <td>기존 서비스에 별도로 로깅 기능을 데커레이터로 감싸서 적용</td>
+    </tr>
+  
+  </tbody>
+</table>

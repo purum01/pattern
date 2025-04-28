@@ -1,0 +1,71 @@
+<style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .tree {
+      line-height: 1.8;
+      white-space: pre;
+      font-family: 'Courier New', monospace;
+      background: #f9f9f9;
+      padding: 20px;
+      border-radius: 10px;
+      width: fit-content;
+      margin: 30px auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+  </style>
+<h1 style="text-align: center;">Java.io 라이브러리 계층 구조 </h1>
+<div class="tree">
+
+    I/O
+    ├── 바이트 스트림
+    │   ├── InputStream
+    │   │   ├── ByteArrayInputStream
+    │   │   ├── PipedInputStream
+    │   │   ├── FilterInputStream
+    │   │   │   ├── BufferedInputStream
+    │   │   │   └── DataInputStream
+    │   │   ├── FileInputStream
+    │   │   └── ObjectInputStream
+    │   └── OutputStream
+    │       ├── ByteArrayOutputStream
+    │       ├── PipedOutputStream
+    │       ├── FilterOutputStream
+    │       │   ├── BufferedOutputStream
+    │       │   ├── DataOutputStream
+    │       │   └── PrintStream
+    │       ├── FileOutputStream
+    │       └── ObjectOutputStream
+    └── 문자열 스트림
+        ├── Reader
+        │   ├── CharArrayReader
+        │   ├── PipedReader
+        │   ├── FilterReader
+        │   ├── BufferedReader
+        │   └── InputStreamReader
+        │       └── FileReader
+        └── Writer
+            ├── CharArrayWriter
+            ├── PipedWriter
+            ├── FilterWriter
+            ├── BufferedWriter
+            └── OutputStreamWriter
+                └── FileWriter
+            └── PrintWriter
+</div>    
+
+<pre><code id="source-code" class="language-java">
+    InputStream in = new FileInputStream("test.txt");
+    InputStream bin = new BufferedInputStream(in);
+    byte[] data = new byte[128];
+    while (bin.read(data) != -1) {
+        ..
+    }
+</code></pre>   
+<pre><code id="source-code" class="language-java">
+    InputStream bin = new BufferedFileInputStream("test.txt");
+    byte[] data = new byte[128];
+    while (bin.read(data) != -1) {
+        ...
+    }
+</code></pre>    

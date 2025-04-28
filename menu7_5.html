@@ -1,0 +1,160 @@
+<h3>JdbcTemplalte 클래스</h3>
+<pre><code id="source-code" class="language-java">
+    public class JdbcDemo {
+        public User queryUser(long id) {
+            Connection conn = null;
+            Statement stmt = null;
+            try {
+                // 1) 드라이버 로딩
+                Class.forName("com.mysql.jdbc.Driver");
+    
+                conn = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/demo", "jpub", "jpub");
+    
+                // 2) SQL 문을 실행하기 위한 Statement 클래스의 객체 생성
+                stmt = conn.createStatement();
+    
+                // 3) ResultSet 클래스에 결과 저장
+                String sql = "select * from user where id=" + id;
+                ResultSet resultSet = stmt.executeQuery(sql);
+    
+                String id_ = null, name = null, telephone = null;
+                User user = null;
+                if (resultSet.next()) {
+                    user = new User();
+                    user.setId(resultSet.getLong("id"));
+                    user.setName(resultSet.getString("name"));
+                    user.setTelephone(resultSet.getString("telephone"));
+                }
+                return user;
+    
+            } catch (ClassNotFoundException e) {
+                // 드라이버 클래스를 못 찾았을 때 처리
+                e.printStackTrace();
+            } catch (SQLException e) {
+                // SQL 실행 중 오류 처리
+                e.printStackTrace();
+            } finally {
+                if (conn != null) {
+                    try {
+                        conn.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (stmt != null) {
+                    try {
+                        stmt.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return null;
+        }
+    }
+</code></pre>    
+
+
+<h3></h3>
+<pre><code id="source-code" class="language-java">
+    public class JdbcTemplateDemo {
+        private JdbcTemplate jdbcTemplate;
+    
+        public User queryUser(long id) {
+            String sql = "select * from user where id=" + id;
+            return jdbcTemplate.query(sql, new UserRowMapper()).get(0);
+        }
+    }
+    
+    class UserRowMapper implements RowMapper<User> {
+        @Override
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+            User user = new User();
+            user.setId(rs.getLong("id"));
+            user.setName(rs.getString("name"));
+            user.setTelephone(rs.getString("telephone"));
+            return user;
+        }
+    }
+</code></pre>    
+
+
+<h3></h3>
+<pre><code id="source-code" class="language-java">
+    // query() 함수는 execute() 함수의 2차 캡슐화로 사용이 더 편리함
+    @Override
+    public <T> T query(final String sql, final ResultSetExtractor<T> rse) throws DataAccessException {
+        Assert.notNull(sql, "SQL must not be null");
+        Assert.notNull(rse, "ResultSetExtractor must not be null");
+        if (logger.isDebugEnabled()) {
+            logger.debug("Executing SQL query [" + sql + "]");
+        }
+        return execute(new QueryStatementCallback<>(sql, rse));
+    }
+    
+    // 콜백 클래스
+    class QueryStatementCallback<T> implements StatementCallback<T>, SqlProvider {
+        private final String sql;
+        private final ResultSetExtractor<T> rse;
+    
+        public QueryStatementCallback(String sql, ResultSetExtractor<T> rse) {
+            this.sql = sql;
+            this.rse = rse;
+        }
+    
+        @Override
+        public T doInStatement(Statement stmt) throws SQLException {
+            ResultSet rs = null;
+            try {
+                rs = stmt.executeQuery(sql);
+                ResultSet rsToUse = rs;
+                if (nativeJdbcExtractor != null) {
+                    rsToUse = nativeJdbcExtractor.getNativeResultSet(rs);
+                }
+                return rse.extractData(rsToUse);
+            } finally {
+                JdbcUtils.closeResultSet(rs);
+            }
+        }
+    
+        @Override
+        public String getSql() {
+            return this.sql;
+        }
+    }
+    
+    // execute() 메서드: 실제 Connection과 Statement 열고 콜백 실행하는 템플릿 메서드
+    @Override
+    public <T> T execute(StatementCallback<T> action) throws DataAccessException {
+        Assert.notNull(action, "Callback object must not be null");
+        Connection con = DataSourceUtils.getConnection(getDataSource());
+        Statement stmt = null;
+        try {
+            Connection conToUse = con;
+            if (this.nativeJdbcExtractor != null && this.nativeJdbcExtractor.isNativeConnectionNecessaryForNativeStatements()) {
+                conToUse = this.nativeJdbcExtractor.getNativeConnection(con);
+            }
+            stmt = conToUse.createStatement();
+            applyStatementSettings(stmt);
+    
+            Statement stmtToUse = stmt;
+            if (this.nativeJdbcExtractor != null) {
+                stmtToUse = this.nativeJdbcExtractor.getNativeStatement(stmt);
+            }
+    
+            T result = action.doInStatement(stmtToUse); // 콜백 실행
+            handleWarnings(stmt);
+            return result;
+        } catch (SQLException ex) {
+            JdbcUtils.closeStatement(stmt);
+            stmt = null;
+            DataSourceUtils.releaseConnection(con, getDataSource());
+            con = null;
+            throw getExceptionTranslator().translate("StatementCallback", getSql(action), ex);
+        } finally {
+            JdbcUtils.closeStatement(stmt);
+            DataSourceUtils.releaseConnection(con, getDataSource());
+        }
+    }
+</code></pre>    

@@ -1,0 +1,60 @@
+<h3>데커레이터 패턴 기반 설계 계획</h3>
+<pre><code id="source-code" class="language-java">
+    public abstract class InputStream {
+        ...
+        public int read(byte b[]) throws IOException {
+            return read(b, 0, b.length);
+        }
+    
+        public int read(byte b[], int off, int len) throws IOException {
+            ...
+        }
+    
+        public long skip(long n) throws IOException {
+            ...
+        }
+    
+        public int available() throws IOException {
+            return 0;
+        }
+    
+        public void close() throws IOException {}
+    
+        public synchronized void mark(int readlimit) {}
+    
+        public synchronized void reset() throws IOException {
+            throw new IOException("mark/reset not supported");
+        }
+    
+        public boolean markSupported() {
+            return false;
+        }
+    }
+    
+    public class BufferedInputStream extends InputStream {
+        protected volatile InputStream in;
+    
+        protected BufferedInputStream(InputStream in) {
+            this.in = in;
+        }
+        // 캐시 기반 읽기 데이터 인터페이스 구현
+    }
+
+    public class DataInputStream extends InputStream {
+        protected volatile InputStream in;
+    
+        protected DataInputStream(InputStream in) {
+            this.in = in;
+        }
+        // 기본 유형 데이터 인터페이스 구현 
+    }
+    
+</code></pre>    
+
+<h3>여러개의 데커레이터 클래스 중첩 사용 </h3>
+<pre><code id="source-code" class="language-java">
+    InputStream in = new FileInputStream("test.txt");    // 첫 번째 중첩
+    InputStream bin = new BufferedInputStream(in);       // 두 번째 중첩
+    DataInputStream din = new DataInputStream(bin);      // 세 번째 중첩
+    int data = din.readInt();
+</code></pre>    

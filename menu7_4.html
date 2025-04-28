@@ -1,0 +1,44 @@
+<h1 style="text-align: center;">콜백의 원리와 구현현 </h1>
+
+<h3></h3>
+<pre><code id="source-code" class="language-java">
+    public interface ICallback {
+        void methodToCallback();
+    }
+    
+    public class BClass {
+        public void process(ICallback callback) {
+            // 콜백 객체의 메서드 호출
+            callback.methodToCallback();
+        }
+    }
+    
+    public class AClass {
+        public static void main(String[] args) {
+            BClass b = new BClass();
+            b.process(new ICallback() { // 익명 클래스 형태로 콜백 구현
+                @Override
+                public void methodToCallback() {
+                    System.out.println("Call back me.");
+                }
+            });
+        }
+    }
+</code></pre>    
+
+<h3></h3>
+<pre><code id="source-code" class="language-java">
+
+</code></pre>    
+
+
+<h3></h3>
+<pre><code id="source-code" class="language-java">
+
+</code></pre>    
+
+
+<h3></h3>
+<pre><code id="source-code" class="language-java">
+
+</code></pre>    
