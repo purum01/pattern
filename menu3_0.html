@@ -1,10 +1,30 @@
 <link href="card.css" rel="stylesheet">
-
+<style>
+  table {
+    width: 80%;
+    margin: 40px auto;
+    border-collapse: collapse;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+  }
+  th, td {
+    padding: 12px 20px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background-color: #f9fafb;
+    font-weight: bold;
+  }
+  tr:hover {
+    background-color: #f1f5f9;
+  }
+</style>
 <div class="card">
   <h1>State Pattern</h1>
   <p>
-    객체의 내부 상태가 변경될 때, 객체의 행동(Behavior)을 변경할 수 있도록 한다.
-    객체는 마치 자신의 클래스를 바꾸는 것처럼 보인다.
+    "객체의 내부 상태가 변경될 때, 객체의 행동(Behavior)을 변경할 수 있도록 한다.
+    객체는 마치 자신의 클래스를 바꾸는 것처럼 보인다."
   </p>
 
   <div class="info">
@@ -25,8 +45,10 @@
         Context(문맥) 객체의 책임 분산
       </div>
     </div>
-
-    <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+  </div>
+</div>  
+<h3>🟠 상태 패턴의 활용 사례</h3>
+    <table>
       <thead>
         <tr>
           <th>상황</th>
@@ -40,7 +62,7 @@
         </tr>
         <tr>
           <td>TCP 연결</td>
-          <td style="text-align: left;">TCP 연결은 '연결됨', '연결 중', '끊김' 같은 상태마다 다르게 동작해야 합니다.</td>
+          <td style="text-align: left;">TCP 연결은 '연결됨', '연결 중', '끊김' 같은 상태마다 다르게 동작해야 함</td>
         </tr>
         <tr>
           <td>문서 편집기</td>
@@ -58,4 +80,4 @@
     </table>
     
   
-</div>
+

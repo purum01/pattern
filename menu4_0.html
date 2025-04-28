@@ -1,0 +1,101 @@
+<link href="card.css" rel="stylesheet">
+<style>
+  table {
+    width: 80%;
+    margin: 40px auto;
+    border-collapse: collapse;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+  }
+  th, td {
+    padding: 12px 20px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background-color: #f9fafb;
+    font-weight: bold;
+  }
+  tr:hover {
+    background-color: #f1f5f9;
+  }
+</style>
+<div class="card">
+  <h1>Command Pattern</h1>
+  <p>
+    "요청을 객체로 캡슐화하여, 서로 다른 요청, 큐잉, 로그 요청 등을 지원하고, 작업의 실행을 나중에 할 수 있게 한다."
+  </p>
+
+  <div class="info">
+    <div class="info-row">
+      <div class="info-title">설명</div>
+      <div class="info-content">
+        어떤 요청(명령, 작업)을 하나의 객체로 만든다.<br>
+        요청을 저장하거나,<br>
+        요청을 취소하거나,<br>
+        요청을 다시 실행하거나,<br>
+        요청을 큐(Queue)에 쌓아두었다가 실행하는 것도 가능해진다.
+      </div>
+    </div>
+  </div>
+</div>  
+
+<h3>🔵 커맨드 패턴을 사용하는 이유</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>이유</th>
+          <th>설명</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>요청을 캡슐화</td>
+          <td>요청(명령, 작업)을 객체로 만들기 때문에, 실행 시점과 구현 방식을 숨길 수 있다.</td>
+        </tr>
+        <tr>
+          <td>요청과 수신자 분리</td>
+          <td>명령을 보내는 쪽(Invoker)과 실제 작업을 수행하는 쪽(Receiver)을 분리해서 코드 의존성을 줄인다.</td>
+        </tr>
+        <tr>
+          <td>요청의 저장 및 실행 제어</td>
+          <td>명령을 객체로 저장할 수 있어, Undo/Redo(실행 취소/재실행)나, 큐잉(Queue에 쌓기)이 가능해진다.</td>
+        </tr>
+        <tr>
+          <td>복잡한 연산 관리</td>
+          <td>여러 작업을 하나의 명령으로 묶거나, 작업 실행을 나중으로 미루는 등의 처리가 가능하다.</td>
+        </tr>
+      </tbody>
+    </table>    
+    
+<h3>🟠 커맨드 패턴의 대표적인 활용 사례</h3>
+<table>
+  <thead>
+    <tr>
+      <th>활용 분야</th>
+      <th>구체적 설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Undo/Redo 기능</td>
+      <td>사용자가 했던 행동(명령)을 저장해두고, 실행 취소(Undo)나 다시 실행(Redo)할 때 사용한다.</td>
+    </tr>
+    <tr>
+      <td>매크로 명령(Macro Commands)</td>
+      <td>여러 개의 명령을 하나로 묶어서 한 번에 실행할 때 (예: 복잡한 초기 설정)</td>
+    </tr>
+    <tr>
+      <td>GUI 버튼 처리</td>
+      <td>버튼 클릭 → 명령 실행 구조. 버튼은 명령 객체만 알고, 실제 수행은 몰라도 된다.</td>
+    </tr>
+    <tr>
+      <td>작업 큐 및 요청 지연(Queueing and Scheduling)</td>
+      <td>명령을 큐에 넣고, 순서대로 실행하거나, 일정 조건이 되면 실행하도록 설정할 수 있다.</td>
+    </tr>
+    <tr>
+      <td>트랜잭션 처리</td>
+      <td>여러 명령을 모아서 하나의 트랜잭션처럼 실행하거나, 실패 시 전체 취소할 때 사용한다.</td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,60 @@
+<h1 style="text-align: center;">옵저버 패턴의 의미 </h1>
+
+<h3>사용자 등록이 완료된후 프로모션 캐시 지급</h3>
+<pre><code id="source-code" class="language-java">
+    public class UserController {
+        private UserService userService;    // 의존성 주입
+        private PromotionService promotionService;    // 의존성 주입
+    
+        public long register(String telephone, String password) {
+            // 입력 매개변수의 인증 코드 생략
+            // userService.register() 예외 처리용 try-catch 코드 생략
+            long userId = userService.register(telephone, password);
+            promotionService.issueNewUserExperienceCash(userId);
+            return userId;
+        }
+    }
+</code></pre>    
+<h3>빈번한 요구 사항 변경 요청</h3>
+<pre><code id="source-code" class="language-java">
+    public interface RegObserver {
+        void handleRegSuccess(long userId);
+    }
+    
+    public class RegPromotionObserver implements RegObserver {
+        private PromotionService promotionService;    // 의존성 주입
+    
+        @Override
+        public void handleRegSuccess(long userId) {
+            promotionService.issueNewUserExperienceCash(userId);
+        }
+    }
+    public class RegNotificationObserver implements RegObserver {
+        private NotificationService notificationService;    // 의존성 주입
+    
+        @Override
+        public void handleRegSuccess(long userId) {
+            notificationService.sendInboxMessage(userId, "Welcome...");
+        }
+    }
+    
+    public class UserController {
+        private UserService userService;    // 의존성 주입
+        private List<RegObserver> regObservers = new ArrayList<>();
+    
+        // 한 번 설정하면 이후 동적으로 수정 불가능
+        public void setRegObservers(List<RegObserver> observers) {
+            regObservers.addAll(observers);
+        }
+    
+        public Long register(String telephone, String password) {
+            // 입력 매개변수의 인증 코드 생략
+            // userService.register() 예외 처리용 try-catch 코드 생략
+            long userId = userService.register(telephone, password);
+            for (RegObserver observer : regObservers) {
+                observer.handleRegSuccess(userId);
+            }
+            return userId;
+        }
+    }
+</code></pre>    

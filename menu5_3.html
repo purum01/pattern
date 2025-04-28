@@ -1,0 +1,111 @@
+<h1 style="text-align: center;">옵서버 패턴의 적용 </h1>
+
+
+<h3>동기식 차단 옵서버 패턴 </h3>
+
+    <figure style="text-align: center;">
+        <img src="img/menu5_3.png" style="width: 50%;">
+    </figure>
+
+<h3>비동기식 비차단 옵서버 패턴 </h3>
+<pre><code id="source-code" class="language-java">
+    import java.util.ArrayList;
+    import java.util.List;
+    import java.util.concurrent.Executor;
+    // 첫 번째 구현: 다른 클래스의 코드는 변경되지 않으므로 생략
+    public class RegPromotionObserver implements RegObserver {
+        private PromotionService promotionService;    // 의존성 주입
+    
+        @Override
+        public void handleRegSuccess(Long userId) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    promotionService.issueNewUserExperienceCash(userId);
+                }
+            });
+            thread.start();
+        }
+    }
+    // 두 번째 구현: 다른 클래스의 코드는 변경되지 않음으로 생략
+    public class UserController {
+        private UserService userService;    // 의존성 주입
+        private List<RegObserver> regObservers = new ArrayList<>();
+        private Executor executor;
+
+        public UserController(Executor executor) {
+            this.executor = executor;
+        }
+
+        public void setRegObservers(List<RegObserver> observers) {
+            regObservers.addAll(observers);
+        }
+
+        public Long register(String telephone, String password) {
+            // 입력 매개변수의 인증 코드 생략
+            // userService.register() 예외 처리용 try-catch 코드 생략
+            long userId = userService.register(telephone, password);
+            for (RegObserver observer : regObservers) {
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        observer.handleRegSuccess(userId);
+                    }
+                });
+            }
+            return userId;
+        }
+    }
+</code></pre>    
+   
+<h3>EventBus 프레임워크 </h3>
+<pre><code id="source-code" class="language-java">
+    import com.google.common.eventbus.AsyncEventBus;
+    import com.google.common.eventbus.EventBus;
+    import com.google.common.eventbus.Subscribe;
+    import java.util.List;
+    import java.util.concurrent.Executors;
+    
+    public class UserController {
+        private UserService userService;    // 의존성 주입
+        private EventBus eventBus;
+        private static final int DEFAULT_EVENTBUS_THREAD_POOL_SIZE = 20;
+    
+        public UserController() {
+            // eventBus = new EventBus();  // 동기식 차단 옵저버 패턴
+            eventBus = new AsyncEventBus(Executors.newFixedThreadPool(DEFAULT_EVENTBUS_THREAD_POOL_SIZE)); // 비동기식 비차단 옵저버 패턴
+        }
+    
+        public void setRegObservers(List<Object> observers) {
+            for (Object observer : observers) {
+                eventBus.register(observer);
+            }
+        }
+    
+        public Long register(String telephone, String password) {
+            // 입력 매개변수의 인증 코드 생략
+            // userService.register() 예외 처리용 try-catch 코드 생략
+            long userId = userService.register(telephone, password);
+            eventBus.post(userId);
+            return userId;
+        }
+    }
+    
+    public class RegPromotionObserver {
+        private PromotionService promotionService;    // 의존성 주입
+    
+        @Subscribe
+        public void handleRegSuccess(Long userId) {
+            promotionService.issueNewUserExperienceCash(userId);
+        }
+    }
+    
+    public class RegNotificationObserver {
+        private NotificationService notificationService;    // 의존성 주입
+    
+        @Subscribe
+        public void handleRegSuccess(Long userId) {
+            notificationService.sendInboxMessage(userId, "...");
+        }
+    }
+</code></pre>    

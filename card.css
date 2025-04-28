@@ -4,7 +4,7 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   padding: 60px 50px;
   max-width: 640px;
-  margin: 60px auto;
+  margin: 0 auto;
   text-align: center;
   transition: all 0.3s ease;
   display: flex;
@@ -39,7 +39,7 @@
 .info {
   width: 100%;
   max-width: 600px;
-  margin-top: 20px;
+  margin-top: 0px;
   text-align: left;
 }
 
