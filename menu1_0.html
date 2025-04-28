@@ -1,0 +1,35 @@
+<link href="card.css" rel="stylesheet">
+
+<div class="card">
+  <h1>Strategy Pattern</h1>
+  <p>
+    알고리즘 클래스 컬렉션을 정의하고, 각 알고리즘을 개별적으로 캡슐화하여, 
+    이를 서로 교환 가능하게 만드는 것이며, 전략 패턴은 이를 사용하는 클라이언트와는 
+    독립적으로 알고리즘을 변경할 수 있다.
+  </p>
+
+  <div class="info">
+    <div class="info-row">
+      <div class="info-title">설명</div>
+      <div class="info-content">
+        여러 알고리즘(또는 동작 방법)을 인터페이스로 정의하고,<br>
+        각 알고리즘을 구현 클래스로 캡슐화해서,<br>
+        클라이언트가 실행 중에도 알고리즘을 자유롭게 교체할 수 있도록 만든다.
+      </div>
+    </div>
+    <div class="info-row">
+      <div class="info-title">이유</div>
+      <div class="info-content">
+        코드 중복 줄이기,<br>
+        적으로 알고리즘 선택 가능,<br>
+        클라이언트 코드 수정 없이 알고리즘 추가/변경 가능
+      </div>
+    </div>
+    <div class="info-row">
+      <div class="info-title">활용</div>
+      <div class="info-content">
+        정렬 방법 선택하기 (QuickSort, MergeSort 등),경로 탐색 전략 변경하기 (최단거리, 최저비용 등),"if-else 지옥"을 우아하게 없애기 
+      </div>
+    </div>
+  </div>
+</div>

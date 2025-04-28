@@ -1,192 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Python With ChatGPT</title>
-<style>
-    body, html {
-        margin: 0;
-        padding: 0;
-        height: 100%;
-    }
-    .container {
-        display: flex;
-        height: 100%;
-    }
-    .side-menu {
-        width: 15%;
-        background-color: #f0f0f0;
-        padding: 20px;
-    }
-    .content {
-        width: 75%;
-        padding: 20px;
-    }
-    ul {
-        list-style-type: none;
-        padding: 0;
-    }
-    li {
-        margin-bottom: 10px;
-        cursor: pointer;
-    }
-    #menu > li:hover {
-        font-weight: bold;
-        background-color: gray;
-    }
-    .nested {
-        margin-left: 20px;
-        display: none;
-    }
-    .nested > li:hover {
-        font-weight: bold;
-        color:white;
-    }
-    .active {
-        display: block;
-    }
-</style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<link rel="stylesheet"  href="style.css">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <meta charset="UTF-8">
+    <title>디자인 패턴</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+        .container {
+            display: flex;
+            height: 100%;
+        }
+        .side-menu {
+            width: 15%;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        .content {
+            width: 75%;
+            padding: 20px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        #menu > li:hover {
+            font-weight: bold;
+            background-color: gray;
+        }
+        .nested {
+            margin-left: 20px;
+            display: none;
+        }
+        .nested > li:hover {
+            font-weight: bold;
+            color:white;
+        }
+        .active {
+            display: block;
+        }
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-python.min.js"></script> 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css" rel="stylesheet" />    
-
+       
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/components/prism-java.min.js"></script> <!-- Java 컴포넌트 추가 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/default.min.css"  rel="stylesheet">
+    <link href="code.css"   rel="stylesheet">
 </head>
 <body>
 
 <div class="container">
     <div class="side-menu">
         <ul id="menu">
-            <li id="menu0" onclick="toggleNested(this)")">1. 시작하기 
+            <li id="menu0" onclick="toggleNested(this)">1. 전략 패턴
                 <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu0_1');">개발 환경 구축</li>                                            
-                    <li onclick="event.stopPropagation(); showContent('menu0_4');">파이썬 실행</li>                        
-                    <li onclick="event.stopPropagation(); showContent('menu0_2');">ChatGPT 가입</li>
-                    <li onclick="event.stopPropagation(); showContent('menu0_3');">ChatGPT 로그인</li>
+                    <li onclick="event.stopPropagation(); showContent('menu1_0');">GoF 정의</li>   
+                    <li onclick="event.stopPropagation(); showContent('menu1_1');">전략의 정의</li>                                                                                     
+                    <li onclick="event.stopPropagation(); showContent('menu1_2');">전략의 생성</li>
+                    <li onclick="event.stopPropagation(); showContent('menu1_3');">전략의 사용</li>
+                    <li onclick="event.stopPropagation(); showContent('menu1_4');">전략패턴 분기 대체</li>
+                    <li onclick="event.stopPropagation(); showContent('menu1_5');">전략패턴 파일 정렬</li>
                 </ul>
             </li>
-            <li id="menu1" onclick="toggleNested(this)">2. 자료형
+            <li id="menu0" onclick="toggleNested(this)">2. 싱글턴 패턴
                 <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu1_4')">① str</li>
-                    <li onclick="event.stopPropagation(); showContent('menu1_1')">② int</li>                  
-                    <li onclick="event.stopPropagation(); showContent('menu1_2')">③ float</li>                  
-                    <li onclick="event.stopPropagation(); showContent('menu1_3')">④ bool</li>
-                    <li onclick="event.stopPropagation(); showContent('menu1_5')">⑤ list</li>
-                    <li onclick="event.stopPropagation(); showContent('menu1_6')">⑥ tuple</li>
-                    <li onclick="event.stopPropagation(); showContent('menu1_7')">⑦ set</li>
-                    <li onclick="event.stopPropagation(); showContent('menu1_8')">⑧ dict</li>
+                    <li onclick="event.stopPropagation(); showContent('menu2_0');">GoF 정의</li>   
+                    <li onclick="event.stopPropagation(); showContent('menu2_1');">싱글턴 패턴 정의</li>                                                                                     
+                    <li onclick="event.stopPropagation(); showContent('menu2_2');">싱글턴 패턴 구현</li>
+                    <li onclick="event.stopPropagation(); showContent('menu2_3');">싱글턴 패턴 적용</li>
+                    <li onclick="event.stopPropagation(); showContent('menu2_4');">싱글턴 패턴 단점</li>
+                    <li onclick="event.stopPropagation(); showContent('menu2_5');">싱글턴 패턴 대안</li>
                 </ul>
             </li>
-            <li id ="menu2" onclick="toggleNested(this)">3. 변수
-                <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu2_1');">변수 선언</li>                        
-                    <li onclick="event.stopPropagation(); showContent('menu2_3');">연습 문제</li>
-                </ul>
-            </li>
-
-            <li id="menu3" onclick="toggleNested(this)">4. 연산자
-                <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu3_1');">산술연산자</li>                        
-                    <li onclick="event.stopPropagation(); showContent('menu3_2');">비교연산자</li>
-                    <li onclick="event.stopPropagation(); showContent('menu3_3');">논리연산자</li>
-                    <li onclick="event.stopPropagation(); showContent('menu3_4');">포함연산자</li>
-                </ul>            
-            </li>
-            <li id="menu4" onclick="toggleNested(this)">5. 내장함수
-                <ul class="nested">
-                    <li></li>
-                    <li onclick="event.stopPropagation(); showContent('menu4_1');">형변환 함수</li>                        
-                    <li onclick="event.stopPropagation(); showContent('menu4_2');">type 함수 </li>                        
-                    <li onclick="event.stopPropagation(); showContent('menu4_3');">input 함수</li>
-                    <li onclick="event.stopPropagation(); showContent('menu4_4');">print 함수</li>
-                    <li onclick="event.stopPropagation(); showContent('menu4_5');">range 함수</li>
-                    <li onclick="event.stopPropagation(); showContent('menu4_8');">집계 함수</li>
-                    <li onclick="event.stopPropagation(); showContent('menu4_6');">연습 문제</li>
-                </ul>            
-            </li>
-            <li id="menu5" onclick="toggleNested(this)">6. 제어문
-                <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu5_1');">if문</li>                        
-                    <li onclick="event.stopPropagation(); showContent('menu5_2');">for문</li>
-                    <li onclick="event.stopPropagation(); showContent('menu5_3');">while문</li>
-                </ul>            
-            </li>
-
-            <li id="menu12" onclick="toggleNested(this)">7 ChatGPT 사용
-                <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu12_1');">프로젝트 기반 실습</li>                        
-                    <li onclick="event.stopPropagation(); showContent('menu12_2');">코딩 챌린지</li>
-                </ul>             
-            </li>     
-                   
-            <li id="menu6" onclick="toggleNested(this)">8. 반복가능객체(Iterable)
-                <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu6_6');">sequence type</li>                        
-                    <li onclick="event.stopPropagation(); showContent('menu6_7');">dictionary type</li>                        
-                    <li onclick="event.stopPropagation(); showContent('menu6_1');">str</li>                        
-                    <li onclick="event.stopPropagation(); showContent('menu6_2');">list</li>
-                    <li onclick="event.stopPropagation(); showContent('menu6_3');">tuple</li>
-                    <li onclick="event.stopPropagation(); showContent('menu6_4');">set</li>
-                    <li onclick="event.stopPropagation(); showContent('menu6_5');">dict</li>
-                </ul>            
-            </li>
-
-            <li id="menu7" onclick="toggleNested(this)">9. 함수(Function)
-                <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu7_1');">함수 선언</li>                        
-                    <li onclick="event.stopPropagation(); showContent('menu7_2');">함수 호출</li>
-                    <li onclick="event.stopPropagation(); showContent('menu7_3');">함수 활용</li>
-                    <li onclick="event.stopPropagation(); showContent('menu7_4');">연습 문제</li>                    
-                </ul>             
-            </li>
-
-            <li id="menu8" onclick="toggleNested(this)">10. 클래스(Class)
-                <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu8_1');">클래스 선언 </li>                        
-                    <li onclick="event.stopPropagation(); showContent('menu8_2');">인스턴스</li>                    
-                </ul>            
-            </li>
-                        
-            <li id="menu9" onclick="toggleNested(this)">11. 오류 처리(Error)
-                <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu9_1');">예외 객체</li>                        
-                    <li onclick="event.stopPropagation(); showContent('menu9_2');">try-except</li>
-                    <li onclick="event.stopPropagation(); showContent('menu9_3');">예외 강제 발생</li>
-                </ul>              
-            </li>
-            <li id="menu10" onclick="toggleNested(this)">12. 라이브러리(Library)
-                <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu10_5');">PIP</li>                        
-                    <li onclick="event.stopPropagation(); showContent('menu10_1');">모듈 사용</li>                        
-                    <li onclick="event.stopPropagation(); showContent('menu10_2');">표준 모듈</li>
-                    <li onclick="event.stopPropagation(); showContent('menu10_3');">연습 문제</li>
-                    <li onclick="event.stopPropagation(); showContent('menu10_4');">Pandas</li>
-                </ul>             
-            </li>
-            <li id="menu11" onclick="toggleNested(this)">13. ChatGPT 활용
-                <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu11_1')">01_로또번호 생성</li>
-                    <li onclick="event.stopPropagation(); showContent('menu11_2')">02_파일 정리</li>
-                    <li onclick="event.stopPropagation(); showContent('menu11_3')">03_파일 병합</li>
-                    <li onclick="event.stopPropagation(); showContent('menu11_4')">04_공문 생성</li>                  
-                    <li onclick="event.stopPropagation(); showContent('menu11_5')">05_데이터 분석</li>                  
-                    <li onclick="event.stopPropagation(); showContent('menu11_6')">06_웹크롤링</li>                  
-                </ul>            
-            </li>
-
+            
         </ul>
     </div>
+
     <div class="content" id="content">
-        <img src = "cover.png" >
+        <img src="cover.png">
     </div>
 </div>
 
 <script>
 function showContent(menu) {
-    var filePath = menu + ".html"; // 예: 'menu1.html'
+    var filePath = menu + ".html"; // 예: 'menu1_1.html'
     console.log(filePath)
 
     // jQuery의 load 메소드를 사용하여 외부 HTML 파일의 내용을 불러옵니다.
@@ -196,9 +103,11 @@ function showContent(menu) {
             var msg = "<p>죄송합니다. 오류가 발생했습니다: </p>";
             msg += "<p>" + xhr.status + " " + xhr.statusText + "</p>";  
             $("#content").html(msg);
+        } else {
+            // 외부 HTML 파일이 로드된 후 Prism 하이라이팅 적용
+            Prism.highlightAll();
         }
     });
-
 }
 
 function toggleNested(element) {

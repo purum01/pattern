@@ -1,0 +1,66 @@
+
+<h1 style="text-align: center;">전략 패턴으로 분기 결정 대체</h1>
+<pre><code id="source-code" class="language-java">
+    public class OrderService {
+        public double discount(Order order) {
+            double discount = 0.0;
+            OrderType type = order.getType();
+            if (type.equals(OrderType.NORMAL)) {  // 정상 주문
+                // 할인 적용 코드 생략
+            } else if (type.equals(OrderType.GROUPON)) {  // 단체 주문
+                // 할인 적용 코드 생략
+            } else if (type.equals(OrderType.PROMOTION)) {  // 프로모션 주문
+                // 할인 적용 코드 생략
+            }
+            return discount;
+        }
+    }
+</code></pre>
+<pre><code id="source-code" class="language-java">
+    // 전략 정의
+    public interface DiscountStrategy {
+        double calDiscount(Order order);
+    }
+    // NormalDiscountStrategy, GrouponDiscountStrategy, PromotionDiscountStrategy 생성
+    
+    // 전략 생성
+    public class DiscountStrategyFactory {
+        private static final Map<OrderType, DiscountStrategy> strategies = new HashMap<>();
+        static {
+            strategies.put(OrderType.NORMAL, new NormalDiscountStrategy());
+            strategies.put(OrderType.GROUPON, new GrouponDiscountStrategy());
+            strategies.put(OrderType.PROMOTION, new PromotionDiscountStrategy());
+        }
+    
+        public static DiscountStrategy getDiscountStrategy(OrderType type) {
+            return strategies.get(type);
+        }
+    }
+    
+    // 전략 사용
+    public class OrderService {
+        public double discount(Order order) {
+            OrderType type = order.getType();
+            DiscountStrategy discountStrategy = DiscountStrategyFactory.getDiscountStrategy(type);
+            return discountStrategy.calDiscount(order);
+        }
+    }
+</code></pre>
+<pre><code id="source-code" class="language-java">
+    public class DiscountStrategyFactory {
+        public static DiscountStrategy getDiscountStrategy(OrderType type) {
+            if (type == null) {
+                throw new IllegalArgumentException("Type should not be null.");
+            }
+    
+            if (type.equals(OrderType.NORMAL)) {
+                return new NormalDiscountStrategy();
+            } else if (type.equals(OrderType.GROUPON)) {
+                return new GrouponDiscountStrategy();
+            } else if (type.equals(OrderType.PROMOTION)) {
+                return new PromotionDiscountStrategy();
+            }
+            return null;
+        }
+    }
+</code></pre>

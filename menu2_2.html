@@ -1,0 +1,94 @@
+<h1 style="text-align: center;">싱글턴 패턴 구현 </h1>
+
+<h3>즉시 초기화(eager initialization)</h3>
+<pre><code id="source-code" class="language-java">
+    public class IdGenerator {
+        private AtomicLong id = new AtomicLong(0);
+        private static final IdGenerator instance = new IdGenerator();
+        
+        private IdGenerator() {}
+        public static IdGenerator getInstance() {
+            return instance;
+        }
+        
+        public long getId() {
+            return id.incrementAndGet();
+        }
+    }
+        
+</code></pre>
+<h3>늦은 초기화(lazy initialization)</h3>
+<pre><code id="source-code" class="language-java">
+    public class IdGenerator {
+        private AtomicLong id = new AtomicLong(0);
+        private static IdGenerator instance;
+    
+        private IdGenerator() {}
+    
+        public static synchronized IdGenerator getInstance() {
+            if (instance == null) {
+                instance = new IdGenerator();
+            }
+            return instance;
+        }
+            
+        public long getId() {
+            return id.incrementAndGet();
+        }
+    }
+</code></pre>        
+<h3>이중 잠금(double-checked locking)</h3>
+<pre><code id="source-code" class="language-java">
+    public class IdGenerator {
+        private AtomicLong id = new AtomicLong(0);
+        private static IdGenerator instance;
+    
+        private IdGenerator() {}
+    
+        public static IdGenerator getInstance() {
+            if (instance == null) {
+                synchronized (IdGenerator.class) { // 클래스 레벨의 잠금 처리
+                    if (instance == null) {
+                        instance = new IdGenerator();
+                    }
+                }
+            }
+            return instance;
+        }
+    
+        public long getId() {
+            return id.incrementAndGet();
+        }
+    }
+</code></pre>   
+<h3>홀더에 의한 초기화(initialization on demand holder idiom)</h3>
+<pre><code id="source-code" class="language-java">
+    public class IdGenerator {
+        private AtomicLong id = new AtomicLong(0);
+    
+        private IdGenerator() {}
+    
+        private static class SingletonHolder {
+            private static final IdGenerator instance = new IdGenerator();
+        }
+    
+        public static IdGenerator getInstance() {
+            return SingletonHolder.instance;
+        }
+    
+        public long getId() {
+            return id.incrementAndGet();
+        }
+    }
+</code></pre>  
+<h3>열거(enumeration)</h3>
+<pre><code id="source-code" class="language-java">
+    public enum IdGenerator {
+        INSTANCE;
+        private AtomicLong id = new AtomicLong(0);
+    
+        public long getId() {
+            return id.incrementAndGet();
+        }
+    }
+</code></pre>    

@@ -1,0 +1,27 @@
+<h1 style="text-align: center;">싱글턴 패턴의 대안 </h1>
+
+
+<h3>정적 메서드 사용</h3>
+<pre><code id="source-code" class="language-java">
+    public class IdGenerator {
+        private static AtomicLong id = new AtomicLong(0);
+    
+        public static long getId() {
+            return id.incrementAndGet();
+        }
+    }
+    
+    // 사용 예제
+    long id = IdGenerator.getId();
+</code></pre>    
+<h3>의존성 주입</h3>
+<pre><code id="source-code" class="language-java">
+    // 의존성 주입
+    public demofunction(IdGenerator idGenerator) {
+        long id = idGenerator.getId();
+    }
+    
+    // 외부에서 demofunction()을 호출할 때 idGenerator 전달
+    IdGenerator idGenerator = IdGenerator.getInstance();
+    demofunction(idGenerator);
+</code></pre>    

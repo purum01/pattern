@@ -1,0 +1,104 @@
+<h1 style="text-align: center;">싱글턴 패턴의 단점 </h1>
+
+<ol>
+    <li>클래스간의 의존성을 감춘다.</li>
+    <li>코드의 확장성에 영향을 미친다.</li>
+    <li>코드의 테스트 용이성에 영향을 미친다.</li>
+    <pre><code id="source-code" class="language-java">
+    public class Order {
+        public void create(...) {
+            ...
+            long id = IdGenerator.getInstance().getId();
+            ...
+        }
+    }
+    </code></pre>   
+    <li>매개변수가 있는 생성자를 지원하지 않는다.</li>
+        <ol type="I">
+            <li>init() 함수를 통해 매개변수를 전달하는 방법</li>
+            <pre><code id="source-code" class="language-java">
+    public class Singleton {
+        private static Singleton instance = null;
+        private final int paramA;
+        private final int paramB;
+    
+        private Singleton(int paramA, int paramB) {
+            this.paramA = paramA;
+            this.paramB = paramB;
+        }
+        public static Singleton getInstance() {
+            if (instance == null) {
+                throw new RuntimeException("Run init() first.");
+            }
+            return instance;
+        }
+        
+        public synchronized static Singleton init(int paramA, int paramB) {
+            if (instance != null) {
+                throw new RuntimeException("Singleton has created!");
+            }
+            instance = new Singleton(paramA, paramB);
+            return instance;
+        }
+        
+        // 먼저 init() 함수를 호출하고 getInstance() 함수를 통해 객체를 가져온다
+        Singleton.init(10, 50);
+        Singleton singleton = Singleton.getInstance();
+            </code></pre>  
+            <li>매개변수를 getInstance()함수에 넣는 방법</li>
+            <pre><code id="source-code" class="language-java">
+        public class Singleton {
+            private static Singleton instance = null;
+            private final int paramA;
+            private final int paramB;
+        
+            private Singleton(int paramA, int paramB) {
+                this.paramA = paramA;
+                this.paramB = paramB;
+            }
+        
+            public synchronized static Singleton getInstance(int paramA, int paramB) {
+                if (instance == null) {
+                    instance = new Singleton(paramA, paramB);
+                }
+                return instance;
+            }
+        }
+        
+        Singleton singleton = Singleton.getInstance(10, 50);
+            </code></pre>                
+            <pre><code id="source-code" class="language-java">
+        /* 두번 실행되는 경우, 문제 발생? */
+        Singleton singleton1 = Singleton.getInstance(10, 50);
+        Singleton singleton2 = Singleton.getInstance(20, 30);
+            </code></pre>                
+            <li>매개변수를 전역 변수에 넣는 방법</li>
+            <pre><code id="source-code" class="language-java">
+        public class Config {
+            public static final int PARAM_A = 123;
+            public static final int PARAM_B = 245;
+        }
+        
+        public class Singleton {
+            private static Singleton instance = null;
+            private final int paramA;
+            private final int paramB;
+        
+            private Singleton() {
+                this.paramA = Config.PARAM_A;
+                this.paramB = Config.PARAM_B;
+            }
+        
+            public synchronized static Singleton getInstance() {
+                if (instance == null) {
+                    instance = new Singleton();
+                }
+                return instance;
+            }
+        }
+            </code></pre>    
+        </ol>
+</ol>
+
+
+

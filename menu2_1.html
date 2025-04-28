@@ -1,0 +1,26 @@
+<h1 style="text-align: center;">싱글턴 패턴 정의</h1>
+
+<pre><code id="source-code" class="language-java">
+    import java.util.concurrent.atomic.AtomicLong;
+    public class IdGenerator {
+        // AtomicLong은 Java 동시성 라이브러리에서 제공하는 원자 변수 유형이며,
+        // 스레드로부터 안전한 연산으로 잠금 필요가 있는 일부 스레드로부터
+        // 안전하지 않은 복합 연산을 캡슐화하며, 아래의 incrementAndGet()에서 사용함
+        private AtomicLong id = new AtomicLong(0);
+        private static final IdGenerator instance = new IdGenerator();
+        
+        private IdGenerator() {}
+        
+        public static IdGenerator getInstance() {
+            return instance;
+        }
+        
+        public long getId() {
+            return id.incrementAndGet();
+        }
+    }
+    
+    // IdGenerator 클래스 사용 예
+    long id = IdGenerator.getInstance().getId();
+</code></pre>
+

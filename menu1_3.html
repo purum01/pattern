@@ -1,0 +1,40 @@
+
+<h1 style="text-align: center;">전략의 사용</h1>
+<pre><code id="source-code" class="language-java">
+    // 전략 인터페이스: EvictionStrategy
+    // 전략 클래스: LruEvictionStrategy, FifoEvictionStrategy, LfuEvictionStrategy...
+    // 전략 팩터리: EvictionStrategyFactory
+    public class UserCache {
+        private Map<String, User> cacheData = new HashMap<>();
+        private EvictionStrategy eviction;
+    
+        public UserCache(EvictionStrategy eviction) {
+            this.eviction = eviction;
+        }
+        ...
+    }
+    // 실행 시간 동적 결정, 즉 설정 파일을 기반으로 사용할 전략
+    public class Application {
+        public static void main(String[] args) throws Exception {
+            EvictionStrategy evictionStrategy = null;
+            Properties props = new Properties();
+            props.load(new FileInputStream("./config.properties"));
+            String type = props.getProperty("eviction_type");
+            evictionStrategy = EvictionStrategyFactory.getEvictionStrategy(type);
+            UserCache userCache = new UserCache(evictionStrategy);
+            ...
+        }
+    }
+    
+    // 비실행 시간 동적 결정, 즉 코드에서 사용할 전략 지정
+    public class Application {
+        public static void main(String[] args) {
+            ...
+            EvictionStrategy evictionStrategy = new LruEvictionStrategy();
+            UserCache userCache = new UserCache(evictionStrategy);
+            ...
+        }
+    }
+        
+</code></pre>
+

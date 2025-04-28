@@ -1,0 +1,67 @@
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 60px 50px;
+  max-width: 640px;
+  margin: 60px auto;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+
+
+.card h1 {
+  font-size: 36px;        /* 제목은 크게 */
+  font-weight: 700;        /* 두껍고 힘있게 */
+  color: #1f2937;          /* 약간 진하지만 부드러운 네이비 톤 */
+  margin-bottom: 30px;     /* 제목과 본문 사이 여백 */
+  letter-spacing: -0.5px;  /* 글자 간격 약간 좁게 */
+  line-height: 1.2;        /* 제목 줄 간격은 조밀하게 */
+}
+
+.card p {
+  font-size: 18px;
+  color: #555;
+  line-height: 1.8;
+  margin-bottom: 40px;
+  max-width: 500px;
+}
+
+.info {
+  width: 100%;
+  max-width: 600px;
+  margin-top: 20px;
+  text-align: left;
+}
+
+.info-row {
+  display: flex;
+  border-top: 1px solid #eee;
+  padding: 20px 0;
+}
+
+.info-row:first-child {
+  border-top: none;
+}
+
+.info-title {
+  width: 100px;
+  font-weight: 600;
+  color: #333;
+  flex-shrink: 0;
+}
+
+.info-content {
+  flex-grow: 1;
+  color: #666;
+  line-height: 1.6;
+}
