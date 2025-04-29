@@ -1,0 +1,124 @@
+<h1 style="text-align: center;">프로토타입 패턴의 구현 </h1>
+
+<figure style="text-align: center;">
+    <img src="img/menu11_1.png" style="width: 50%;">
+</figure>
+
+<hr>
+<ul>
+    <li>- 해시 테이블의 key는 검색어, value는 SearchWord 객체이며, 이 객체는 메모리 외부에 저장된다.</li>
+    <li>- 얕은 복사는 참조값만 복사하고, 깊은 복사는 실제 객체를 복사하여 독립된 복제본을 만든다.</li>
+    <li>- currentKeywords를 복사해 생성한 newKeywords가 얕은 복사일 경우, 내부 SearchWord 객체가 공유되어 데이터 일관성이 깨질 수 있다.</li>
+    <li>- 따라서 메모리 캐시를 안전하게 갱신하려면 깊은 복사를 사용해야 하며, currentKeywords 대신 newKeywords를 만든 뒤 전체를 교체하는 방식으로 동작해야 한다.</li>
+    <li>- Java의 clone() 메서드는 얕은 복사만 지원하므로, 직접 깊은 복사를 구현하거나 직렬화를 통해 복제해야 한다.</li>
+</ul>
+<br><br>  
+<h3>참조 없는 기본 데이터만 재귀적으로 복사하는 방법</h3>
+<pre><code id="source-code" class="language-java">
+    public class Demo {
+        private HashMap<String, SearchWord> currentKeywords = new HashMap<>();
+        private long lastUpdateTime = -1;
+    
+        public void refresh() {
+            // 깊은 복사 수행
+            HashMap<String, SearchWord> newKeywords = new HashMap<>();
+            for (Map.Entry<String, SearchWord> e : currentKeywords.entrySet()) {
+                SearchWord word = e.getValue();
+                SearchWord newSearchWord = new SearchWord(
+                    word.getKeyword(),
+                    word.getCount(),
+                    word.getLastUpdateTime()
+                );
+                newKeywords.put(e.getKey(), newSearchWord);
+            }
+    
+            // 변경된 데이터만 가져옴
+            List<SearchWord> toBeUpdatedSearchWords = getSearchWords(lastUpdateTime);
+            long maxNewUpdatedTime = lastUpdateTime;
+    
+            for (SearchWord searchWord : toBeUpdatedSearchWords) {
+                if (searchWord.getLastUpdateTime() > maxNewUpdatedTime) {
+                    maxNewUpdatedTime = searchWord.getLastUpdateTime();
+                }
+    
+                if (newKeywords.containsKey(searchWord.getKeyword())) {
+                    SearchWord oldSearchWord = newKeywords.get(searchWord.getKeyword());
+                    oldSearchWord.setCount(searchWord.getCount());
+                    oldSearchWord.setLastUpdateTime(searchWord.getLastUpdateTime());
+                } else {
+                    newKeywords.put(searchWord.getKeyword(), searchWord);
+                }
+            }
+    
+            // 최신 상태 반영
+            lastUpdateTime = maxNewUpdatedTime;
+            currentKeywords = newKeywords;
+        }
+    
+        private List<SearchWord> getSearchWords(long lastUpdateTime) {
+            // TODO: 데이터베이스에서 lastUpdateTime보다 큰 시간값을 가진 데이터 가져오기
+            return null;
+        }
+    }
+</code></pre> 
+
+<br><br>
+<h3>직렬화 후 역직렬화로 복사하는 방법</h3>
+<pre><code id="source-code" class="language-java">
+    public Object deepCopy(Object object) {
+        ByteArrayOutputStream bo = new ByteArrayOutputStream();
+        ObjectOutputStream oo = new ObjectOutputStream(bo);
+        oo.writeObject(object);
+    
+        ByteArrayInputStream bi = new ByteArrayInputStream(bo.toByteArray());
+        ObjectInputStream oi = new ObjectInputStream(bi);
+    
+        return oi.readObject();
+    }
+</code></pre> 
+
+<hr>
+<ul>
+    <li>- 얕은 복사 기반의 최적화 방식은 newKeywords만 복사하고, SearchWord 객체는 변경이 필요한 경우에만 깊은 복사하여 교체하는 방식이다.</li>
+    <li>- 이 방식은 시간과 메모리 사용을 줄이면서도 효율적인 업데이트가 가능하다.</li>
+    <li>- 또한 업데이트 후에도 currentKeywords의 데이터를 유지할 수 있어 이전 상태 보존이 가능하다.</li>
+</ul>
+<p style="font-size: 14px; font-weight: bold; color: #2c3e50; background-color: #f0f8ff; padding: 10px; border-radius: 8px;">
+    "얕은 복사 후 변경 대상만 깊은 복사하여 메모리 절약과 데이터 일관성 모두 확보한다."
+</p>
+<pre><code id="source-code" class="language-java">
+    public class Demo {
+        private HashMap<String, SearchWord> currentKeywords = new HashMap<>();
+        private long lastUpdateTime = -1;
+    
+        @SuppressWarnings("unchecked")
+        public void refresh() {
+            // 얕은 복사 수행 (HashMap 자체만 복사, 내부 SearchWord 객체는 공유)
+            HashMap<String, SearchWord> newKeywords = (HashMap<String, SearchWord>) currentKeywords.clone();
+    
+            // 데이터베이스에서 lastUpdateTime보다 큰 시간값을 가진 데이터 가져오기
+            List<SearchWord> toBeUpdatedSearchWords = getSearchWords(lastUpdateTime);
+            long maxNewUpdatedTime = lastUpdateTime;
+    
+            for (SearchWord searchWord : toBeUpdatedSearchWords) {
+                if (searchWord.getLastUpdateTime() > maxNewUpdatedTime) {
+                    maxNewUpdatedTime = searchWord.getLastUpdateTime();
+                }
+    
+                if (newKeywords.containsKey(searchWord.getKeyword())) {
+                    // 업데이트 필요한 경우에만 깊은 복사
+                    newKeywords.remove(searchWord.getKeyword());
+                }
+                newKeywords.put(searchWord.getKeyword(), searchWord);
+            }
+    
+            lastUpdateTime = maxNewUpdatedTime;
+            currentKeywords = newKeywords;
+        }
+    
+        private List<SearchWord> getSearchWords(long lastUpdateTime) {
+            // TODO: 데이터베이스에서 lastUpdateTime보다 큰 갱신 데이터를 가져오기
+            return null;
+        }
+    }
+</code></pre> 

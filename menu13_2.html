@@ -1,0 +1,42 @@
+<h1 style="text-align: center;">상속 기반의 프록시 패턴 </h1>
+
+<ul>
+    <li>- 인터페이스 기반 프록시 패턴은 보통 원본 클래스와 프록시 클래스가 같은 인터페이스를 구현한다.</li>
+    <li>- 원본 클래스가 외부 라이브러리 소속이거나 인터페이스가 없을 경우,
+        기존 방식을 쓸 수 없다.</li>
+    <li>- 이럴 땐 상속을 이용한 클래스 기반 프록시 패턴을 사용하여
+        원본 클래스를 확장하고 부가기능을 추가하는 방식으로 구현한다.</li>
+</ul>
+
+<pre><code id="source-code" class="language-java">
+    public class UserControllerProxy extends UserController {
+        private MetricsCollector metricsCollector;
+    
+        public UserControllerProxy() {
+            this.metricsCollector = new MetricsCollector();
+        }
+    
+        public UserVo login(String telephone, String password) {
+            long startTimestamp = System.currentTimeMillis();
+            UserVo userVo = super.login(telephone, password);
+            long endTimestamp = System.currentTimeMillis();
+            long responseTime = endTimestamp - startTimestamp;
+            RequestInfo requestInfo = new RequestInfo("login", responseTime, startTimestamp);
+            metricsCollector.recordRequest(requestInfo);
+            return userVo;
+        }
+    
+        public UserVo register(String telephone, String password) {
+            long startTimestamp = System.currentTimeMillis();
+            UserVo userVo = super.register(telephone, password);
+            long endTimestamp = System.currentTimeMillis();
+            long responseTime = endTimestamp - startTimestamp;
+            RequestInfo requestInfo = new RequestInfo("register", responseTime, startTimestamp);
+            metricsCollector.recordRequest(requestInfo);
+            return userVo;
+        }
+    }
+    
+    // UserControllerProxy 클래스 사용 예
+    UserController userController = new UserControllerProxy();
+</code></pre>   

@@ -1,0 +1,242 @@
+<h1 style="text-align: center;">어댑터 패턴의 응용 </h1>
+
+
+<hr>
+<h3>결함이 있는 인터페이스 설계가 캡슐화 된 경우 </h3>
+<ul>
+    <li>- 외부 시스템의 인터페이스에 결합도가 높고 정적 메서드가 많으면,
+        테스트 용이성에 부정적인 영향을 줄 수 있다.</li>
+    <li>- 어댑터 패턴을 사용해 외부 인터페이스를 캡슐화하고,</li>
+    <li>- 테스트 용이성과 사용성과 유지보수성이 높은 구조로 리팩토링할 수 있다.</li>
+</ul>
+<pre><code id="source-code" class="language-java">
+    public class CD {  // 이 클래스는 외부 SDK 코드이므로 직접 수정 불가
+        ...
+        public static void staticFunction1() { ... }
+        public void uglyNamingFunction2() { ... }
+        public void tooManyParamsFunction3(int paramA, int paramB, ...) { ... }
+        public void lowPerformanceFunction4() { ... }
+    }
+    // 클라이언트가 기대하는 인터페이스
+    public interface ITarget {
+        void function1();
+        void function2();
+        void function3(ParamsWrapperDefinition paramsWrapper);
+        void function4();
+    }
+    // 어댑터 클래스 (이름에 반드시 Adaptor가 붙을 필요는 없음)
+    public class CDAdaptor extends CD implements ITarget {
+    
+        @Override
+        public void function1() {
+            super.staticFunction1();  // 정적 메서드 위임
+        }
+    
+        @Override
+        public void function2() {
+            super.uglyNamingFunction2();  // 명확한 이름으로 감싸기
+        }
+    
+        @Override
+        public void function3(ParamsWrapperDefinition paramsWrapper) {
+            super.tooManyParamsFunction3(paramsWrapper.getParamA(), ...);  // 래퍼 객체에서 필요한 값 추출
+        }
+    
+        @Override
+        public void function4() {
+            // 새로 구현
+        }
+    }
+</code></pre>    
+<hr>
+<h3>여러 클래스의 인터페이스 설계를 통합할 경우</h3>
+<ul>
+    <li>- 외부 시스템의 클래스마다 인터페이스 구조가 다르다면,
+        클라이언트 코드에서 일관되게 사용하기 어렵다.</li>
+    <li>- 어댑터 패턴을 사용해 다양한 인터페이스를 통일된 인터페이스로 래핑함으로써
+        사용성과 재사용성을 높일 수 있다.</li>
+    <li>예: 여러 필터 시스템을 하나의 공통 필터 인터페이스로 통합하여 사용.</li>
+</ul>
+
+<pre><code id="source-code" class="language-java">
+    // A 시스템: 민감 단어 필터링 시스템 제공 인터페이스
+    public class ASensitiveWordsFilter {
+        // 텍스트 원문에서, 방송에서 *** 문자로 필터링할 단어를 반환
+        public String filterObsceneWords(String text) {
+            // ...
+        }
+    
+        public String filterPoliticalWords(String text) {
+            // ...
+        }
+    }
+    
+    // B 시스템: 민감 단어 필터링 시스템 제공 인터페이스
+    public class BSensitiveWordsFilter {
+        public String filter(String text) {
+            // ...
+        }
+    }
+    
+    // C 시스템: 민감 단어 필터링 시스템 제공 인터페이스
+    public class CSensitiveWordsFilter {
+        public String filter(String text, String mask) {
+            // ...
+        }
+    }
+    
+    // 클라이언트 코드
+    public class RiskManagement {
+        private ASensitiveWordsFilter aFilter = new ASensitiveWordsFilter();
+        private BSensitiveWordsFilter bFilter = new BSensitiveWordsFilter();
+        private CSensitiveWordsFilter cFilter = new CSensitiveWordsFilter();
+    
+        public String filterSensitiveWords(String text) {
+            String maskedText = aFilter.filterObsceneWords(text);
+            maskedText = aFilter.filterPoliticalWords(maskedText);
+            maskedText = bFilter.filter(maskedText);
+            maskedText = cFilter.filter(maskedText, "***");
+            return maskedText;
+        }
+    }
+</code></pre>    
+<ul>
+    <li>- 어댑터 패턴을 사용하면 모든 시스템 인터페이스를 통합된 인터페이스로 맞출 수 있다. </li>
+    <li>- 덕분에 코드를 쉽게 재사용하고, 확장성도 높일 수 있다.</li>
+    <li>- 새로운 민감 단어 필터링 시스템을 추가해도,
+        filterSensitiveWords() 함수의 코드를 수정할 필요가 없다.</li>
+</ul>
+<pre><code id="source-code" class="language-java">
+    public interface ISensitiveWordsFilter {  // 인터페이스 정의 통합
+        String filter(String text);
+    }
+    public class ASensitiveWordsFilterAdaptor implements ISensitiveWordsFilter {
+        private ASensitiveWordsFilter aFilter;
+    
+        public ASensitiveWordsFilterAdaptor(ASensitiveWordsFilter aFilter) {
+            this.aFilter = aFilter;
+        }
+    
+        @Override
+        public String filter(String text) {
+            String maskedText = aFilter.filterObsceneWords(text);
+            maskedText = aFilter.filterPoliticalWords(maskedText);
+            return maskedText;
+        }
+    }
+    public class RiskManagement {
+        private List<ISensitiveWordsFilter> filters = new ArrayList<>();
+    
+        public void addSensitiveWordsFilter(ISensitiveWordsFilter filter) {
+            filters.add(filter);
+        }
+    
+        public String filterSensitiveWords(String text) {
+            String maskedText = text;
+            for (ISensitiveWordsFilter filter : filters) {
+                maskedText = filter.filter(maskedText);
+            }
+            return maskedText;
+        }
+    }
+</code></pre>  
+
+
+<hr>
+<h3>사용중인 외부 시스템을 교체해야 할 경우 </h3>
+<pre><code id="source-code" class="language-java">
+    // 외부 시스템 A
+    public interface IA {
+        void fa();
+    }
+    
+    public class A implements IA {
+        @Override
+        public void fa() {
+            // 실제 구현
+            System.out.println("A 시스템의 fa() 실행");
+        }
+    }
+    
+    // 외부 시스템 B
+    public class B {
+        public void fb() {
+            // 실제 구현
+            System.out.println("B 시스템의 fb() 실행");
+        }
+    }
+    
+    // 어댑터: B 시스템을 IA 인터페이스에 맞게 변환
+    public class BAdaptor implements IA {
+        private B b;
+    
+        public BAdaptor(B b) {
+            this.b = b;
+        }
+    
+        @Override
+        public void fa() {
+            b.fb();  // B의 fb()를 호출하여 fa()처럼 사용
+        }
+    }
+    
+    // 클라이언트 코드 (Demo 클래스)
+    public class Demo {
+        private IA a;
+    
+        public Demo(IA a) {
+            this.a = a;
+        }
+    
+        public void execute() {
+            a.fa();  // 인터페이스에 의존하여 실행
+        }
+    
+        public static void main(String[] args) {
+            // 기존 A 시스템 사용
+            Demo d1 = new Demo(new A());
+            d1.execute();
+    
+            // 외부 시스템 B로 교체하면서도 IA 인터페이스는 그대로 유지
+            Demo d2 = new Demo(new BAdaptor(new B()));
+            d2.execute();
+        }
+    }
+</code></pre>    
+
+<hr>
+<h3>이전 버젼 인터페이스와 호환성이 필요한 경우 </h3>
+<ul>
+    <li>- 시스템을 업그레이드할 때 기존 인터페이스를 제거하지 않고,</li>
+    <li>- 새 인터페이스에 위임하는 방식으로 유지하면</li>
+    <li>- 기존 사용자 코드의 호환성과 업그레이드 유연성을 높일 수 있다.</li>
+</ul>
+
+<pre><code id="source-code" class="language-java">
+    public class Collections {
+        public static Enumeration enumeration(final Collection c) {
+            return new Enumeration() {
+                Iterator i = c.iterator();
+    
+                public boolean hasMoreElements() {
+                    return i.hasNext();
+                }
+    
+                public Object nextElement() {
+                    return i.next();
+                }
+            };
+        }
+    }
+</code></pre>    
+<hr>
+<h3>다양한 형식의 데이터에 적응해야 할 경우 </h3>
+<ul>
+    <li>- 어댑터 패턴은 인터페이스 뿐 아니라 데이터 형식이 다를 때도 적용할 수 있다.</li>
+    <li>- 예를 들어 서로 다른 신용 정보 시스템 간 데이터를 동일한 형식으로 통합할 필요가 있는 경우.</li>
+    <li>- 또한 배열, 리스트 등 다양한 저장 구조 간 변환에도 유용하다.</li>
+    <li>- 대표 예: Arrays.asList()는 배열을 리스트로 어댑팅하는 표준 메서드다.</li>
+</ul>
+<pre><code id="source-code" class="language-java">
+    List<String> stooges = Arrays.asList("Larry", "Moe", "Curly");
+</code></pre>    

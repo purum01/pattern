@@ -1,0 +1,106 @@
+<h1 style="text-align: center;">생성자를 위한 객체 생성 </h1>
+
+<h3>✅ 리소스 설정을 위한 ResoucePoolConfig의 멤버변수</h3>
+<style>
+    table {
+        width: 60%;
+        border-collapse: collapse;
+        margin-left: 0;   /* 왼쪽 정렬 */
+        margin-top: 30px; /* 위쪽 여백 */
+        font-family: Arial, sans-serif;
+    }
+    th, td {
+        border: 1px solid #aaa;
+        padding: 10px;
+        text-align: center;
+    }
+    thead {
+        background-color: #d1f0e1; /* 헤더 부분 연한 초록색 */
+    }
+</style>
+
+
+<table>
+<thead>
+    <tr>
+        <th>멤버 변수</th>
+        <th>설명</th>
+        <th>필수 설정</th>
+        <th>기본값</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>Name</td>
+        <td>리소스 이름</td>
+        <td>예</td>
+        <td>없음</td>
+    </tr>
+    <tr>
+        <td>maxTotal</td>
+        <td>최대 전체 리소스 크기</td>
+        <td>아니요</td>
+        <td>8</td>
+    </tr>
+    <tr>
+        <td>maxIdle</td>
+        <td>최대 유휴 리소스 크기</td>
+        <td>아니요</td>
+        <td>8</td>
+    </tr>
+    <tr>
+        <td>minIdle</td>
+        <td>최소 유휴 리소스 크기</td>
+        <td>아니요</td>
+        <td>0</td>
+    </tr>
+</tbody>
+</table>
+
+<pre><code id="source-code" class="language-java">
+    public class ResourcePoolConfig {
+        private static final int DEFAULT_MAX_TOTAL = 8;
+        private static final int DEFAULT_MAX_IDLE = 8;
+        private static final int DEFAULT_MIN_IDLE = 0;
+    
+        private String name;
+        private int maxTotal = DEFAULT_MAX_TOTAL;
+        private int maxIdle = DEFAULT_MAX_IDLE;
+        private int minIdle = DEFAULT_MIN_IDLE;
+    
+        public ResourcePoolConfig(String name, Integer maxTotal, Integer maxIdle, Integer minIdle) {
+            if (StringUtils.isBlank(name)) {
+                throw new IllegalArgumentException("name should not be empty.");
+            }
+            this.name = name;
+    
+            if (maxTotal != null) {
+                if (maxTotal <= 0) {
+                    throw new IllegalArgumentException("maxTotal should be positive.");
+                }
+                this.maxTotal = maxTotal;
+            }
+    
+            if (maxIdle != null) {
+                if (maxIdle < 0) {
+                    throw new IllegalArgumentException("maxIdle should not be negative.");
+                }
+                this.maxIdle = maxIdle;
+            }
+    
+            if (minIdle != null) {
+                if (minIdle < 0) {
+                    throw new IllegalArgumentException("minIdle should not be negative.");
+                }
+                this.minIdle = minIdle;
+            }
+        }
+    
+        // getter 메서드 생략
+    }
+    
+</code></pre>
+
+<pre><code id="source-code" class="language-java">
+ResourcePoolConfig config = new ResourcePoolConfig("dbconnectionpool", 16, null, 8, null, false, true, 10, 20, false, true);
+</code></pre>   

@@ -8,7 +8,6 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            overflow: hidden; /* body 자체는 스크롤 안함 */
         }
         .container {
             display: flex;
@@ -18,19 +17,10 @@
             width: 15%;
             background-color: #f0f0f0;
             padding: 20px;
-            height: 100%;
-            position: fixed;
-            overflow-y: auto; /* 사이드메뉴 자체에 스크롤 생기게 */
-            top: 0;
-            left: 0;
         }
         .content {
-            margin-left: 18%; /* 사이드 메뉴 너비만큼 오른쪽으로 밀기 */
-            width: 85%;
-            padding: 40px 20px 20px 40px; /* 왼쪽 padding을 넉넉히 40px 줌 */
-            height: 100%;
-            overflow-y: auto; /* 본문 스크롤 가능 */
-            box-sizing: border-box; /* 패딩이 width 안에 포함되게 */
+            width: 75%;
+            padding: 20px;
         }
         ul {
             list-style-type: none;
@@ -50,13 +40,13 @@
         }
         .nested > li:hover {
             font-weight: bold;
-            color: white;
+            color:white;
         }
         .active {
             display: block;
         }
+       
     </style>
-    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
@@ -141,46 +131,9 @@
                     <li onclick="event.stopPropagation(); showContent('menu8_4');">적용 대상</li>                                                                                     
                     <li onclick="event.stopPropagation(); showContent('menu8_5');">DI 컨테이너</li>                                                                                     
                     <li onclick="event.stopPropagation(); showContent('menu8_6');">DI 컨테이너 구현</li>                                                                                     
+                                                                               
                 </ul>
             </li>            
-            <li id="menu0" onclick="toggleNested(this)">9. 컴퍼지트 패턴
-                <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu9_0');">GoF 정의</li>   
-                    <li onclick="event.stopPropagation(); showContent('menu9_1');">디렉터리 트리</li>   
-                    <li onclick="event.stopPropagation(); showContent('menu9_2');">휴먼 트리</li>   
-                </ul>
-            </li>            
-            <li id="menu0" onclick="toggleNested(this)">10. 빌더 패턴
-                <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu10_0');">GoF 정의</li>   
-                    <li onclick="event.stopPropagation(); showContent('menu10_1');">생성자 사용 </li>   
-                    <li onclick="event.stopPropagation(); showContent('menu10_2');">Setter 사용 </li>   
-                </ul>
-            </li>            
-            <li id="menu0" onclick="toggleNested(this)">11. 프로토타입 패턴
-                <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu11_0');">GoF 정의</li>   
-                    <li onclick="event.stopPropagation(); showContent('menu11_1');">프로토타입 패턴 적용</li>   
-                    <li onclick="event.stopPropagation(); showContent('menu11_2');">프로토타입 패턴 구현</li>   
-                </ul>
-            </li>            
-            <li id="menu0" onclick="toggleNested(this)">12. 어댑터 패턴
-                <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu12_0');">GoF 정의</li>   
-                    <li onclick="event.stopPropagation(); showContent('menu12_1');">어댑터 패턴 정의 </li>   
-                    <li onclick="event.stopPropagation(); showContent('menu12_2');">어댑터 패턴 응용 </li>   
-                </ul>
-            </li>            
-            <li id="menu0" onclick="toggleNested(this)">13. 프록시 패턴
-                <ul class="nested">
-                    <li onclick="event.stopPropagation(); showContent('menu13_0');">GoF 정의</li>   
-                    <li onclick="event.stopPropagation(); showContent('menu13_1');">인터페이스 기반</li>   
-                    <li onclick="event.stopPropagation(); showContent('menu13_2');">상속 기반</li>   
-                    <li onclick="event.stopPropagation(); showContent('menu13_3');">리플렉션 기반</li>                   
-                    <li onclick="event.stopPropagation(); showContent('menu13_4');">활용 방법</li>                   
-                </ul>
-            </li>            
-         
         </ul>
     </div>
 

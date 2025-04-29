@@ -1,0 +1,206 @@
+<h1 style="text-align: center;">파일 시스템 </h1>
+
+<h3>✅ 요구 사항</h3>
+<ul>
+    <li>- 디렉터리 다음의 하위 디렉터리나 파일을 동적으로 추가하거나 삭제할 수 있다.</li>
+    <li>- 지정된 디렉터리에 있는 파일의 수를 확인한다.</li>
+    <li>- 지정된 디렉터리의 있는 파일의 크기를 합산한다.</li>
+</ul>    
+<pre><code id="source-code" class="language-java">
+    public class FileSystemNode {
+        private String path;
+        private boolean isFile;
+        private List<FileSystemNode> subNodes = new ArrayList<>();
+    
+        public FileSystemNode(String path, boolean isFile) {
+            this.path = path;
+            this.isFile = isFile;
+        }
+    
+        public int countNumOfFiles() {
+            // TODO: 작성 필요
+        }
+    
+        public long countSizeOfFiles() {
+            // TODO: 작성 필요
+        }
+    
+        public String getPath() {
+            return path;
+        }
+    
+        public void addSubNode(FileSystemNode fileOrDir) {
+            subNodes.add(fileOrDir);
+        }
+    
+        public void removeSubNode(FileSystemNode fileOrDir) {
+            int size = subNodes.size();
+            int i = 0;
+            for (; i < size; ++i) {
+                if (subNodes.get(i).getPath().equalsIgnoreCase(fileOrDir.getPath())) {
+                    break;
+                }
+            }
+            if (i < size) {
+                subNodes.remove(i);
+            }
+        }
+    }
+</code></pre>    
+
+<h3>재귀 트리 탐색 알고리즘 - 전체 디렉터리 구조 탐색</h3>
+<pre><code id="source-code" class="language-java">
+    public int countNumOfFiles() {
+        if (isFile) {
+            return 1;
+        }
+    
+        int numOfFiles = 0;
+        for (FileSystemNode fileOrDir : subNodes) {
+            numOfFiles += fileOrDir.countNumOfFiles();
+        }
+        return numOfFiles;
+    }
+    
+    public long countSizeOfFiles() {
+        if (isFile) {
+            File file = new File(path);
+            if (!file.exists()) {
+                return 0;
+            }
+            return file.length();
+        }
+    
+        long sizeOfFiles = 0;
+        for (FileSystemNode fileOrDir : subNodes) {
+            sizeOfFiles += fileOrDir.countSizeOfFiles();
+        }
+        return sizeOfFiles;
+    }
+</code></pre>   
+
+<h3>확장성 고려 - File, Directory 클래스 분리</h3>
+<pre><code id="source-code" class="language-java">
+    // 공통 부모 클래스
+    public abstract class FileSystemNode {
+        protected String path;
+    
+        public FileSystemNode(String path) {
+            this.path = path;
+        }
+    
+        public abstract int countNumOfFiles();
+        public abstract long countSizeOfFiles();
+    
+        public String getPath() {
+            return path;
+        }
+    }
+    
+    // 파일을 나타내는 클래스
+    public class File extends FileSystemNode {
+        public File(String path) {
+            super(path);
+        }
+    
+        @Override
+        public int countNumOfFiles() {
+            return 1;
+        }
+    
+        @Override
+        public long countSizeOfFiles() {
+            java.io.File file = new java.io.File(path);
+            if (!file.exists()) return 0;
+            return file.length();
+        }
+    }
+    
+    // 디렉터리를 나타내는 클래스
+    public class Directory extends FileSystemNode {
+        private List<FileSystemNode> subNodes = new ArrayList<>();
+    
+        public Directory(String path) {
+            super(path);
+        }
+    
+        @Override
+        public int countNumOfFiles() {
+            int numOfFiles = 0;
+            for (FileSystemNode fileOrDir : subNodes) {
+                numOfFiles += fileOrDir.countNumOfFiles();
+            }
+            return numOfFiles;
+        }
+    
+        @Override
+        public long countSizeOfFiles() {
+            long sizeOfFiles = 0;
+            for (FileSystemNode fileOrDir : subNodes) {
+                sizeOfFiles += fileOrDir.countSizeOfFiles();
+            }
+            return sizeOfFiles;
+        }
+    
+        public void addSubNode(FileSystemNode fileOrDir) {
+            subNodes.add(fileOrDir);
+        }
+    
+        public void removeSubNode(FileSystemNode fileOrDir) {
+            int size = subNodes.size();
+            int i = 0;
+            for (; i < size; ++i) {
+                if (subNodes.get(i).getPath().equalsIgnoreCase(fileOrDir.getPath())) {
+                    break;
+                }
+            }
+            if (i < size) {
+                subNodes.remove(i);
+            }
+        }
+    }
+</code></pre>   
+<h3></h3>
+<pre><code id="source-code" class="language-java">
+    public class Demo {
+        public static void main(String[] args) {
+            /*
+             * /
+             * /jp
+             * /jp/a.txt
+             * /jp/b.txt
+             * /jp/movies
+             * /jp/movies/c.avi
+             * /jpub
+             * /jpub/docs
+             * /jpub/docs/d.txt
+             */
+    
+            Directory fileSystemTree = new Directory("/");
+    
+            Directory node_jp = new Directory("/jp/");
+            Directory node_jpub = new Directory("/jpub/");
+            fileSystemTree.addSubNode(node_jp);
+            fileSystemTree.addSubNode(node_jpub);
+    
+            File node_jp_a = new File("/jp/a.txt");
+            File node_jp_b = new File("/jp/b.txt");
+            Directory node_jp_movies = new Directory("/jp/movies/");
+            node_jp.addSubNode(node_jp_a);
+            node_jp.addSubNode(node_jp_b);
+            node_jp.addSubNode(node_jp_movies);
+    
+            File node_jp_movies_c = new File("/jp/movies/c.mp4");
+            node_jp_movies.addSubNode(node_jp_movies_c);
+    
+            Directory node_jpub_docs = new Directory("/jpub/docs/");
+            node_jpub.addSubNode(node_jpub_docs);
+    
+            File node_jpub_docs_d = new File("/jpub/docs/d.txt");
+            node_jpub_docs.addSubNode(node_jpub_docs_d);
+    
+            System.out.println("/ files num: " + fileSystemTree.countNumOfFiles());
+            System.out.println("/jp files num: " + node_jp.countNumOfFiles());
+        }
+    }
+</code></pre>  

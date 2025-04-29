@@ -1,0 +1,121 @@
+<h1 style="text-align: center;">인터페이스 기반의 프락시 패턴 </h1>
+<hr>
+원본 클래스를 변경하지 않고,인터페이스 기반의 프록시 클래스를 만들어 새로운 기능(예: 처리 시간 측정)을 추가하는 방식
+<pre><code id="source-code" class="language-java">
+    public class UserController {
+        private MetricsCollector metricsCollector;  // 의존성 주입
+    
+        public UserVo login(String telephone, String password) {
+            long startTimestamp = System.currentTimeMillis();
+    
+            // ... 로그인 로직 생략
+    
+            long endTimestamp = System.currentTimeMillis();
+            long responseTime = endTimestamp - startTimestamp;
+    
+            RequestInfo requestInfo = new RequestInfo("login", responseTime, startTimestamp);
+            metricsCollector.recordRequest(requestInfo);
+    
+            // UserVo 데이터 반환
+        }
+    
+        public UserVo register(String telephone, String password) {
+            long startTimestamp = System.currentTimeMillis();
+    
+            // ... 등록 로직 생략
+    
+            long endTimestamp = System.currentTimeMillis();
+            long responseTime = endTimestamp - startTimestamp;
+    
+            RequestInfo requestInfo = new RequestInfo("register", responseTime, startTimestamp);
+            metricsCollector.recordRequest(requestInfo);
+    
+            // UserVo 데이터 반환
+        }
+    }
+</code></pre>    
+
+<div style="border-left: 5px solid #4CAF50; background-color: #f9f9f9; padding: 20px 30px; border-radius: 10px; max-width: 800px; font-family: 'Segoe UI', sans-serif; line-height: 1.6;">
+    <h3 style="margin-top: 0;">✅ 문제점과 프록시 패턴 적용 필요성 </h3>
+  
+    <ol>
+      <li><strong style="font-size: 1.1em;">문제점</strong>
+        <ul style="margin-top: 8px;">
+          <li><strong>성능 통계 코드(<code>MetricsCollector</code>)</strong>가 <strong>비즈니스 로직과 강하게 결합</strong>되어 있어,<br>
+              교체나 수정 시 <strong style="color: #e53935;">유지보수가 어려움</strong></li>
+          <li><strong>성능 통계</strong>와 같은 <span style="color: #666;">부가 기능</span>이 <span style="color: #666;">핵심 로직</span>을 흐림</li>
+        </ul>
+      </li>
+  
+      <li style="margin-top: 20px;"><strong style="font-size: 1.1em;">해결 방법</strong>
+        <ul style="margin-top: 8px;">
+          <li><strong>프록시 패턴</strong>을 사용해 <strong>핵심 비즈니스 로직</strong>과 <strong>부가 기능</strong>을 <span style="color: #43a047;">분리</span></li>
+          <li><code>UserController</code>와 동일한 인터페이스를 가지는 <strong>프록시 클래스</strong> (<code>UserControllerProxy</code>) 도입</li>
+          <li><code>UserControllerProxy</code>가 <span style="color: #666;">통계 측정 등 부가기능</span>을 처리하고,<br>
+              실제 업무 처리는 내부에서 <code>UserController</code>에 위임</li>
+        </ul>
+      </li>
+    </ol>
+  </div>
+  
+  <pre><code id="source-code" class="language-java">
+    public interface IUserController {
+        UserVo login(String telephone, String password);
+        UserVo register(String telephone, String password);
+    }
+    
+    public class UserController implements IUserController {
+        // ... 원래 작성돼 있던 코드 생략 ...
+        @Override
+        public UserVo login(String telephone, String password) {
+            // ... 로그인 코드 생략 ...
+        }
+    
+        @Override
+        public UserVo register(String telephone, String password) {
+            // ... 등록 코드 생략 ...
+        }
+    }
+    
+    public class UserControllerProxy implements IUserController {
+        private MetricsCollector metricsCollector;
+        private UserController userController;
+    
+        public UserControllerProxy(UserController userController) {
+            this.userController = userController;
+            this.metricsCollector = new MetricsCollector();
+        }
+    
+        @Override
+        public UserVo login(String telephone, String password) {
+            long startTimestamp = System.currentTimeMillis();
+            UserVo userVo = userController.login(telephone, password);
+            long endTimestamp = System.currentTimeMillis();
+            long responseTime = endTimestamp - startTimestamp;
+            RequestInfo requestInfo = new RequestInfo("login", responseTime, startTimestamp);
+            metricsCollector.recordRequest(requestInfo);
+            return userVo;
+        }
+    
+        @Override
+        public UserVo register(String telephone, String password) {
+            long startTimestamp = System.currentTimeMillis();
+            UserVo userVo = userController.register(telephone, password);
+            long endTimestamp = System.currentTimeMillis();
+            long responseTime = endTimestamp - startTimestamp;
+            RequestInfo requestInfo = new RequestInfo("register", responseTime, startTimestamp);
+            metricsCollector.recordRequest(requestInfo);
+            return userVo;
+        }
+    }
+  </code></pre> 
+
+<ul>
+    <li>- UserControllerProxy 클래스는 원본 클래스(UserController)와 동일한 인터페이스를 구현하므로,</li>
+    <li>- 코드 수정 없이 기존 객체를 프록시 객체로 쉽게 교체 가능하다.</li>
+    <li>- 즉, 인터페이스 기반 설계 덕분에 교체 비용이 적다는 장점이 있다.</li>
+</ul> 
+
+<pre><code id="source-code" class="language-java">
+    IUserController userController = new UserControllerProxy(new UserController());
+</code></pre> 

@@ -1,0 +1,103 @@
+<link href="card.css" rel="stylesheet">
+<style>
+  table {
+    width: 80%;
+    margin: 40px auto;
+    border-collapse: collapse;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+  }
+  th, td {
+    padding: 12px 20px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background-color: #f9fafb;
+    font-weight: bold;
+  }
+  tr:hover {
+    background-color: #f1f5f9;
+  }
+</style>
+<div class="card">
+  <h1>Proxy  Pattern</h1>
+  <p>
+    “프록시는 다른 객체에 대한 접근을 제어하기 위해 그 객체를 대리하는 객체를 제공한다.”
+  </p>
+
+  <div class="info">
+    <div class="info-row">
+      <div class="info-title">설명</div>
+      <div class="info-content">
+        프록시(Proxy)는 실제 객체에 직접 접근하지 못하게 하고,<br>
+        대리 객체를 통해 간접적으로 접근하게 만드는 구조이다<br>
+        접근 제어, 지연 로딩, 로깅, 보안 등의 목적으로 사용된다.
+      </div>
+    </div>
+  </div>
+</div>  
+
+<h3>🔵 Proxy Pattern 사용 이유</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>이유</th>
+          <th>설명</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>접근 제어</td>
+          <td>실제 객체에 대한 접근을 제한하거나 조건을 걸 수 있음</td>
+        </tr>
+        <tr>
+          <td>지연 로딩 (Lazy Loading)</td>
+          <td>실제 객체 생성을 나중으로 미뤄 자원을 절약</td>
+        </tr>
+        <tr>
+          <td>로깅 및 감시</td>
+          <td>접근 시 로그 기록, 감사(Audit), 성능 모니터링 가능</td>
+        </tr>
+        <tr>
+          <td>보안</td>
+          <td>인증된 사용자만 객체에 접근하게 제한 가능</td>
+        </tr>
+        <tr>
+          <td>네트워크 프록시</td>
+          <td>원격 객체와의 통신을 추상화하여 마치 로컬처럼 사용 가능</td>
+        </tr>
+      </tbody>
+    </table>    
+    
+<h3>🟠 Proxy Pattern 활용 사례</h3>
+<table>
+  <thead>
+    <tr>
+      <th>활용 분야</th>
+      <th>구체적 설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>가상 프록시 (Virtual Proxy)</td>
+      <td>이미지처럼 로딩 비용이 큰 객체를 필요할 때까지 생성하지 않음</td>
+    </tr>
+    <tr>
+      <td>보호 프록시 (Protection Proxy)</td>
+      <td>권한이 있는 사용자만 특정 작업을 할 수 있게 제한</td>
+    </tr>
+    <tr>
+      <td>원격 프록시 (Remote Proxy)</td>
+      <td>클라이언트가 네트워크 너머의 객체를 로컬처럼 다룰 수 있게 함 (예: RMI)</td>
+    </tr>
+    <tr>
+      <td>스마트 참조 프록시 (Smart Reference)</td>
+      <td>접근 시 로깅, 카운팅, 캐싱 등 부가 기능을 수행</td>
+    </tr>
+    <tr>
+      <td>Spring AOP 프록시</td>
+      <td>메서드 호출 시 트랜잭션, 로깅, 보안 처리 등을 삽입하는 데 활용됨</td>
+    </tr>
+  </tbody>
+</table>

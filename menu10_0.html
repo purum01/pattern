@@ -1,0 +1,95 @@
+<link href="card.css" rel="stylesheet">
+<style>
+  table {
+    width: 80%;
+    margin: 40px auto;
+    border-collapse: collapse;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+  }
+  th, td {
+    padding: 12px 20px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background-color: #f9fafb;
+    font-weight: bold;
+  }
+  tr:hover {
+    background-color: #f1f5f9;
+  }
+</style>
+<div class="card">
+  <h1>Builder Pattern</h1>
+  <p>
+    "복잡한 객체의 생성 과정을 그 객체의 표현과 분리하여, 동일한 생성 절차가 서로 다른 표현 결과를 만들 수 있도록 한다."
+  </p>
+
+  <div class="info">
+    <div class="info-row">
+      <div class="info-title">설명</div>
+      <div class="info-content">
+        객체 생성 과정과 **객체 구성 방식(표현)**을 분리한다. <br>
+        동일한 절차를 거치더라도 다른 형태의 객체를 만들어낼 수 있다.<br>
+        복잡한 객체를 단계별로 조립하는데 유용하다.
+      </div>
+    </div>
+  </div>
+</div>  
+
+<h3>🔵 Builder Pattern 사용 이유</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>이유</th>
+          <th>설명</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>복잡한 객체 생성을 단계별로 관리하기 위해</td>
+          <td>필수 속성과 선택 속성이 섞여 있을 때, 객체 생성 과정을 단계별로 분리해서 명확하게 구성할 수 있다.</td>
+        </tr>
+        <tr>
+          <td>생성 과정과 표현을 분리하기 위해</td>
+          <td>같은 생성 절차를 사용해도 다양한 객체 표현이 가능하게 만들 수 있다.</td>
+        </tr>
+        <tr>
+          <td>코드 가독성과 유지보수성을 높이기 위해</td>
+          <td>생성자 파라미터가 너무 많을 때 (ex: 10개 이상), 빌더를 사용하면 가독성이 좋아지고 코드가 안전해진다.</td>
+        </tr>
+        <tr>
+          <td>불변 객체(immutable object) 만들기 위해</td>
+          <td>빌더를 통해 모든 필드를 설정하고, 최종적으로 한 번에 객체를 생성하여 불변 객체를 쉽게 만들 수 있다.</td>
+        </tr>
+      </tbody>
+    </table>    
+    
+<h3>🟠 Builder Pattern 활용 사례</h3>
+<table>
+  <thead>
+    <tr>
+      <th>활용 분야</th>
+      <th>구체적 설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>복잡한 옵션을 가진 객체 생성</td>
+      <td>Person 클래스에서 이름, 나이, 주소, 이메일 등 다양한 옵션이 있을 때 빌더 사용.</td>
+    </tr>
+    <tr>
+      <td>라이브러리/프레임워크의 설정 객체</td>
+      <td>Java의 StringBuilder, Spring Framework의 BeanDefinitionBuilder, Lombok의 @Builder</td>
+    </tr>
+    <tr>
+      <td>Immutable 객체 생성</td>
+      <td>생성 후 변경이 불가능한 객체를 만들 때 빌더를 사용하면 안전하고 명확하게 구성할 수 있다.</td>
+    </tr>
+    <tr>
+      <td>복잡한 문서(Document) 생성</td>
+      <td>문서 생성기, 리포트 생성기처럼 다양한 부분이 조립되는 복잡한 데이터 생성 시 유용하다.</td>
+    </tr>
+  </tbody>
+</table>

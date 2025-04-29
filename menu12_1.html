@@ -1,0 +1,134 @@
+  <style>
+
+    .box {
+      border-left: 5px solid #4CAF50;
+      padding: 20px 30px;
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    h2::before {
+      content: "✅ ";
+    }
+    code {
+      background-color: #eee;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: "Courier New", monospace;
+    }
+    ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+    li {
+      margin-bottom: 6px;
+    }
+  </style>
+
+  <div class="box">
+    <h2>어댑터 패턴</h2>
+    <p><strong>목적:</strong> 서로 다른 인터페이스를 호환되게 만들어 함께 작동하도록 돕는 패턴이다.</p>
+    <p><strong>비유:</strong> USB 어댑터처럼, 호환되지 않는 장치끼리 연결되게 만든다.</p>
+    <p><strong>형태:</strong></p>
+    <ul>
+      <li><strong>클래스 어댑터:</strong> 상속을 사용하여 구현</li>
+      <li><strong>객체 어댑터:</strong> 합성(객체 포함)을 사용하여 구현</li>
+    </ul>
+    <p><strong>구성요소:</strong></p>
+    <ul>
+      <li><code>ITarget</code>: 클라이언트가 기대하는 인터페이스</li>
+      <li><code>Adaptee</code>: 기존(호환되지 않는) 클래스</li>
+      <li><code>Adapter</code>: <code>Adaptee</code>를 <code>ITarget</code>에 맞게 변환</li>
+    </ul>
+  </div>
+<br><br>
+
+<pre><code id="source-code" class="language-java">
+    // 상속 기반의 클래스 어댑터
+    public interface ITarget {
+        void f1();
+        void f2();
+        void fC();
+    }
+    
+    // 호환되지 않는 기존 클래스
+    public class Adaptee {
+        public void fa() { /* ... */ }
+        public void fb() { /* ... */ }
+        public void fc() { /* ... */ }
+    }
+    
+    // 어댑터: 상속을 사용하여 ITarget을 구현
+    public class Adapter extends Adaptee implements ITarget {
+        @Override
+        public void f1() {
+            super.fa();  // Adaptee의 fa() 사용
+        }
+    
+        @Override
+        public void f2() {
+            // f2() 재구현
+        }
+    
+        // fC()는 Adaptee에서 상속받은 것을 그대로 사용
+    }
+
+    // 합성 기반 객체 어댑터
+    public interface ITarget {
+        void f1();
+        void f2();
+        void fC();
+    }
+    
+    // 호환되지 않는 기존 클래스
+    public class Adaptee {
+        public void fa() { /* ... */ }
+        public void fb() { /* ... */ }
+        public void fc() { /* ... */ }
+    }
+    
+    // 어댑터: 합성을 사용하여 Adaptee를 포함
+    public class Adapter implements ITarget {
+        private Adaptee adaptee;
+    
+        public Adapter(Adaptee adaptee) {
+            this.adaptee = adaptee;
+        }
+    
+        @Override
+        public void f1() {
+            adaptee.fa();  // 위임
+        }
+    
+        @Override
+        public void f2() {
+            // f2() 재구현
+        }
+    
+        @Override
+        public void fC() {
+            adaptee.fc();  // 위임
+        }
+    }
+</code></pre>    
+<br><br>
+<div class="box">
+    <h2>클래스 어댑터 vs 객체 어댑터 선택 기준 요약</h2>
+    <ol>
+      <li>
+        <strong>Adaptee 인터페이스가 많지 않다면</strong>
+        <span>→ 두 방식(클래스 어댑터, 객체 어댑터) 모두 무방하다.</span>
+      </li>
+      <li>
+        <strong>Adaptee 인터페이스가 많고,<br>
+        Adaptee와 ITarget 인터페이스의 경계가 비슷하다면</strong>
+        <span>→ 클래스 어댑터가 유리하다.<br>(기존 Adaptee 기능을 재사용하기 쉬움)</span>
+      </li>
+      <li>
+        <strong>Adaptee 인터페이스가 많지만,<br>
+        Adaptee와 ITarget 인터페이스 구조가 다르다면</strong>
+        <span>→ 객체 어댑터가 유리하다.<br>(유연한 합성 구조 덕분에 더 적합)</span>
+      </li>
+    </ol>
+  </div>

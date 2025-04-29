@@ -1,0 +1,155 @@
+<h1 style="text-align: center;">휴먼 트리 </h1>
+
+<h3>✅ 사무 자동화 시스템 개발</h3>
+
+<style>
+    table {
+        width: 60%;
+        border-collapse: collapse;
+        margin-bottom: 30px;
+    }
+    th, td {
+        border: 1px solid #aaa;
+        padding: 10px;
+        text-align: center;
+    }
+    caption {
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+</style>
+
+
+<table>
+<caption>부서(department)</caption>
+<thead>
+    <tr>
+        <th>부서 ID</th>
+        <th>상위 부서 ID</th>
+        <th>...</th>
+        <th>...</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>id</td>
+        <td>parent_department_id</td>
+        <td>...</td>
+        <td>...</td>
+    </tr>
+</tbody>
+</table>
+
+<table>
+<caption>직원(employee)</caption>
+<thead>
+    <tr>
+        <th>직원 ID</th>
+        <th>소속 부서 ID</th>
+        <th>급여</th>
+        <th>...</th>
+    </tr>
+</thead>
+<tbody>
+    <tr>
+        <td>id</td>
+        <td>department_id</td>
+        <td>salary</td>
+        <td>...</td>
+    </tr>
+</tbody>
+</table>
+
+<h3>✅ 세부 사항</h3>
+
+회사 전체 조직도를 기억하고, 부서별로 소속 직원들의 급여 합계를 계산할 수 있는 인터페이스를 제공하려고 한다.
+부서는 하위 부서와 직원을 포함하는 트리 구조로 표현된다.
+부서별 급여 계산은 트리 순회 알고리즘으로 해결할 수 있다.
+이를 위해 복합체(Composite) 패턴을 사용해 설계하고 구현한다.
+<figure style="text-align: center;">
+    <img src="img/menu9_2.png" style="width: 50%;">
+</figure>
+<pre><code id="source-code" class="language-java">
+    // 추상 클래스: 공통 부모
+    public abstract class HumanResource {
+        protected long id;
+        protected double salary;
+    
+        public HumanResource(long id) {
+            this.id = id;
+        }
+    
+        public long getId() {
+            return id;
+        }
+    
+        public abstract double calculateSalary();
+    }
+    
+    // 직원 클래스
+    public class Employee extends HumanResource {
+        public Employee(long id, double salary) {
+            super(id);
+            this.salary = salary;
+        }
+    
+        @Override
+        public double calculateSalary() {
+            return salary;
+        }
+    }
+    
+    // 부서 클래스
+    public class Department extends HumanResource {
+        private List<HumanResource> subNodes = new ArrayList<>();
+    
+        public Department(long id) {
+            super(id);
+        }
+    
+        @Override
+        public double calculateSalary() {
+            double totalSalary = 0;
+            for (HumanResource hr : subNodes) {
+                totalSalary += hr.calculateSalary();
+            }
+            this.salary = totalSalary;
+            return totalSalary;
+        }
+    
+        public void addSubNode(HumanResource hr) {
+            subNodes.add(hr);
+        }
+    }
+    
+    // 조직도를 작성하는 코드
+    public class Demo {
+        private static final long ORGANIZATION_ROOT_ID = 1001;
+    
+        private DepartmentRepo departmentRepo; // 의존성 주입
+        private EmployeeRepo employeeRepo;      // 의존성 주입
+    
+        public void buildOrganization() {
+            Department rootDepartment = new Department(ORGANIZATION_ROOT_ID);
+            buildOrganization(rootDepartment);
+        }
+    
+        private void buildOrganization(Department department) {
+            List<Long> subDepartmentIds = departmentRepo.getSubDepartmentIds(department.getId());
+            for (Long subDepartmentId : subDepartmentIds) {
+                Department subDepartment = new Department(subDepartmentId);
+                department.addSubNode(subDepartment);
+                buildOrganization(subDepartment);
+            }
+    
+            List<Long> employeeIds = employeeRepo.getDepartmentEmployeeIds(department.getId());
+            for (Long employeeId : employeeIds) {
+                double salary = employeeRepo.getEmployeeSalary(employeeId);
+                department.addSubNode(new Employee(employeeId, salary));
+            }
+        }
+    }
+</code></pre>
+
+
