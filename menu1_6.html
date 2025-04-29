@@ -1,0 +1,354 @@
+<style>
+    /* 전체 박스 */
+    .assignment {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+        padding: 50px 40px;
+        max-width: 960px;
+        margin: 40px auto;
+        font-family: 'Inter', 'Noto Sans KR', sans-serif;
+        color: #333;
+        font-size: 16px;
+        line-height: 1.8;
+    }
+    
+    /* 제목 */
+    .title {
+        font-size: 36px;
+        font-weight: 700;
+        margin-bottom: 30px;
+        color: #222;
+        text-align: center;
+    }
+    
+    /* 섹션 */
+    .section {
+        margin-bottom: 50px;
+    }
+    
+    /* 섹션 제목 */
+    .section-title {
+        font-size: 26px;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: #2c3e50;
+        border-left: 6px solid #3498db;
+        padding-left: 12px;
+    }
+    
+    /* 소제목 */
+    .subsection-title {
+        font-size: 20px;
+        font-weight: 600;
+        margin-top: 24px;
+        margin-bottom: 12px;
+        color: #555;
+    }
+    
+    /* 일반 문단 */
+    .paragraph {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    
+    /* 리스트 */
+    .list {
+        list-style: disc;
+        padding-left: 25px;
+        margin-bottom: 20px;
+    }
+    
+    .list li {
+        margin-bottom: 8px;
+    }
+    
+    /* 코드 한 줄 강조 */
+    .inline-code {
+        background: #f1f3f5;
+        padding: 3px 6px;
+        border-radius: 5px;
+        font-family: 'Fira Code', 'Courier New', monospace;
+        font-size: 90%;
+    }
+    
+    /* 코드 블록 */
+    .code-box {
+        background: #f4f4f4;
+        padding: 15px;
+        border-radius: 10px;
+        overflow-x: auto;
+        margin-top: 12px;
+        font-family: 'Fira Code', 'Courier New', monospace;
+    }
+    
+    /* 복사 버튼 */
+    .copy-button {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background-color: #3498db;
+        color: #ffffff;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s;
+    }
+    
+    .copy-button:hover {
+        background-color: #2980b9;
+    }
+    
+    /* 파일 블록 */
+    .file-box {
+        background: #fafafa;
+        padding: 20px;
+        margin-bottom: 35px;
+        border-radius: 12px;
+        border: 1px solid #e0e0e0;
+        position: relative;
+    }
+    
+    /* 파일 이름 */
+    .file-title {
+        font-size: 22px;
+        font-weight: 600;
+        color: #34495e;
+        margin-bottom: 10px;
+    }
+    
+    /* 강조 박스 */
+    .highlight-box {
+        background: #eaf6ff;
+        border-left: 6px solid #3498db;
+        padding: 16px;
+        border-radius: 8px;
+        margin-bottom: 24px;
+        font-size: 15px;
+    }
+    </style>
+    
+    
+    <div class="assignment">
+        <h1 class="title">전략 패턴(Strategy Pattern) 적용하여 리팩토링하기</h1>
+    
+        <section class="section">
+            <h2 class="section-title">📋 실습 목표</h2>
+            <p class="paragraph">
+                주어진 소스코드(리팩토링 전)를 분석하고, <strong>전략 패턴(Strategy Pattern)</strong>을 적용하여 코드를 리팩토링하세요.
+            </p>
+            <div class="highlight-box">
+                리팩토링 후에는 <strong>Player</strong> 클래스가 전략을 몰라야 하며,<strong>새 전략 추가 시 Player를 수정하지 않아야</strong> 합니다.
+            </div>
+        </section>
+    
+        <section class="section">
+            <h2 class="section-title">🛠 리팩토링 지침</h2>
+    
+            <h3 class="subsection-title">1. Strategy 인터페이스를 설계하세요.</h3>
+            <ul class="list">
+                <li>메서드: <code class="inline-code">Hand nextHand()</code>, <code class="inline-code">void study(boolean win)</code></li>
+            </ul>
+    
+            <h3 class="subsection-title">2. 구체 전략(Concrete Strategy) 클래스를 만드세요.</h3>
+            <ul class="list">
+                <li><strong>RandomStrategy</strong>: 무작위로 가위/바위/보 중 하나를 선택</li>
+                <li><strong>WinningStrategy</strong>: 직전에 이긴 손을 계속 반복, 지면 랜덤 선택</li>
+                <li><strong>ProbStrategy</strong>: 확률 기반으로 손을 선택하고 승패에 따라 확률을 조정</li>
+            </ul>
+    
+            <h3 class="subsection-title">3. Player 클래스를 수정하세요.</h3>
+            <ul class="list">
+                <li>Player는 <code class="inline-code">Strategy</code> 인터페이스를 통해 전략을 사용합니다.</li>
+                <li>if-else로 전략 분기하던 코드를 삭제합니다.</li>
+                <li>생성자에서 <code class="inline-code">Strategy</code> 객체를 주입받도록 변경합니다.</li>
+            </ul>
+    
+            <h3 class="subsection-title">4. Main 클래스를 수정하세요.</h3>
+            <ul class="list">
+                <li>Player를 생성할 때 원하는 <code class="inline-code">Strategy</code> 구현체를 생성해서 넘깁니다.</li>
+            </ul>
+    
+            <pre class="code-box"><code>Player player1 = new Player("홍", new RandomStrategy(seed1));
+Player player2 = new Player("강", new ProbStrategy(seed2));</code></pre>
+
+            <h3 class="subsection-title">5. 리팩터링 후 구조는 다음과 같습니다.</h3>
+            <pre class="code-box"><code>/strategy/
+        Hand.java
+        Strategy.java
+        RandomStrategy.java
+        WinningStrategy.java
+        ProbStrategy.java
+        Player.java
+        Main.java
+    </code></pre>
+    
+            <ul class="list">
+                <li>실행 시 기존과 동일하게 10,000판 게임을 진행하고 결과를 출력해야 합니다.</li>
+            </ul>
+            <section class="section">
+                <h2 class="section-title">🗂 제공 파일</h2>
+                <ul class="list">
+                    <li>Hand.java (완성본)</li>
+                    <li>Player.java (리팩토링 전 버전)</li>
+                    <li>Main.java (리팩토링 전 버전)</li>
+                </ul>
+            </section>            
+<!-- Hand.java -->
+<div class="file-box">
+    <h3 class="file-title">Hand.java</h3>
+    <button class="copy-button" onclick="copyCode('hand-code')">복사하기</button>
+    <pre class="code-box"><code id="hand-code">package strategy;
+
+public class Hand {
+    public static final int HANDVALUE_GUU = 0;
+    public static final int HANDVALUE_CHO = 1;
+    public static final int HANDVALUE_PAA = 2;
+
+    private static final Hand[] hand = {
+        new Hand(HANDVALUE_GUU),
+        new Hand(HANDVALUE_CHO),
+        new Hand(HANDVALUE_PAA),
+    };
+
+    private static final String[] name = {"주먹", "가위", "보"};
+
+    private int handvalue;
+
+    private Hand(int handvalue) {
+        this.handvalue = handvalue;
+    }
+
+    public static Hand getHand(int handvalue) {
+        return hand[handvalue];
+    }
+
+    public boolean isStrongerThan(Hand h) {
+        return fight(h) == 1;
+    }
+
+    public boolean isWeakerThan(Hand h) {
+        return fight(h) == -1;
+    }
+
+    private int fight(Hand h) {
+        int result = (handvalue + 1) % 3;
+        if (result == h.getHandvalue()) return 1;
+        else if (result > h.getHandvalue()) return 0;
+        else return -1;
+    }
+
+    public int getHandvalue() {
+        return handvalue;
+    }
+
+    public String toString() {
+        return name[handvalue];
+    }
+}
+</code></pre>
+</div>
+
+<!-- Player.java -->
+<div class="file-box">
+    <h3 class="file-title">Player.java</h3>
+    <button class="copy-button" onclick="copyCode('player-code')">복사하기</button>
+    <pre class="code-box"><code id="player-code">package strategy;
+
+public class Player {
+    private String name;
+    private String strategyType;
+    private int wincount;
+    private int losecount;
+    private int gamecount;
+
+    public Player(String name, String strategyType) {
+        this.name = name;
+        this.strategyType = strategyType;
+    }
+
+    public Hand nextHand() {
+        if ("random".equals(strategyType)) {
+            int value = (int)(Math.random() * 3);
+            return Hand.getHand(value);
+        } else if ("winning".equals(strategyType)) {
+            // 간단한 winning 전략 (임시)
+            return Hand.getHand((int)(Math.random() * 3));
+        } else {
+            // default random
+            return Hand.getHand((int)(Math.random() * 3));
+        }
+    }
+
+    public void win() {
+        wincount++;
+        gamecount++;
+    }
+
+    public void lose() {
+        losecount++;
+        gamecount++;
+    }
+
+    public void even() {
+        gamecount++;
+    }
+
+    public String toString() {
+        return "[" + name + ":" + gamecount + " games, " + wincount + " win, " + losecount + " lose" + "]";
+    }
+}
+</code></pre>
+</div>
+
+<!-- Main.java -->
+<div class="file-box">
+    <h3 class="file-title">Main.java</h3>
+    <button class="copy-button" onclick="copyCode('main-code')">복사하기</button>
+    <pre class="code-box"><code id="main-code">package strategy;
+
+public class Main {
+    public static void main(String[] args) {
+        Player player1 = new Player("홍", "random");
+        Player player2 = new Player("강", "winning");
+
+        for (int i = 0; i &lt; 10000; i++) {
+            Hand nextHand1 = player1.nextHand();
+            Hand nextHand2 = player2.nextHand();
+            if (nextHand1.isStrongerThan(nextHand2)) {
+                System.out.println("Winner: " + player1);
+                player1.win();
+                player2.lose();
+            } else if (nextHand2.isStrongerThan(nextHand1)) {
+                System.out.println("Winner: " + player2);
+                player1.lose();
+                player2.win();
+            } else {
+                System.out.println("Even...");
+                player1.even();
+                player2.even();
+            }
+        }
+
+        System.out.println("Total result:");
+        System.out.println(player1);
+        System.out.println(player2);
+    }
+}
+</code></pre>
+</div>
+
+</section>
+</div>            
+        </section>
+    </div>
+<script>
+    function copyCode(id) {
+        const codeElement = document.getElementById(id);
+        navigator.clipboard.writeText(codeElement.textContent)
+            .then(() => alert('코드가 복사되었습니다!'))
+            .catch(err => alert('복사 실패: ' + err));
+    }
+</script>    
