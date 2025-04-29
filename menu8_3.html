@@ -1,0 +1,172 @@
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    html {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #f9fafb;
+        padding: 40px;
+    }
+    h1.main-title {
+        font-size: 36px;
+        margin-bottom: 50px;
+        color: #111827;
+        text-align: center;
+        font-weight: 700;
+    }
+    h2.section-title {
+        font-size: 24px;
+        margin-top: 60px;
+        margin-bottom: 10px;
+        color: #1f2937;
+        text-align: center;
+        font-weight: 600;
+    }
+    p.section-desc {
+        font-size: 18px;
+        margin: 8px 0 30px 0;
+        color: #6b7280;
+        text-align: center;
+    }
+    code {
+        background-color: #eef2f7;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 16px;
+        font-family: 'Courier New', monospace;
+        color: #111827;
+    }
+    .table-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 60px;
+    }
+    table {
+        width: 600px;
+        border-collapse: separate;
+        border-spacing: 0;
+        background-color: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+    th, td {
+        padding: 16px 24px;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    th {
+        background-color: #f3f4f6;
+        font-weight: 700;
+        color: #374151;
+    }
+    td {
+        color: #374151;
+    }
+    tr:last-child td {
+        border-bottom: none;
+    }
+    table tbody tr:hover {
+        background-color: #f9fafb;
+    }
+</style>
+
+<h1 class="main-title">Abstract Factory Pattern</h1>
+
+<h2 class="section-title"><code>IRuleConfigParser</code> 인터페이스 기반</h2>
+<p class="section-desc">규칙 설정(<strong>rule config</strong>)을 위한 파서 클래스 목록:</p>
+
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>클래스명</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>(1)</td>
+                <td><code>JsonRuleConfigParser</code></td>
+            </tr>
+            <tr>
+                <td>(2)</td>
+                <td><code>XmlRuleConfigParser</code></td>
+            </tr>
+            <tr>
+                <td>(3)</td>
+                <td><code>YamlRuleConfigParser</code></td>
+            </tr>
+            <tr>
+                <td>(4)</td>
+                <td><code>PropertiesRuleConfigParser</code></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h2 class="section-title"><code>ISystemConfigParser</code> 인터페이스 기반</h2>
+<p class="section-desc">시스템 설정(<strong>system config</strong>)을 위한 파서 클래스 목록:</p>
+
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>클래스명</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>(1)</td>
+                <td><code>JsonSystemConfigParser</code></td>
+            </tr>
+            <tr>
+                <td>(2)</td>
+                <td><code>XmlSystemConfigParser</code></td>
+            </tr>
+            <tr>
+                <td>(3)</td>
+                <td><code>YamlSystemConfigParser</code></td>
+            </tr>
+            <tr>
+                <td>(4)</td>
+                <td><code>PropertiesSystemConfigParser</code></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<h3></h3>
+<pre><code id="source-code" class="language-java">
+    public interface IConfigParserFactory {
+        IRuleConfigParser createRuleParser();
+        ISystemConfigParser createSystemParser();
+        // 여기서 IBizConfigParser와 같은 새로운 parser 유형을 확장할 수 있음
+    }
+    
+    public class JsonConfigParserFactory implements IConfigParserFactory {
+        @Override
+        public IRuleConfigParser createRuleParser() {
+            return new JsonRuleConfigParser();
+        }
+    
+        @Override
+        public ISystemConfigParser createSystemParser() {
+            return new JsonSystemConfigParser();
+        }
+    }
+    
+    public class XmlConfigParserFactory implements IConfigParserFactory {
+        @Override
+        public IRuleConfigParser createRuleParser() {
+            return new XmlRuleConfigParser();
+        }
+    
+        @Override
+        public ISystemConfigParser createSystemParser() {
+            return new XmlSystemConfigParser();
+        }
+    }
+    
+    // YamlConfigParserFactory, PropertiesConfigParserFactory 생성 예정
+</code></pre>    

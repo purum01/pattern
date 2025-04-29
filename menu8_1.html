@@ -1,0 +1,134 @@
+<h1 style="text-align: center;">단순 팩터리 패턴 </h1>
+
+<h3>설정 파일 확장자에따른 객체 생성</h3>
+<pre><code id="source-code" class="language-java">
+    public class RuleConfigSource {
+        public RuleConfig load(String ruleConfigFilePath) {
+            String ruleConfigFileExtension = getFileExtension(ruleConfigFilePath);
+            IRuleConfigParser parser = null;
+            if ("json".equalsIgnoreCase(ruleConfigFileExtension)) {
+                parser = new JsonRuleConfigParser();
+            } else if ("xml".equalsIgnoreCase(ruleConfigFileExtension)) {
+                parser = new XmlRuleConfigParser();
+            } else if ("yaml".equalsIgnoreCase(ruleConfigFileExtension)) {
+                parser = new YamlRuleConfigParser();
+            } else if ("properties".equalsIgnoreCase(ruleConfigFileExtension)) {
+                parser = new PropertiesRuleConfigParser();
+            } else {
+                throw new InvalidRuleConfigException(
+                    "Rule config file format is not supported: " + ruleConfigFilePath
+                );
+            }
+    
+            String configText = "";
+            // ruleConfigFilePath 파일에서 configText로 설정 텍스트 읽기
+            RuleConfig ruleConfig = parser.parse(configText);
+            return ruleConfig;
+        }
+    
+        private String getFileExtension(String filePath) {
+            // 파일 이름을 분석하여 확장자 얻기
+            return "json";
+        }
+    }
+</code></pre>
+
+
+<h3>createParser() 함수로 캡슐화</h3>
+<pre><code id="source-code" class="language-java">
+    public RuleConfig load(String ruleConfigFilePath) {
+        String ruleConfigFileExtension = getFileExtension(ruleConfigFilePath);
+        IRuleConfigParser parser = createParser(ruleConfigFileExtension);
+        if (parser == null) {
+            throw new InvalidRuleConfigException(
+                "Rule config file format is not supported: " + ruleConfigFilePath
+            );
+        }
+    
+        String configText = "";
+        // ruleConfigFilePath 파일에서 configText로 설정 텍스트 읽기
+        RuleConfig ruleConfig = parser.parse(configText);
+        return ruleConfig;
+    }
+    
+    private String getFileExtension(String filePath) {
+        // 파일 이름을 분석하여 확장자 얻기
+        return "json";
+    }
+    
+    private IRuleConfigParser createParser(String configFormat) {
+        IRuleConfigParser parser = null;
+        if ("json".equalsIgnoreCase(configFormat)) {
+            parser = new JsonRuleConfigParser();
+        } else if ("xml".equalsIgnoreCase(configFormat)) {
+            parser = new XmlRuleConfigParser();
+        } else if ("yaml".equalsIgnoreCase(configFormat)) {
+            parser = new YamlRuleConfigParser();
+        } else if ("properties".equalsIgnoreCase(configFormat)) {
+            parser = new PropertiesRuleConfigParser();
+        }
+        return parser;
+    }
+</code></pre>    
+<h3>클래스 분리</h3>
+<pre><code id="source-code" class="language-java">
+    public class RuleConfigSource {
+        public RuleConfig load(String ruleConfigFilePath) {
+            String ruleConfigFileExtension = getFileExtension(ruleConfigFilePath);
+            IRuleConfigParser parser = RuleConfigParserFactory.createParser(ruleConfigFileExtension);
+            if (parser == null) {
+                throw new InvalidRuleConfigException(
+                    "Rule config file format is not supported: " + ruleConfigFilePath
+                );
+            }
+    
+            String configText = "";
+            // ruleConfigFilePath 파일에서 configText로 설정 텍스트 읽기
+            RuleConfig ruleConfig = parser.parse(configText);
+            return ruleConfig;
+        }
+    
+        private String getFileExtension(String filePath) {
+            // 파일 이름을 분석하여 확장자 얻기
+            return "json";
+        }
+    }
+    
+    public class RuleConfigParserFactory {
+        public static IRuleConfigParser createParser(String configFormat) {
+            IRuleConfigParser parser = null;
+            if ("json".equalsIgnoreCase(configFormat)) {
+                parser = new JsonRuleConfigParser();
+            } else if ("xml".equalsIgnoreCase(configFormat)) {
+                parser = new XmlRuleConfigParser();
+            } else if ("yaml".equalsIgnoreCase(configFormat)) {
+                parser = new YamlRuleConfigParser();
+            } else if ("properties".equalsIgnoreCase(configFormat)) {
+                parser = new PropertiesRuleConfigParser();
+            }
+            return parser;
+        }
+    }
+</code></pre>    
+
+<h3>객체 재사용</h3>
+<pre><code id="source-code" class="language-java">
+    public class RuleConfigParserFactory {
+        private static final Map<String, IRuleConfigParser> cachedParsers = new HashMap<>();
+        static {
+            cachedParsers.put("json", new JsonRuleConfigParser());
+            cachedParsers.put("xml", new XmlRuleConfigParser());
+            cachedParsers.put("yaml", new YamlRuleConfigParser());
+            cachedParsers.put("properties", new PropertiesRuleConfigParser());
+        }
+    
+        public static IRuleConfigParser createParser(String configFormat) {
+            if (configFormat == null || configFormat.isEmpty()) {
+                // null 또는 IllegalArgumentException 예외 중 하나를 선택할 수 있음
+                return null;
+            }
+            IRuleConfigParser parser = cachedParsers.get(configFormat.toLowerCase());
+            return parser;
+        }
+    }
+</code></pre>    

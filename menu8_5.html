@@ -1,0 +1,241 @@
+<style>
+    .di-section {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        color: #374151;
+        background-color: transparent;
+        padding: 20px;
+        line-height: 1.5;
+        font-size: 14px;
+    }
+
+    .di-section h1 {
+        text-align: center;
+        font-size: 24px;
+        color: #1f2937;
+        margin-bottom: 24px;
+    }
+
+    .di-section h2 {
+        font-size: 20px;
+        margin-bottom: 12px;
+        color: #1f2937;
+    }
+
+    .di-section h3 {
+        font-size: 18px;
+        margin-top: 24px;
+        margin-bottom: 12px;
+        color: #1f2937;
+    }
+
+    .di-section ul {
+        font-size: 14px;
+        margin-bottom: 24px;
+        padding-left: 20px;
+    }
+
+    .di-section table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        margin-top: 8px;
+        margin-bottom: 24px;
+    }
+
+    .di-section th, .di-section td {
+        padding: 10px 16px;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+        font-size: 13px;
+    }
+
+    .di-section th {
+        background-color: #f3f4f6;
+        font-weight: 700;
+        color: #374151;
+    }
+
+    .di-section td {
+        color: #374151;
+    }
+
+    .di-section tr:last-child td {
+        border-bottom: none;
+    }
+
+    .di-section pre {
+        background: #f8f9fa;
+        padding: 16px;
+        border-radius: 6px;
+        overflow-x: auto;
+        font-size: 13px;
+        margin-top: 20px;
+        margin-bottom: 24px;
+    }
+
+    .di-section code {
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+  
+    .custom-list {
+        list-style: none; /* 기본 목록 기호 제거 */
+        padding-left: 20px;
+        font-size: 14px;
+    }
+    .custom-list li {
+        position: relative;
+        margin-bottom: 8px;
+        padding-left: 20px;
+    }
+    .custom-list li::before {
+        content: "✅"; /* 원하는 기호를 여기에 입력 */
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+  
+</style>
+
+<div class="di-section">
+    <h1>DI 컨테이너와 팩터리 패턴</h1>
+
+    <h3>📌 공통점</h3>
+    <ul>
+        <li>DI 컨테이너의 기본 설계 사상은 팩터리 패턴을 기반으로 한다.</li>
+        <li>둘 다 프로그램이 시작될 때 설정에 따라 객체를 생성한다.</li>
+        <li>컨테이너는 많은 객체를 직접 관리할 수 있기 때문에 "컨테이너(Container)"라고 부른다.</li>
+    </ul>
+
+    <h3>📌 차이점</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>구분</th>
+                <th>설명</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>팩터리 패턴</td>
+                <td>특정 클래스나 인터페이스에 맞는 객체 생성만 담당함. 주로 하위 계층의 객체만 생성.</td>
+            </tr>
+            <tr>
+                <td>DI 컨테이너</td>
+                <td>전체 프로그램의 모든 클래스에 대한 객체 생성 관리까지 수행. 더 큰 범위의 생성 작업을 처리.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h1>DI 컨테이너의 핵심기능</h1>
+
+    <h3>🚀 설정 분석</h3>
+    
+    <ul class="custom-list">
+        <li>팩터리 패턴은 클래스 코드에 객체 생성이 미리 작성되어 있어 실행 중에 변경하기 어렵다.</li>
+        <li>DI 컨테이너는 애플리케이션 코드를 고치지 않고도 설정만 수정해서 객체 생성을 조정할 수 있다.</li>
+        <li>DI 컨테이너는 프로그램이 실행되기 전에는 어떤 객체가 필요한지 미리 알 수 없는 경우에도 대응할 수 있도록 설계된다.</li>
+        <li>DI 컨테이너는 설정 파일이나 메타데이터를 통해 필요한 객체 정보를 읽어 객체를 생성한다.</li>
+    </ul>
+
+    <h4>    예시</h4>
+    <ul class="custom-list">
+        <li>Java에서 가장 널리 알려진 DI 컨테이너는 Spring 컨테이너이다.</li>
+        <li>Spring은 설정 파일을 읽어 <code>rateLimiter</code>, <code>redisCounter</code>와 같은 객체를 생성한다.</li>
+        <li>즉, 프로그램 실행 시 필요한 객체를 설정 파일을 기반으로 생성할 수 있다.</li>
+    </ul>
+
+    <pre><code>
+public class RateLimiter {
+    private RedisCounter redisCounter;
+
+    public RateLimiter(RedisCounter redisCounter) {
+        this.redisCounter = redisCounter;
+    }
+
+    public void test() {
+        System.out.println("Hello World!");
+    }
+    // ...
+}
+
+public class RedisCounter {
+    private String ipAddress;
+    private int port;
+
+    public RedisCounter(String ipAddress, int port) {
+        this.ipAddress = ipAddress;
+        this.port = port;
+    }
+    // ...
+}
+    </code></pre>
+
+    <h3>🚀 객체 생성</h3>
+    <ul class="custom-list">
+        <li>DI 컨테이너에서 각 클래스마다 별도로 팩터리 클래스를 생성하면, 팩터리 클래스 수가 많아지고 관리 비용이 커진다.</li>
+        <li>이 문제를 해결하기 위해 모든 객체 생성을 하나의 BeansFactory 클래스에 통합했다.</li>
+        <li>BeansFactory는 여러 객체를 유연하게 생성할 수 있도록 설계되었다.</li>
+        <li>그러나 BeansFactory 코드가 생성할 객체 수에 따라 크기가 무한히 늘어나지는 않는다.</li>
+        <li>생성할 객체를 코드에 미리 작성하는 대신,</li>
+        <li>리플렉션(Reflection)을 이용해 동적으로 객체를 생성하는 방식이 사용된다.</li>
+    </ul>
+    
+
+    <h3>🚀 객체 수명 주기 관리</h3>
+
+    <style>
+        .summary-section {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    
+        .summary-section h2 {
+            font-size: 20px;
+            margin-bottom: 12px;
+            color: #1f2937;
+        }
+    
+        .summary-section ul {
+            padding-left: 20px;
+            margin-bottom: 24px;
+        }
+    
+        .summary-section ul li {
+            margin-bottom: 8px;
+        }
+    </style>
+    
+    <div class="summary-section">
+        <ul>
+            <li>단순 팩터리 패턴 구현 방법은 두 가지가 있다:</li>
+            <ul>
+                <li>① 매번 새로 생성된 객체를 반환</li>
+                <li>② 미리 생성된 동일 객체를 반환</li>
+            </ul>
+            <li>Spring 프레임워크에서는 객체의 생성을 다음과 같이 관리한다:</li>
+            <ul>
+                <li><code>scope=prototype</code> : 매번 새로운 객체를 반환</li>
+                <li><code>scope=singleton</code> : 미리 생성된 객체를 반환</li>
+            </ul>
+            <li>또한, 객체를 지연 초기화(lazy initialization) 할 수 있다.</li>
+            <ul>
+                <li><code>lazy-init=true</code> : 객체가 필요할 때 생성</li>
+                <li><code>lazy-init=false</code> : 애플리케이션 시작 시 객체 생성</li>
+            </ul>
+        </ul>
+    
+        <h4>✅초기화와 소멸 메소드 관리</h4>
+        <ul>
+            <li>객체 생성 시 초기화 메소드(<code>init-method</code>)와 소멸 메소드(<code>destroy-method</code>)를 지정할 수 있다.</li>
+            <li><code>init-method</code> : 객체가 생성될 때 호출되어 초기화 작업(예: DB 연결, 파일 읽기 등)을 수행.</li>
+            <li><code>destroy-method</code> : 객체가 소멸될 때 호출되어 정리 작업(예: 연결 해제 등)을 수행.</li>
+        </ul>
+    
+    </div>
+    

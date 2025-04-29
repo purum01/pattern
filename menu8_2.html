@@ -1,0 +1,116 @@
+<h1 style="text-align: center;">Factory Method Pattern  </h1>
+
+<h3>다형성 사용</h3>
+<pre><code id="source-code" class="language-java">
+    public interface IRuleConfigParserFactory {
+        IRuleConfigParser createParser();
+    }
+    
+    public class JsonRuleConfigParserFactory implements IRuleConfigParserFactory {
+        @Override
+        public IRuleConfigParser createParser() {
+            return new JsonRuleConfigParser();
+        }
+    }
+    
+    public class XmlRuleConfigParserFactory implements IRuleConfigParserFactory {
+        @Override
+        public IRuleConfigParser createParser() {
+            return new XmlRuleConfigParser();
+        }
+    }
+    
+    public class YamlRuleConfigParserFactory implements IRuleConfigParserFactory {
+        @Override
+        public IRuleConfigParser createParser() {
+            return new YamlRuleConfigParser();
+        }
+    }
+    
+    public class PropertiesRuleConfigParserFactory implements IRuleConfigParserFactory {
+        @Override
+        public IRuleConfigParser createParser() {
+            return new PropertiesRuleConfigParser();
+        }
+    }
+</code></pre>
+
+
+<h3>팩터리 객체 생성의 결합</h3>
+<pre><code id="source-code" class="language-java">
+    public class RuleConfigSource {
+        public RuleConfig load(String ruleConfigFilePath) {
+            String ruleConfigFileExtension = getFileExtension(ruleConfigFilePath);
+            IRuleConfigParserFactory parserFactory = null;
+            if ("json".equalsIgnoreCase(ruleConfigFileExtension)) {
+                parserFactory = new JsonRuleConfigParserFactory();
+            } else if ("xml".equalsIgnoreCase(ruleConfigFileExtension)) {
+                parserFactory = new XmlRuleConfigParserFactory();
+            } else if ("yaml".equalsIgnoreCase(ruleConfigFileExtension)) {
+                parserFactory = new YamlRuleConfigParserFactory();
+            } else if ("properties".equalsIgnoreCase(ruleConfigFileExtension)) {
+                parserFactory = new PropertiesRuleConfigParserFactory();
+            } else {
+                throw new InvalidRuleConfigException(
+                    "Rule config file format is not supported: " + ruleConfigFilePath
+                );
+            }
+    
+            IRuleConfigParser parser = parserFactory.createParser();
+            String configText = "";
+            // ruleConfigFilePath 파일에서 configText로 설정 텍스트 읽기
+            RuleConfig ruleConfig = parser.parse(configText);
+            return ruleConfig;
+        }
+    
+        private String getFileExtension(String filePath) {
+            // 파일 이름을 분석하여 확장자 얻기
+            return "json";
+        }
+    }
+</code></pre>    
+
+<h3>Factory의  Factory</h3>
+<pre><code id="source-code" class="language-java">
+    public class RuleConfigSource {
+        public RuleConfig load(String ruleConfigFilePath) {
+            String ruleConfigFileExtension = getFileExtension(ruleConfigFilePath);
+            IRuleConfigParserFactory parserFactory = 
+                RuleConfigParserFactoryMap.getParserFactory(ruleConfigFileExtension);
+            if (parserFactory == null) {
+                throw new InvalidRuleConfigException(
+                    "Rule config file format is not supported: " + ruleConfigFilePath
+                );
+            }
+    
+            IRuleConfigParser parser = parserFactory.createParser();
+            String configText = "";
+            // ruleConfigFilePath 파일에서 configText로 설정 텍스트 읽기
+            RuleConfig ruleConfig = parser.parse(configText);
+            return ruleConfig;
+        }
+    
+        private String getFileExtension(String filePath) {
+            // 파일 이름을 분석하여 확장자 얻기
+            return "json";
+        }
+    }
+    
+    public class RuleConfigParserFactoryMap { // 팩터리의 팩터리
+        private static final Map<String, IRuleConfigParserFactory> cachedFactories = new HashMap<>();
+        static {
+            cachedFactories.put("json", new JsonRuleConfigParserFactory());
+            cachedFactories.put("xml", new XmlRuleConfigParserFactory());
+            cachedFactories.put("yaml", new YamlRuleConfigParserFactory());
+            cachedFactories.put("properties", new PropertiesRuleConfigParserFactory());
+        }
+    
+        public static IRuleConfigParserFactory getParserFactory(String type) {
+            if (type == null || type.isEmpty()) {
+                return null;
+            }
+            IRuleConfigParserFactory parserFactory = cachedFactories.get(type.toLowerCase());
+            return parserFactory;
+        }
+    }
+</code></pre>    

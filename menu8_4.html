@@ -1,0 +1,125 @@
+
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f9fafb;
+            padding: 40px;
+            color: #374151;
+            line-height: 1.6;
+        }
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #111827;
+        }
+        h2 {
+            font-size: 22px;
+            margin-top: 36px;
+            color: #1f2937;
+        }
+        h3 {
+            font-size: 18px;
+            margin-top: 28px;
+            color: #1f2937;
+        }
+        p {
+            font-size: 16px;
+            margin-top: 8px;
+        }
+        ul {
+            font-size: 16px;
+            margin-top: 8px;
+            padding-left: 20px;
+        }
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        th, td {
+            padding: 12px 18px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 15px;
+        }
+        th {
+            background-color: #f1f5f9;
+            font-weight: 700;
+            color: #374151;
+        }
+        td {
+            color: #374151;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        table tbody tr:hover {
+            background-color: #f9fafb;
+        }
+        .summary {
+            margin-top: 36px;
+            font-size: 18px;
+            text-align: center;
+            font-weight: bold;
+            color: #111827;
+        }
+    </style>
+
+
+    <h1>📚 팩터리 패턴의 적용 대상</h1>
+
+    <h2>✅ 팩터리 패턴을 고려해야 하는 경우</h2>
+    <p>객체 생성 과정이 복잡하거나, 객체 생성 프로세스를 캡슐화하고 싶을 때 적용할 수 있습니다.</p>
+
+    <h2>주요 상황</h2>
+
+    <h3>1. 객체 설정 복잡성/유사성 문제</h3>
+    <ul>
+        <li>규칙 설정 클래스처럼 객체 설정 코드가 <strong>복잡</strong>하거나 <strong>유사</strong>한 경우 → 팩터리 패턴 사용.</li>
+        <li>클래스마다 객체 설정 코드가 복잡하면 유지보수가 어려워짐.</li>
+        <li><strong>팩터리 메서드 패턴</strong>을 통해 객체 생성/설정 분리 → 클래스 복잡도 감소.</li>
+    </ul>
+
+    <h3>2. 생성할 객체가 상황(흐름)에 따라 달라질 때</h3>
+    <ul>
+        <li>상황(흐름)에 따라 생성할 객체가 달라질 경우.</li>
+        <li>클래스 내부 if-else/switch를 없애고, <strong>팩터리 클래스</strong>를 통해 관리.</li>
+    </ul>
+
+    <h2>✨ 팩터리 패턴의 4가지 역할</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>설명</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>팩터리 패턴을 사용해 생성 과정을 캡슐화할 수 있다. (변경 시에도 호환성 유지)</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>생성 과정을 팩터리 클래스로 추출해 재사용할 수 있다.</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>복잡한 생성 과정을 캡슐화하고, 객체 생성 방법을 명확히 구분할 수 있다.</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>생성과 사용을 분리해 복잡한 코드를 간결하게 만들 수 있다.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="summary">
+        ✅ "생성 과정이 복잡하거나, 상황에 따라 다른 객체를 만들어야 할 때, 팩터리 패턴을 사용하라."
+    </div>
+
