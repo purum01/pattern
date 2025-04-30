@@ -1,0 +1,92 @@
+<link href="exam.css"   rel="stylesheet">
+<script src="copy_button.js" ></script>
+
+
+<div class="assignment">
+    <h1 class="title">팩토리 메서드 패턴(Factory Method Pattern) 실습</h1>
+  
+    <section class="section">
+      <h2 class="section-title">📋 실습 목표</h2>
+      <p class="paragraph">
+        객체 생성을 하위 클래스에 위임하여, 상위 클래스는 생성 방식과 무관하게 동작할 수 있도록 <strong>팩토리 메서드 패턴</strong>을 구현합니다.
+      </p>
+      <div class="highlight-box">
+        상위 클래스 <code>Factory</code>는 템플릿 메서드 역할을 하며,<br>
+        실제 인스턴스 생성은 하위 클래스 <code>IDCardFactory</code>에서 수행합니다.
+      </div>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">🛠 구현 지침</h2>
+      <ul class="list">
+        <li><code class="inline-code">Product</code>: 추상 클래스. <code>use()</code> 메서드 정의</li>
+        <li><code class="inline-code">Factory</code>: 추상 클래스. <code>create()</code>, <code>createProduct()</code>, <code>registerProduct()</code></li>
+        <li><code class="inline-code">IDCard</code>: <code>Product</code>를 상속. 이름(owner)을 포함하고 출력</li>
+        <li><code class="inline-code">IDCardFactory</code>: <code>Factory</code> 상속. 실제 IDCard 인스턴스를 생성 및 등록</li>
+        <li><code class="inline-code">Main</code>: Factory를 통해 IDCard를 생성 및 사용</li>
+      </ul>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">🖥 실행 예시</h2>
+      <pre class="code-box"><code>
+  홍의 카드를 만듭니다.
+  강의 카드를 만듭니다.
+  박의 카드를 만듭니다.
+  홍의 카드를 사용합니다.
+  강의 카드를 사용합니다.
+  박의 카드를 사용합니다.
+  </code></pre>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">📂 파일 구조</h2>
+      <pre class="code-box"><code>/factory/
+    Product.java
+    Factory.java
+    IDCard.java
+    IDCardFactory.java
+    Main.java
+  </code></pre>
+    </section>
+  
+  
+  <section class="section">
+    <h2 class="section-title">📌 UML 다이어그램</h2>
+    <img src="img/menu8_1.png">
+</section>
+
+<section class="section">
+    <h2 class="section-title">🗂 제공 파일</h2>
+<div class="file-box">
+    <h3 class="file-title">Product.java</h3>
+    <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
+    <pre class="code-box"><code id="code1">
+package factory;
+
+public abstract class Product {
+    public abstract void use();
+}
+</code></pre>
+</div>          
+<div class="file-box">
+    <h3 class="file-title">Factory.java</h3>
+    <button class="copy-button" onclick="copyCode('code2')">복사하기</button>
+    <pre class="code-box"><code id="code2">
+package factory;
+
+public abstract class Factory {
+    public final Product create(String owner) {
+        Product p = createProduct(owner);
+        registerProduct(p);
+        return p;
+    }
+
+    protected abstract Product createProduct(String owner);
+    protected abstract void registerProduct(Product product);
+}
+        
+</code></pre>
+</div>
+</section>
+</div>

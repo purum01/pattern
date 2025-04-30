@@ -1,0 +1,136 @@
+<link href="exam.css"   rel="stylesheet">
+<div class="assignment">
+    <h1 class="title">상태 패턴(State Pattern) 적용하여 리팩토링하기</h1>
+  
+    <section class="section">
+      <h2 class="section-title">📋 실습 목표</h2>
+      <p class="paragraph">
+        주어진 코드는 시간대(주간/야간)에 따라 동작이 달라지는 보안 시스템입니다.<br>
+        <strong>조건문을 사용한 방식</strong>을 <strong>상태 패턴(State Pattern)</strong>으로 리팩토링하세요.
+      </p>
+      <div class="highlight-box">
+        조건 분기(<code>if</code>) 대신 상태 객체에 행동을 위임하고,<br>
+        시각에 따라 자동으로 상태(State)를 변경하도록 구현하세요.
+      </div>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">🛠 리팩토링 지침</h2>
+      <ul class="list">
+        <li><code class="inline-code">State</code> 인터페이스를 정의하고 행동을 선언합니다.</li>
+        <li><strong>DayState</strong>, <strong>NightState</strong> 클래스를 구현하여 시간에 따라 다르게 행동하도록 합니다.</li>
+        <li><code class="inline-code">Context</code> 인터페이스를 통해 상태 변경 및 기록/출력을 처리하도록 합니다.</li>
+        <li><code class="inline-code">SafeFrame</code> 클래스는 <code>Context</code> 역할로 현재 상태에게 요청을 위임합니다.</li>
+      </ul>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">📂 리팩토링 후 파일 구조</h2>
+      <pre class="code-box"><code>/state/
+      Context.java
+      State.java
+      DayState.java
+      NightState.java
+      SafeFrame.java
+      Main.java
+  </code></pre>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">🗂 제공 파일 (리팩토링 전)</h2>
+      <p class="paragraph">아래 코드에서 시간 조건에 따른 <code>if</code> 분기들을 제거하고, 상태 패턴을 적용하세요.</p>
+  
+      <!-- SafeFrame.java (리팩토링 전) -->
+      <div class="file-box">
+        <h3 class="file-title">SafeFrame.java</h3>
+        <button class="copy-button" onclick="copyCode('safeframe-code')">복사하기</button>
+        <pre class="code-box"><code id="safeframe-code">package state;
+  
+  import java.awt.*;
+  import java.awt.event.*;
+  
+  public class SafeFrame extends Frame {
+      private TextField textClock = new TextField(60);
+      private TextArea textScreen = new TextArea(10, 60);
+      private Button buttonUse = new Button("금고사용");
+      private Button buttonAlarm = new Button("비상벨");
+      private Button buttonPhone = new Button("일반 통화");
+      private Button buttonExit = new Button("종료");
+  
+      public SafeFrame(String title) {
+          super(title);
+          setBackground(Color.lightGray);
+          setLayout(new BorderLayout());
+  
+          add(textClock, BorderLayout.NORTH);
+          textClock.setEditable(false);
+  
+          add(textScreen, BorderLayout.CENTER);
+          textScreen.setEditable(false);
+  
+          Panel panel = new Panel();
+          panel.add(buttonUse);
+          panel.add(buttonAlarm);
+          panel.add(buttonPhone);
+          panel.add(buttonExit);
+          add(panel, BorderLayout.SOUTH);
+  
+          pack();
+          setVisible(true);
+  
+          buttonUse.addActionListener(e -> {
+              int hour = getCurrentHour();
+              if (hour &lt; 9 || hour &gt;= 17) {
+                  textScreen.append("야간 금고 사용 기록\n");
+              } else {
+                  textScreen.append("주간 금고 사용 기록\n");
+              }
+          });
+  
+          buttonAlarm.addActionListener(e -> textScreen.append("비상벨 작동\n"));
+          buttonPhone.addActionListener(e -> textScreen.append("전화 연결\n"));
+          buttonExit.addActionListener(e -> System.exit(0));
+      }
+  
+      public void setClock(int hour) {
+          textClock.setText("현재 시각은 " + (hour &lt; 10 ? "0" + hour : hour) + ":00");
+      }
+  
+      private int getCurrentHour() {
+          return Integer.parseInt(textClock.getText().replaceAll("\\D", ""));
+      }
+  }
+  </code></pre>
+      </div>
+  
+      <!-- Main.java -->
+      <div class="file-box">
+        <h3 class="file-title">Main.java</h3>
+        <button class="copy-button" onclick="copyCode('main-code')">복사하기</button>
+        <pre class="code-box"><code id="main-code">package state;
+  
+  public class Main {
+      public static void main(String[] args) {
+          SafeFrame frame = new SafeFrame("State Sample");
+          for (int hour = 0; hour &lt; 24; hour++) {
+              frame.setClock(hour);
+              try {
+                  Thread.sleep(1000);
+              } catch (InterruptedException e) {}
+          }
+      }
+  }
+  </code></pre>
+      </div>
+    </section>
+  </div>
+  
+  <script>
+  function copyCode(id) {
+    const codeElement = document.getElementById(id);
+    navigator.clipboard.writeText(codeElement.textContent)
+      .then(() => alert('코드가 복사되었습니다!'))
+      .catch(err => alert('복사 실패: ' + err));
+  }
+  </script>
+  

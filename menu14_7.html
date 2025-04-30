@@ -1,0 +1,88 @@
+<link href="exam.css"   rel="stylesheet">
+<script src="copy_button.js" ></script>
+
+<!-- Print.java -->
+<div class="file-box">
+    <h3 class="file-title">Print.java</h3>
+    <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
+    <pre class="code-box"><code id="code1">
+package adapter;
+
+public interface Print{
+    ////Main에서 실행할 메서드를 2개를 선언한다.
+    public void printWeak();
+    public void printStrong();
+}
+</code></pre>
+</div>
+<!-- Banner.java -->
+<div class="file-box">
+    <h3 class="file-title">Banner.java</h3>
+    <button class="copy-button" onclick="copyCode('code2')">복사하기</button>
+    <pre class="code-box"><code id="code2">
+package adapter;
+
+public class Banner{
+    String string;
+    
+    public Banner(String string) {
+        super();
+        this.string = string;
+    }
+    public void showWithParen(){
+        System.out.println("("+ string + ")");
+    }
+    
+    public void showWithAster(){
+        System.out.println("*"+ string+ "*");
+    }
+}
+    </code></pre>
+</div>  
+
+<!-- PrintBanner.java -->
+<div class="file-box">
+    <h3 class="file-title">PrintBanner.java</h3>
+    <button class="copy-button" onclick="copyCode('code3')">복사하기</button>
+    <pre class="code-box"><code id="code3">
+package adapter;
+
+////Banner를 상속, Print를 구현
+public class PrintBanner extends Banner implements Print{
+    
+    public PrintBanner(String string) {
+        super(string);
+    }
+    public void printWeak(){
+        ////어댑팅할 클래스의 showWithParen 실행
+        showWithParen();
+    }
+    
+    public void printStrong(){
+        ////어댑팅할 클래스의 showWithAster 실행
+        showWithAster();
+    }
+}
+</code></pre>
+</div>
+
+
+<!-- Main.java -->
+<div class="file-box">
+    <h3 class="file-title">Main.java</h3>
+    <button class="copy-button" onclick="copyCode('code4')">복사하기</button>
+    <pre class="code-box"><code id="code4">
+package adapter;
+
+public class Main{
+    
+    public static void main(String[] args) {
+        Print p= new PrintBanner("Hello");
+        p.printWeak();
+        p.printStrong();
+    }
+}  
+</code></pre>
+</div>
+</div>
+

@@ -69,7 +69,7 @@
 <body>
 
 <div class="container">
-    <div class="side-menu">
+    <div class="side-menu" >
         <ul id="menu">
             <li id="menu0" onclick="toggleNested(this)">1. 전략 패턴
                 <ul class="nested">
@@ -85,19 +85,21 @@
             <li id="menu0" onclick="toggleNested(this)">2. 싱글턴 패턴
                 <ul class="nested">
                     <li onclick="event.stopPropagation(); showContent('menu2_0');">GoF 정의</li>   
-                    <li onclick="event.stopPropagation(); showContent('menu2_1');">싱글턴 패턴 정의</li>                                                                                     
-                    <li onclick="event.stopPropagation(); showContent('menu2_2');">싱글턴 패턴 구현</li>
-                    <li onclick="event.stopPropagation(); showContent('menu2_3');">싱글턴 패턴 적용</li>
-                    <li onclick="event.stopPropagation(); showContent('menu2_4');">싱글턴 패턴 단점</li>
-                    <li onclick="event.stopPropagation(); showContent('menu2_5');">싱글턴 패턴 대안</li>
+                    <li onclick="event.stopPropagation(); showContent('menu2_1');">싱글턴패턴 정의</li>                                                                                     
+                    <li onclick="event.stopPropagation(); showContent('menu2_2');">싱글턴패턴 구현</li>
+                    <li onclick="event.stopPropagation(); showContent('menu2_3');">싱글턴패턴 적용</li>
+                    <li onclick="event.stopPropagation(); showContent('menu2_4');">싱글턴패턴 단점</li>
+                    <li onclick="event.stopPropagation(); showContent('menu2_5');">싱글턴패턴 대안</li>
+                    <li onclick="event.stopPropagation(); showContent('menu2_6');">싱글턴패턴 실습</li>
                 </ul>
             </li>
             <li id="menu0" onclick="toggleNested(this)">3. 상태 패턴
                 <ul class="nested">
                     <li onclick="event.stopPropagation(); showContent('menu3_0');">GoF 정의</li>   
-                    <li onclick="event.stopPropagation(); showContent('menu3_1');">상태 패턴 정의</li>                                                                                     
-                    <li onclick="event.stopPropagation(); showContent('menu3_2');">상태 패턴 구현</li>
+                    <li onclick="event.stopPropagation(); showContent('menu3_1');">상태패턴 정의</li>                                                                                     
+                    <li onclick="event.stopPropagation(); showContent('menu3_2');">상태패턴 구현</li>
                     <li onclick="event.stopPropagation(); showContent('menu3_3');">리펙토링</li>
+                    <li onclick="event.stopPropagation(); showContent('menu3_4');">상태패턴 실습</li>
 
                 </ul>
             </li>
@@ -121,6 +123,7 @@
                     <li onclick="event.stopPropagation(); showContent('menu6_1');">java.io 라이브러리</li>                                                                                     
                     <li onclick="event.stopPropagation(); showContent('menu6_2');">상속 기반 설계</li>                                                                                     
                     <li onclick="event.stopPropagation(); showContent('menu6_3');">합성과의 차이점</li>                                                                                     
+                    <li onclick="event.stopPropagation(); showContent('menu6_4');">데커레이터 패턴 실습</li>                                                                                     
                 </ul>
             </li>
             <li id="menu0" onclick="toggleNested(this)">7. 템플릿 메서드 패턴
@@ -131,6 +134,7 @@
                     <li onclick="event.stopPropagation(); showContent('menu7_3');">역할 : 확장</li>                                                                                     
                     <li onclick="event.stopPropagation(); showContent('menu7_4');">콜백의 원리와 구현</li>                                                                                     
                     <li onclick="event.stopPropagation(); showContent('menu7_5');">JdbcTemplalte 클래스</li>                                                                                     
+                    <li onclick="event.stopPropagation(); showContent('menu7_6');">템플릿 메서드 패턴 실습</li>                                                                                     
                 </ul>
             </li>
             <li id="menu0" onclick="toggleNested(this)">8. 팩토리 메서드 패턴
@@ -142,6 +146,7 @@
                     <li onclick="event.stopPropagation(); showContent('menu8_4');">적용 대상</li>                                                                                     
                     <li onclick="event.stopPropagation(); showContent('menu8_5');">DI 컨테이너</li>                                                                                     
                     <li onclick="event.stopPropagation(); showContent('menu8_6');">DI 컨테이너 구현</li>                                                                                     
+                    <li onclick="event.stopPropagation(); showContent('menu8_7');">팩터리 메서드 패턴 실습</li>                                                                                     
                 </ul>
             </li>            
             <li id="menu0" onclick="toggleNested(this)">9. 컴퍼지트 패턴
@@ -149,6 +154,7 @@
                     <li onclick="event.stopPropagation(); showContent('menu9_0');">GoF 정의</li>   
                     <li onclick="event.stopPropagation(); showContent('menu9_1');">디렉터리 트리</li>   
                     <li onclick="event.stopPropagation(); showContent('menu9_2');">휴먼 트리</li>   
+                    <li onclick="event.stopPropagation(); showContent('menu9_3');">컴퍼지트 패턴 실습</li>   
                 </ul>
             </li>            
             <li id="menu0" onclick="toggleNested(this)">10. 빌더 패턴
@@ -170,6 +176,7 @@
                     <li onclick="event.stopPropagation(); showContent('menu12_0');">GoF 정의</li>   
                     <li onclick="event.stopPropagation(); showContent('menu12_1');">어댑터 패턴 정의 </li>   
                     <li onclick="event.stopPropagation(); showContent('menu12_2');">어댑터 패턴 응용 </li>   
+                    <li onclick="event.stopPropagation(); showContent('menu12_3');">어댑터 패턴 실습 </li>   
                 </ul>
             </li>            
             <li id="menu0" onclick="toggleNested(this)">13. 프록시 패턴
@@ -179,6 +186,20 @@
                     <li onclick="event.stopPropagation(); showContent('menu13_2');">상속 기반</li>   
                     <li onclick="event.stopPropagation(); showContent('menu13_3');">리플렉션 기반</li>                   
                     <li onclick="event.stopPropagation(); showContent('menu13_4');">활용 방법</li>                   
+                    <li onclick="event.stopPropagation(); showContent('menu13_5');">프록시 패턴 실습</li>                   
+                </ul>
+            </li>            
+            <li id="menu0" onclick="toggleNested(this)">14. 실습 완성 파일
+                <ul class="nested">
+                    <li onclick="event.stopPropagation(); showContent('menu14_1');">전략 패턴</li>   
+                    <li onclick="event.stopPropagation(); showContent('menu14_2');">싱글턴 패턴</li>   
+                    <li onclick="event.stopPropagation(); showContent('menu14_3');">상태 패턴</li>   
+                    <li onclick="event.stopPropagation(); showContent('menu14_4');">데커레이터 패턴</li>   
+                    <li onclick="event.stopPropagation(); showContent('menu14_5');">템플릿 메서드 패턴</li>   
+                    <li onclick="event.stopPropagation(); showContent('menu14_9');">팩터리 패턴</li>   
+                    <li onclick="event.stopPropagation(); showContent('menu14_6');">컴퍼지트 패턴</li>   
+                    <li onclick="event.stopPropagation(); showContent('menu14_7');">어댑터 패턴</li>   
+                    <li onclick="event.stopPropagation(); showContent('menu14_8');">프록시 패턴</li>   
                 </ul>
             </li>            
          

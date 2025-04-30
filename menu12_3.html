@@ -1,0 +1,111 @@
+<link href="exam.css"   rel="stylesheet">
+<div class="assignment">
+    <h1 class="title">어댑터 패턴(Adapter Pattern) 실습</h1>
+  
+    <section class="section">
+      <h2 class="section-title">📋 실습 목표</h2>
+      <p class="paragraph">
+        기존 클래스를 수정하지 않고 새로운 인터페이스에 맞게 사용할 수 있도록 <strong>어댑터 패턴</strong>을 구현합니다.<br>
+        상속 방식과 위임 방식의 차이를 비교해보며 적용 능력을 키웁니다.
+      </p>
+      <div class="highlight-box">
+        <code class="inline-code">Banner</code> 클래스는 수정하지 않고,<br>
+        <code class="inline-code">Print</code> 인터페이스에 맞게 출력 동작을 변환하는 어댑터 클래스를 만들어야 합니다.
+      </div>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">🛠 구현 지침</h2>
+      <ul class="list">
+        <li><code class="inline-code">Print</code>: 원하는 인터페이스로, <code>printWeak()</code>, <code>printStrong()</code> 메서드 선언</li>
+        <li><code class="inline-code">Banner</code>: 기존 클래스. <code>showWithParen()</code>, <code>showWithAster()</code> 메서드를 가짐</li>
+        <li><code class="inline-code">PrintBanner</code>: <code>Banner</code>를 상속하고 <code>Print</code> 인터페이스를 구현 (상속 기반 어댑터)</li>
+        <li><code class="inline-code">AnotherPrintBanner</code>: <code>Banner</code>를 내부에 포함하고 <code>Print</code> 구현 (위임 기반 어댑터)</li>
+        <li><code class="inline-code">Main</code>에서는 <code>Print</code> 타입만을 사용하여 출력</li>
+      </ul>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">🖥 실행 예시</h2>
+      <pre class="code-box"><code>(Hello)
+  *Hello*</code></pre>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">📂 파일 구조</h2>
+      <pre class="code-box"><code>/adapter/
+    Print.java                ← 제공됨
+    Banner.java               ← 제공됨
+    PrintBanner.java          ← 구현 대상 (상속 방식)
+    AnotherPrintBanner.java   ← 구현 대상 (위임 방식)
+    Main.java                 ← 제공됨
+  </code></pre>
+    </section>
+    <section class="section">
+        <h2 class="section-title">📌 UML 다이어그램</h2>
+        <img src="img/menu12_1.png">
+    </section>
+    <section class="section">
+      <h2 class="section-title">🗂 제공 파일</h2>
+  
+<!-- Print.java -->
+<div class="file-box">
+    <h3 class="file-title">Print.java</h3>
+    <button class="copy-button" onclick="copyCode('print-code')">복사하기</button>
+    <pre class="code-box"><code id="print-code">package adapter;
+  
+  public interface Print {
+      public void printWeak();
+      public void printStrong();
+  }
+  </code></pre>
+  </div>
+  
+  <!-- Banner.java -->
+  <div class="file-box">
+    <h3 class="file-title">Banner.java</h3>
+    <button class="copy-button" onclick="copyCode('banner-code')">복사하기</button>
+    <pre class="code-box"><code id="banner-code">package adapter;
+  
+  public class Banner {
+      String string;
+  
+      public Banner(String string) {
+          this.string = string;
+      }
+  
+      public void showWithParen() {
+          System.out.println("(" + string + ")");
+      }
+  
+      public void showWithAster() {
+          System.out.println("*" + string + "*");
+      }
+  }
+  </code></pre>
+  </div>
+  
+  <!-- Main.java -->
+  <div class="file-box">
+    <h3 class="file-title">Main.java</h3>
+    <button class="copy-button" onclick="copyCode('main-code')">복사하기</button>
+    <pre class="code-box"><code id="main-code">package adapter;
+  
+  public class Main {
+      public static void main(String[] args) {
+          Print p = new PrintBanner("Hello");
+          p.printWeak();
+          p.printStrong();
+      }
+  }
+  </code></pre>
+  </div>
+  <script>
+    function copyCode(id) {
+      const codeElement = document.getElementById(id);
+      navigator.clipboard.writeText(codeElement.textContent)
+        .then(() => alert('코드가 복사되었습니다!'))
+        .catch(err => alert('복사 실패: ' + err));
+    }
+    </script>
+    

@@ -1,0 +1,51 @@
+<link href="exam.css"   rel="stylesheet">
+<script src="copy_button.js" ></script>
+
+
+<!-- MySingleton.java -->
+<div class="file-box">
+    <h3 class="file-title">MySingleton.java</h3>
+    <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
+    <pre class="code-box"><code id="code1">
+package singleton;
+
+public class MySingleton {
+    private static MySingleton me = new MySingleton();
+
+    private MySingleton() {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+        }
+        System.out.println("MySingleton()");
+    }
+
+    public static MySingleton getInstance() {
+        if (me == null) {
+            me = new MySingleton();
+        }
+        return me;
+    }
+}
+</code></pre>
+</div>
+
+<!-- Main.java -->
+<div class="file-box">
+    <h3 class="file-title">Main.java</h3>
+    <button class="copy-button" onclick="copyCode('code2')">복사하기</button>
+    <pre class="code-box"><code id="code2">
+package singleton;
+
+public class Main {
+    public static void main(String[] args) {
+        // MySingleton my = new MySingleton(); // 생성자 호출 불가하다.
+        MySingleton my = MySingleton.getInstance();
+        for (int i = 0; i &lt; 5; i++) {
+            my = MySingleton.getInstance();
+        }
+    }
+}
+</code></pre>
+</div>
+

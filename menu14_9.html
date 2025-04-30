@@ -1,0 +1,112 @@
+<link href="exam.css"   rel="stylesheet">
+<script src="copy_button.js" ></script>
+
+<!-- Product.java -->
+<div class="file-box">
+    <h3 class="file-title">Product.java</h3>
+    <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
+    <pre class="code-box"><code id="code1">
+package factory;
+
+public abstract class Product {
+    public abstract void use();
+}
+</code></pre>
+</div>
+<!-- IDCard.java -->
+<div class="file-box">
+    <h3 class="file-title">IDCard.java</h3>
+    <button class="copy-button" onclick="copyCode('code2')">복사하기</button>
+    <pre class="code-box"><code id="code2">
+package factory;
+
+public class IDCard extends Product {
+    private String owner;
+
+    public IDCard(String owner) {
+        System.out.println(owner + "의 카드를 만듭니다.");
+        this.owner = owner;
+    }
+
+    public void use() {
+        System.out.println(owner + "의 카드를 사용합니다.");
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+}
+    </code></pre>
+</div>  
+
+<!-- Factory.java -->
+<div class="file-box">
+    <h3 class="file-title">Factory.java</h3>
+    <button class="copy-button" onclick="copyCode('code3')">복사하기</button>
+    <pre class="code-box"><code id="code3">
+package factory;
+
+public abstract class Factory {
+    public final Product create(String owner) {
+        Product p = createProduct(owner);
+        registerProduct(p);
+        return p;
+    }
+
+    protected abstract Product createProduct(String owner);
+    protected abstract void registerProduct(Product product);
+}
+</code></pre>
+</div>
+
+
+<!-- IDCardFactory.java -->
+<div class="file-box">
+    <h3 class="file-title">IDCardFactory.java</h3>
+    <button class="copy-button" onclick="copyCode('code4')">복사하기</button>
+    <pre class="code-box"><code id="code4">
+package factory;
+
+import java.util.*;
+
+public class IDCardFactory extends Factory {
+    private List<String> owners = new ArrayList<>();
+
+    protected Product createProduct(String owner) {
+        return new IDCard(owner);
+    }
+
+    protected void registerProduct(Product product) {
+        owners.add(((IDCard) product).getOwner());
+    }
+
+    public List<String> getOwners() {
+        return owners;
+    }
+}
+        
+</code></pre>
+</div>
+
+<!-- IDCardFactory.java -->
+<div class="file-box">
+    <h3 class="file-title">IDCardFactory.java</h3>
+    <button class="copy-button" onclick="copyCode('code5')">복사하기</button>
+    <pre class="code-box"><code id="code5">
+package factory;
+
+public class Main {
+    public static void main(String[] args) {
+        Factory factory = new IDCardFactory();
+        Product card1 = factory.create("홍");
+        Product card2 = factory.create("강");
+        Product card3 = factory.create("박");
+        card1.use();
+        card2.use();
+        card3.use();
+    }
+} 
+</code></pre>
+</div>       
+</div>
+

@@ -1,0 +1,96 @@
+<link href="exam.css"   rel="stylesheet">
+
+<div class="assignment">
+    <h1 class="title">프록시 패턴(Proxy Pattern) 실습</h1>
+  
+    <section class="section">
+      <h2 class="section-title">📋 실습 목표</h2>
+      <p class="paragraph">
+        인스턴스의 생성을 지연시키거나 접근 제어를 하기 위해 <strong>프록시 패턴</strong>을 구현합니다.<br>
+        실제 객체와 동일한 인터페이스를 사용하며, <code>Printer</code> 객체의 생성을 <code>PrinterProxy</code>를 통해 지연시킵니다.
+      </p>
+      <div class="highlight-box">
+        <code class="inline-code">Printable</code> 인터페이스를 통해 <code>Printer</code>와 <code>PrinterProxy</code>가 동일한 기능을 가지며,<br>
+        프록시 객체는 실제 객체 생성을 나중에 수행합니다 (지연 초기화).
+      </div>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">🛠 구현 지침</h2>
+      <ul class="list">
+        <li><code class="inline-code">Printable</code>: 인터페이스. <code>setPrinterName()</code>, <code>getPrinterName()</code>, <code>print()</code> 포함</li>
+        <li><code class="inline-code">Printer</code>: 실제 무거운 객체로, 생성 시 시간이 오래 걸림 (예: Thread.sleep)</li>
+        <li><code class="inline-code">PrinterProxy</code>: 이름만 저장하고 실제 객체는 필요할 때 생성</li>
+        <li><code class="inline-code">Main</code>: <code>Printable</code> 타입을 통해 프록시를 사용</li>
+      </ul>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">🖥 실행 예시</h2>
+      <pre class="code-box"><code>이름은 현재 Alice입니다.
+  이름은 현재 Bob입니다.
+  Printer의 인스턴스를 생성중.....완료
+  === Bob ===
+  Hello, world.</code></pre>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">📂 파일 구조</h2>
+      <pre class="code-box"><code>/proxy/
+    Printable.java        ← 제공됨
+    Printer.java          ← 구현 대상 (실제 대상)
+    PrinterProxy.java     ← 구현 대상 (프록시)
+    Main.java             ← 제공됨 (사용 예시)
+  </code></pre>
+    </section>
+  
+    <section class="section">
+        <h2 class="section-title">📌 UML 다이어그램</h2>
+        <img src="img/menu13_1.png">
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">🗂 제공 파일</h2>
+  
+
+      <!-- Printable.java -->
+<div class="file-box">
+    <h3 class="file-title">Printable.java</h3>
+    <button class="copy-button" onclick="copyCode('printable-code')">복사하기</button>
+    <pre class="code-box"><code id="printable-code">package proxy;
+  
+  public interface Printable {
+      public void setPrinterName(String name);
+      public String getPrinterName();
+      public void print(String string);
+  }
+  </code></pre>
+  </div>
+  
+  <!-- Main.java -->
+  <div class="file-box">
+    <h3 class="file-title">Main.java</h3>
+    <button class="copy-button" onclick="copyCode('main-code')">복사하기</button>
+    <pre class="code-box"><code id="main-code">package proxy;
+  
+  public class Main {
+      public static void main(String[] args) {
+          Printable p = new PrinterProxy("Alice", "proxy.Printer");
+          System.out.println("이름은 현재" + p.getPrinterName() + "입니다.");
+          p.setPrinterName("Bob");
+          System.out.println("이름은 현재" + p.getPrinterName() + "입니다.");
+          p.print("Hello, world.");
+      }
+  }
+  </code></pre>
+  </div>
+  
+  <script>
+    function copyCode(id) {
+      const codeElement = document.getElementById(id);
+      navigator.clipboard.writeText(codeElement.textContent)
+        .then(() => alert('코드가 복사되었습니다!'))
+        .catch(err => alert('복사 실패: ' + err));
+    }
+    </script>
+    

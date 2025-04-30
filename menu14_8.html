@@ -1,0 +1,131 @@
+<link href="exam.css"   rel="stylesheet">
+<script src="copy_button.js" ></script>
+
+<!-- Printable.java -->
+<div class="file-box">
+    <h3 class="file-title">Printable.java</h3>
+    <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
+    <pre class="code-box"><code id="code1">
+package proxy;
+
+public interface Printable {
+    //// 이름의 설정
+    public void setPrinterName(String name);
+    //// 이름의 취득
+    public String getPrinterName();
+    //// 문자열 표시(프린트아웃)
+    public void print(String string);
+}
+</code></pre>
+</div>
+<!-- Printer.java -->
+<div class="file-box">
+    <h3 class="file-title">Printer.java</h3>
+    <button class="copy-button" onclick="copyCode('code2')">복사하기</button>
+    <pre class="code-box"><code id="code2">
+package proxy;
+
+public class Printer implements Printable {
+    private String name;
+    public Printer() {
+        heavyJob("Printer의 인스턴스를 생성중");
+    }
+    public Printer(String name) {                   // 생성자
+        this.name = name;
+        ////heavyJob을 호출한다. name을 전달한다.
+        heavyJob("Printer 객체 생성 중 name="+ name);
+    }
+    public void setPrinterName(String name) {       // 이름의 설정
+        this.name = name;
+    }
+    public String getPrinterName() {                // 이름의 취득
+        return name;
+    }
+    public void print(String string) {              // 이름을 붙여서 표시
+        System.out.println("=== " + name + " ===");
+        System.out.println(string);
+    }
+    private void heavyJob(String msg) {             // 무거운 작업
+        System.out.print(msg);
+        for (int i = 0; i < 5; i++) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+            }
+            System.out.print(".");
+        }
+        System.out.println("완료");
+    }
+}
+    </code></pre>
+</div>  
+
+<!-- PrinterProxy.java -->
+<div class="file-box">
+    <h3 class="file-title">PrinterProxy.java</h3>
+    <button class="copy-button" onclick="copyCode('code3')">복사하기</button>
+    <pre class="code-box"><code id="code3">
+package proxy;
+
+public class PrinterProxy implements Printable {
+    private String name;            // 이름
+    private Printable real;         // "본인"                 
+    private String className;       // "본인"의 클래스명       
+    public PrinterProxy(String name, String className) {      // 생성자   
+        this.name = name;
+        this.className = className;                                                 
+    }
+    public synchronized void setPrinterName(String name) {  // 이름의 설정
+        ////real이 널이 아니면, real도 이름을 변경한다.
+        if(real!=null) real.setPrinterName(name);
+        this.name = name;
+    }
+    public String getPrinterName() {    // 이름의 취득
+        return name;
+    }
+    public void print(String string) {  // 표시
+        realize();
+        if(real==null){
+            real= new Printer();
+            real.setPrinterName(name);
+        }
+        real.print(string);
+    }
+    private synchronized void realize() {   // "본인"을 생성
+        if (real == null) {
+            try {                                                                       
+                real = (Printable)Class.forName(className).newInstance();
+                real.setPrinterName(name);                                              
+            } catch (ClassNotFoundException e) {                                        
+                System.err.println("클래스 " + className + " 가 발견되지 않습니다.");      
+            } catch (Exception e) {                                                     
+                e.printStackTrace();                                                    
+            }                                                                           
+        }
+    }
+}
+</code></pre>
+</div>
+
+
+<!-- Main.java -->
+<div class="file-box">
+    <h3 class="file-title">Main.java</h3>
+    <button class="copy-button" onclick="copyCode('code4')">복사하기</button>
+    <pre class="code-box"><code id="code4">
+package proxy;
+
+public class Main {
+    public static void main(String[] args) {
+        Printable p = new PrinterProxy("Alice", "proxy.Printer");                 
+        System.out.println("이름은 현재" + p.getPrinterName() + "입니다.");
+        ////setPrinterName을 호출하여 Bob으로 변경한다.
+        p.setPrinterName("Bob");
+        System.out.println("이름은 현재" + p.getPrinterName() + "입니다.");
+        p.print("Hello, world.");
+    }
+}
+</code></pre>
+</div>
+</div>
+

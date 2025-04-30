@@ -1,0 +1,181 @@
+<link href="exam.css"   rel="stylesheet">
+<script src="copy_button.js" ></script>
+
+<!-- Entry.java -->
+<div class="file-box">
+    <h3 class="file-title">Entry.java</h3>
+    <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
+    <pre class="code-box"><code id="code1">
+package composite;
+
+public abstract class Entry 
+{
+    public Entry() {      }
+    
+    public abstract String getName();
+    
+    public abstract int getSize();
+    
+    public abstract void printList(String prefix);
+    
+    public Entry add(Entry entry) throws FileTreatmentException{
+        throw new FileTreatmentException();
+    }
+    public String toString(){
+        return getName()+ " ("+ getSize()+ ")";
+    }
+    public void printList(){
+        printList("");
+    }
+}
+</code></pre>
+</div>
+<!-- Directory.java -->
+<div class="file-box">
+    <h3 class="file-title">Directory.java</h3>
+    <button class="copy-button" onclick="copyCode('code2')">복사하기</button>
+    <pre class="code-box"><code id="code2">
+package composite;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Vector;
+
+public class Directory extends Entry {
+    private String name;
+    ////Entry를 넣을 수 있는 벡터를 directory라는 이름으로 선언한다.
+    List<Entry> directory= new ArrayList<>();
+    
+    public Directory() {
+    
+    }
+    
+    public Directory(String name) {
+    this.name= name;
+    }
+    
+    public Entry add(Entry entry) {
+        directory.add(entry);
+    return this;
+    }
+    public String getName() {
+    return name;
+    }
+    
+    public int getSize() {
+        int size= 0;
+        Iterator it= directory.iterator();
+        while(it.hasNext()){
+            Entry entry= (Entry)it.next();
+            size += entry.getSize();
+        }
+    return size;
+    }
+    
+    public void printList(String prefix) {
+    System.out.println(prefix+ "/"+ this);
+    Iterator it= directory.iterator();
+    while(it.hasNext()) {
+        Entry entry= (Entry)it.next();
+        entry.printList(prefix+ "/"+ name);
+    }
+    }
+    
+}
+    </code></pre>
+</div>  
+<!-- File.java -->
+<div class="file-box">
+    <h3 class="file-title">File.java</h3>
+    <button class="copy-button" onclick="copyCode('code3')">복사하기</button>
+    <pre class="code-box"><code id="code3">
+package composite;
+
+public class File extends Entry 
+{
+    String name;
+    int size;
+    
+    public File(String name, int size) {
+        super();
+        this.name = name;
+        this.size = size;
+    }
+    public File(){     }
+    
+    public String getName(){
+        return name;
+    }
+    
+    public int getSize(){
+        return size;
+    }
+    
+    public void printList(String prefix){
+        System.out.println(prefix+ "/"+ this);
+    }
+}
+        
+</code></pre>
+</div>
+
+<!-- FileTreatmentException.java -->
+<div class="file-box">
+    <h3 class="file-title">FileTreatmentException.java</h3>
+    <button class="copy-button" onclick="copyCode('code4')">복사하기</button>
+    <pre class="code-box"><code id="code4">
+package composite;
+
+public class FileTreatmentException extends Exception {
+
+    public FileTreatmentException() {
+        super();
+    }
+    public FileTreatmentException(String arg0) {
+        super(arg0);
+    }
+}
+</code></pre>
+</div>
+
+<!-- Main.java -->
+<div class="file-box">
+    <h3 class="file-title">Main.java</h3>
+    <button class="copy-button" onclick="copyCode('code5')">복사하기</button>
+    <pre class="code-box"><code id="code5">
+package composite;
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Making root entries...");
+        Directory rootdir = new Directory("root");
+        Directory bindir = new Directory("bin");
+        Directory tmpdir = new Directory("tmp");
+        Directory usrdir = new Directory("usr");
+        rootdir.add(bindir);
+        rootdir.add(tmpdir);
+        rootdir.add(usrdir);
+        bindir.add(new File("vi", 10000));
+        bindir.add(new File("latex", 20000));
+        rootdir.printList();
+        System.out.println("");
+        System.out.println("Making user entries...");
+        Directory Kim = new Directory("Kim");
+        Directory Lee = new Directory("Lee");
+        Directory Kang = new Directory("Kang");
+        usrdir.add(Kim);
+        usrdir.add(Lee);
+        usrdir.add(Kang);
+        Kim.add(new File("diary.html", 100));
+        Kim.add(new File("Composite.java", 200));
+        Lee.add(new File("memo.tex", 300));
+        Kang.add(new File("game.doc", 400));
+        Kang.add(new File("junk.mail", 500));
+        rootdir.printList();
+    }
+}   
+</code></pre>
+</div>
+</div>
+

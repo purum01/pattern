@@ -1,0 +1,107 @@
+<link href="exam.css"   rel="stylesheet">
+
+<div class="assignment">
+    <h1 class="title">데코레이터 패턴(Decorator Pattern) 적용하여 출력 장식 구현하기</h1>
+  
+    <section class="section">
+      <h2 class="section-title">📋 실습 목표</h2>
+      <p class="paragraph">
+        하나의 문자열을 다양한 방식으로 장식하여 출력하는 프로그램을 <strong>데코레이터 패턴</strong>으로 구현합니다.<br>
+        각 장식 요소를 독립된 클래스로 정의하고, 중첩 가능하도록 설계하는 것이 목표입니다.
+      </p>
+      <div class="highlight-box">
+        장식을 상속으로 구현하는 대신, <code class="inline-code">Display</code> 인터페이스와
+        <code class="inline-code">Border</code> 클래스를 통해 동적으로 조합하세요.
+      </div>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">🛠 구현 지침</h2>
+      <ul class="list">
+        <li><code class="inline-code">Display</code>: 출력 대상의 기본 인터페이스 (getRows(), getColumns(), getRowText())</li>
+        <li><code class="inline-code">StringDisplay</code>: 출력할 문자열을 하나 가지고 있음</li>
+        <li><code class="inline-code">Border</code>: Display를 상속받고, Display를 멤버로 가짐 (장식의 부모 클래스)</li>
+        <li><code class="inline-code">SideBorder</code>: 좌우에 문자 추가</li>
+        <li><code class="inline-code">FullBorder</code>: 상하좌우 모두 테두리 추가</li>
+        <li><code class="inline-code">UpDownBorder</code>: 상하에만 문자로 장식</li>
+        <li>모든 장식은 <strong>Display 인터페이스로 다시 포장</strong>되어, 조합이 가능해야 합니다.</li>
+      </ul>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">🖥 실행 예시</h2>
+      <pre class="code-box"><code>~~~~~~~~~~~~~~~
+  +-------------+
+  |#Hello, world.#|
+  +-------------+
+  ~~~~~~~~~~~~~~~</code></pre>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">📂 파일 구조</h2>
+      <pre class="code-box"><code>/decorator/
+    Display.java
+    Border.java
+    StringDisplay.java
+    SideBorder.java
+    FullBorder.java
+    UpDownBorder.java
+    Main.java
+  </code></pre>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">📌 UML 다이어그램</h2>
+        <img src="img/menu6_1.png">
+    </section>
+
+
+  
+    
+  <section class="section">
+    <h2 class="section-title">🗂 실행 예시 파일 (리팩토링 전)</h2>
+    
+
+    <!-- FramePrinter.java (리팩토링 전) -->
+    <div class="file-box">
+      <h3 class="file-title">FramePrinter.java</h3>
+      <button class="copy-button" onclick="copyCode('safeframe-code')">복사하기</button>
+      <pre class="code-box"><code id="safeframe-code">
+package decorator;
+
+public class FramePrinter {
+    private String text;
+
+    public FramePrinter(String text) {
+        this.text = text;
+    }
+
+    public void printWithDecoration() {
+        String line = "+-------------+";
+        System.out.println("~~~~~~~~~~~~~~~");
+        System.out.println(line);
+        System.out.println("|#" + text + "#|");
+        System.out.println(line);
+        System.out.println("~~~~~~~~~~~~~~~");
+    }
+}
+</code></pre>
+</div>        
+
+      <!-- Main.java -->
+      <div class="file-box">
+        <h3 class="file-title">Main.java</h3>
+        <button class="copy-button" onclick="copyCode('main-code')">복사하기</button>
+        <pre class="code-box"><code id="main-code">
+package decorator;
+
+public class Main {
+    public static void main(String[] args) {
+        FramePrinter printer = new FramePrinter("Hello, world.");
+        printer.printWithDecoration();
+    }
+}
+  </code></pre>
+      </div>
+    </section>
+  </div>

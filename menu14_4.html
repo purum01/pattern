@@ -1,0 +1,231 @@
+<link href="exam.css"   rel="stylesheet">
+<script src="copy_button.js" ></script>
+
+<!-- Display.java -->
+<div class="file-box">
+    <h3 class="file-title">Display.java</h3>
+    <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
+    <pre class="code-box"><code id="code1">
+package decorator;
+
+public abstract class Display {
+    public Display() {}
+
+    public abstract int getColumns();
+    public abstract int getRows();
+    public abstract String getRowText(int row);
+
+    public void show() {
+        for (int i = 0; i < getRows(); i++) {
+            System.out.println(getRowText(i));
+        }
+    }
+}
+</code></pre>
+</div>
+
+<!-- StringDisplay.java -->
+<div class="file-box">
+    <h3 class="file-title">StringDisplay.java</h3>
+    <button class="copy-button" onclick="copyCode('code2')">복사하기</button>
+    <pre class="code-box"><code id="code2">
+package decorator;
+
+public class StringDisplay extends Display {
+    String string;
+    public StringDisplay(String string ){
+        super();
+        this.string = string;
+    }
+    
+    public StringDisplay() {
+        
+    }
+    public int getColumns() {
+        return string.getBytes().length;			
+    }
+    
+    public int getRows() {
+        return 1;			
+    }
+    
+    public String getRowText(int row) {
+        if(row==0){
+            return string;
+        } else {
+            return null;
+        }			
+    }
+}
+</code></pre>
+</div>
+
+<!-- Border.java -->
+<div class="file-box">
+    <h3 class="file-title">Border.java</h3>
+    <button class="copy-button" onclick="copyCode('code3')">복사하기</button>
+    <pre class="code-box"><code id="code3">
+package decorator;
+
+////abstract로 정의, Display의 하위로 정의한다
+public abstract class Border extends Display {
+    ////public Display display;
+    public Display display;
+
+    ////생성자에서 멤버변수를 설정한다.
+    public Border(Display display) {
+        super();
+        this.display = display;
+    }
+    
+    ////디폴트 생성자도 넣어둔다.
+    public Border(){}
+}
+</code></pre>
+</div>
+
+<!-- FullBorder.java -->
+<div class="file-box">
+    <h3 class="file-title">FullBorder.java</h3>
+    <button class="copy-button" onclick="copyCode('code4')">복사하기</button>
+    <pre class="code-box"><code id="code4">
+package decorator;
+
+public class FullBorder extends Border {
+    
+    public FullBorder() {
+        
+    }
+    public int getColumns() {
+        return 1 + display.getColumns() + 1;			
+    }
+    public int getRows() {
+        return 1 + display.getRows() + 1;			
+    }
+    
+    public String getRowText(int row) {
+        if (row == 0)
+        {
+            return "+" + makeLine('-', display.getColumns()) + "+";
+        }
+        else if (row == display.getRows() +1)
+        {
+            return "+" + makeLine('-', display.getColumns()) + "+";
+        }
+        else {
+            return "|" + display.getRowText(row - 1) + "|";
+        }			
+    }
+    
+    String makeLine(char ch,int count){
+        StringBuffer buf = new StringBuffer();
+        for(int i = 0; i < count; i++) {
+            buf.append(ch);
+        }
+        return buf.toString();
+    }
+    
+    public FullBorder(Display display){
+        super(display);
+    }
+}
+</code></pre>
+</div>
+
+<!-- SideBorder.java -->
+<div class="file-box">
+    <h3 class="file-title">SideBorder.java</h3>
+    <button class="copy-button" onclick="copyCode('code5')">복사하기</button>
+    <pre class="code-box"><code id="code5">
+package decorator;
+
+public class SideBorder extends Border {
+    char borderChar;
+    public SideBorder() {
+        
+    }
+    
+    public int getColumns() {
+        return 1+ display.getColumns()+ 1;			
+    }
+    
+    public int getRows() {
+        return display.getRows();			
+    }
+    
+    public String getRowText(int row) {
+        return borderChar+ display.getRowText(row)+ borderChar;			
+    }
+    
+    public SideBorder(Display theDisplay,char ch){
+        super(theDisplay);
+        this.borderChar= ch;
+    }
+}
+</code></pre>
+</div>
+
+<!-- UpDownBorder.java -->
+<div class="file-box">
+    <h3 class="file-title">UpDownBorder.java</h3>
+    <button class="copy-button" onclick="copyCode('code6')">복사하기</button>
+    <pre class="code-box"><code id="code6">
+package decorator;
+
+public class UpDownBorder extends Border {
+    char ch;
+    
+    public UpDownBorder(Display theDisplay, char ch) {
+        super(theDisplay);
+        this.ch= ch;
+    }
+    public UpDownBorder() {
+        
+    }
+    
+    public int getColumns() {
+        return display.getColumns();
+    }
+    
+    public int getRows() {
+        return 1+ display.getRows()+ 1;
+    }
+    
+    public String getRowText(int row) {
+        if(row== 0 || row== getRows()-1){
+            return makeLine(ch, getColumns());
+        } else {
+            return display.getRowText(row-1);
+        }
+    }
+    String makeLine(char ch,int count){
+        StringBuffer buf = new StringBuffer();
+        for(int i = 0; i < count; i++) {
+            buf.append(ch);
+        }
+        return buf.toString();
+    }
+}
+</code></pre>
+</div>
+
+<!-- Main.java -->
+<div class="file-box">
+    <h3 class="file-title">Main.java</h3>
+    <button class="copy-button" onclick="copyCode('code7')">복사하기</button>
+    <pre class="code-box"><code id="code7">
+package decorator;
+
+public class Main {
+    public static void main(String[] args) {
+        Display b1 = new StringDisplay("Hello, world.");
+        Display b2 = new SideBorder(b1, '#');
+        Display b3 = new FullBorder(b2);
+        Display b4 = new FullBorder(b3);
+        Display b5 = new UpDownBorder(b4, '~');
+        b5.show();
+    }
+}
+</code></pre>
+</div>
+

@@ -1,0 +1,138 @@
+<link href="exam.css"   rel="stylesheet">
+
+<div class="assignment">
+    <h1 class="title">컴퍼지트 패턴(Composite Pattern) 구현 실습</h1>
+  
+    <section class="section">
+      <h2 class="section-title">📋 실습 목표</h2>
+      <p class="paragraph">
+        파일과 디렉터리를 같은 방식으로 다루기 위해 <strong>컴퍼지트 패턴</strong>을 구현합니다.<br>
+        단일 객체(파일)와 복합 객체(디렉터리)를 동일한 인터페이스로 다룰 수 있어야 합니다.
+      </p>
+      <div class="highlight-box">
+        <code class="inline-code">Entry</code>는 파일과 디렉터리의 공통 추상 클래스입니다.<br>
+        <code class="inline-code">File</code>은 실제 파일, <code class="inline-code">Directory</code>는 자식 Entry를 포함할 수 있습니다.
+      </div>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">🛠 구현 지침</h2>
+      <ul class="list">
+        <li><code class="inline-code">Entry</code>: getName(), getSize(), printList()를 정의한 추상 클래스</li>
+        <li><code class="inline-code">File</code>: 이름과 크기를 가진 단일 객체</li>
+        <li><code class="inline-code">Directory</code>: Entry들을 포함할 수 있는 복합 객체</li>
+        <li>모든 Entry는 <code>printList()</code>로 자신의 경로와 크기를 출력합니다</li>
+      </ul>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">🖥 실행 예시</h2>
+      <pre class="code-box"><code>/root (31200)
+    /root/bin (30000)
+      /root/bin/vi (10000)
+      /root/bin/latex (20000)
+    /root/tmp (0)
+    /root/usr (1500)
+      /root/usr/Kim (300)
+        /root/usr/Kim/diary.html (100)
+        /root/usr/Kim/Composite.java (200)
+      /root/usr/Lee (300)
+        /root/usr/Lee/memo.tex (300)
+      /root/usr/Kang (900)
+        /root/usr/Kang/game.doc (400)
+        /root/usr/Kang/junk.mail (500)
+  </code></pre>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">📂 파일 구조</h2>
+      <pre class="code-box"><code>/composite/
+    Entry.java        ← 제공됨
+    File.java         ← 구현 대상
+    Directory.java    ← 구현 대상
+    FileTreatmentException.java ← 예외 클래스
+    Main.java         ← 제공됨
+  </code></pre>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">📌 UML 다이어그램</h2>
+        <img src="img/menu9_1.png">
+    </section>
+
+
+
+<section class="section">
+<h2 class="section-title">🗂 제공 파일</h2>
+<div class="file-box">
+    <h3 class="file-title">Entry.java</h3>
+    <button class="copy-button" onclick="copyCode('entry-code')">복사하기</button>
+    <pre class="code-box"><code id="entry-code">
+package composite;
+
+public abstract class Entry {
+    public abstract String getName();
+    public abstract int getSize();
+    public abstract void printList(String prefix);
+    public Entry add(Entry entry) throws FileTreatmentException {
+        throw new FileTreatmentException();
+    }
+    public void printList() {
+        printList("");
+    }
+    public String toString() {
+        return getName() + " (" + getSize() + ")";
+    }
+}
+</code></pre>
+</div>
+<div class="file-box">
+    <h3 class="file-title">Main.java</h3>
+    <button class="copy-button" onclick="copyCode('main-code')">복사하기</button>
+    <pre class="code-box"><code id="main-code">
+package composite;
+
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Making root entries...");
+        Directory rootdir = new Directory("root");
+        Directory bindir = new Directory("bin");
+        Directory tmpdir = new Directory("tmp");
+        Directory usrdir = new Directory("usr");
+        rootdir.add(bindir);
+        rootdir.add(tmpdir);
+        rootdir.add(usrdir);
+        bindir.add(new File("vi", 10000));
+        bindir.add(new File("latex", 20000));
+        rootdir.printList();
+
+        System.out.println();
+        System.out.println("Making user entries...");
+        Directory Kim = new Directory("Kim");
+        Directory Lee = new Directory("Lee");
+        Directory Kang = new Directory("Kang");
+        usrdir.add(Kim);
+        usrdir.add(Lee);
+        usrdir.add(Kang);
+        Kim.add(new File("diary.html", 100));
+        Kim.add(new File("Composite.java", 200));
+        Lee.add(new File("memo.tex", 300));
+        Kang.add(new File("game.doc", 400));
+        Kang.add(new File("junk.mail", 500));
+        rootdir.printList();
+    }
+}
+</code></pre>
+</div>
+</section>
+</div>
+</div>
+<script>
+  function copyCode(id) {
+    const codeElement = document.getElementById(id);
+    navigator.clipboard.writeText(codeElement.textContent)
+      .then(() => alert('코드가 복사되었습니다!'))
+      .catch(err => alert('복사 실패: ' + err));
+  }
+  </script>
+    

@@ -1,0 +1,106 @@
+<link href="exam.css"   rel="stylesheet">
+
+<div class="assignment">
+    <h1 class="title">템플릿 메서드 패턴(Template Method Pattern) 구현 실습</h1>
+  
+    <section class="section">
+      <h2 class="section-title">📋 실습 목표</h2>
+      <p class="paragraph">
+        출력의 흐름을 일정하게 유지하면서도 세부 동작은 하위 클래스에서 정의할 수 있도록, <strong>템플릿 메서드 패턴</strong>을 구현합니다.<br>
+        공통 알고리즘은 상위 클래스가 제공하고, 세부 구현은 서브클래스에게 위임합니다.
+      </p>
+      <div class="highlight-box">
+        <code class="inline-code">display()</code> 메서드는 상위 클래스에 고정하고,<br>
+        <code class="inline-code">open()</code>, <code class="inline-code">print()</code>, <code class="inline-code">close()</code>는 하위 클래스에서 구현하세요.
+      </div>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">🛠 구현 지침</h2>
+      <ul class="list">
+        <li><code class="inline-code">AbstractDisplay</code>: 템플릿 메서드(<code>display()</code>)를 구현한 추상 클래스</li>
+        <li><code class="inline-code">CharDisplay</code>: 문자 하나를 출력하는 하위 클래스</li>
+        <li><code class="inline-code">StringDisplay</code>: 문자열을 출력하는 하위 클래스</li>
+        <li>하위 클래스는 <code class="inline-code">open()</code>, <code class="inline-code">print()</code>, <code class="inline-code">close()</code>를 재정의해야 합니다</li>
+      </ul>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">🖥 실행 예시</h2>
+      <pre class="code-box"><code>&lt;&lt;HHHHH&gt;&gt;
+  +----+
+  |HAHA|
+  |HAHA|
+  |HAHA|
+  |HAHA|
+  |HAHA|
+  +----+</code></pre>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">📂 파일 구조</h2>
+      <pre class="code-box"><code>/template/
+    AbstractDisplay.java   ← 제공됨
+    Main.java              ← 제공됨
+    CharDisplay.java       ← 직접 구현
+    StringDisplay.java     ← 직접 구현
+  </code></pre>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">🗂 제공 파일</h2>
+      <p class="paragraph">아래 두 개의 파일을 참고하여 <code>CharDisplay</code>와 <code>StringDisplay</code>를 구현하세요.</p>
+  
+      <!-- AbstractDisplay.java -->
+      <div class="file-box">
+        <h3 class="file-title">AbstractDisplay.java</h3>
+        <button class="copy-button" onclick="copyCode('abstractdisplay-code')">복사하기</button>
+        <pre class="code-box"><code id="abstractdisplay-code">
+package template;
+  
+  public abstract class AbstractDisplay {
+      public abstract void open();
+      public abstract void print();
+      public abstract void close();
+  
+      public final void display() {
+          open();
+          for (int i = 0; i < 5; i++) {
+              print();
+          }
+          close();
+      }
+  }
+  </code></pre>
+      </div>
+  
+      <!-- Main.java -->
+      <div class="file-box">
+        <h3 class="file-title">Main.java</h3>
+        <button class="copy-button" onclick="copyCode('main-code')">복사하기</button>
+        <pre class="code-box"><code id="main-code">
+package template;
+  
+  public class Main {
+      public static void main(String[] args) {
+          AbstractDisplay d1 = new CharDisplay('H');
+          AbstractDisplay d2 = new StringDisplay("HAHA");
+          d1.display();
+          d2.display();
+      }
+  }
+  </code></pre>
+      </div>
+    </section>
+  </div>
+  
+  <!-- 복사 버튼 스크립트 -->
+  <script>
+  function copyCode(id) {
+    const codeElement = document.getElementById(id);
+    navigator.clipboard.writeText(codeElement.textContent)
+      .then(() => alert('코드가 복사되었습니다!'))
+      .catch(err => alert('복사 실패: ' + err));
+  }
+  </script>
+  
