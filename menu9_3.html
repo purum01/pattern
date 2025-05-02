@@ -17,31 +17,48 @@
   
     <section class="section">
       <h2 class="section-title">🛠 구현 지침</h2>
-      <ul class="list">
-        <li><code class="inline-code">Entry</code>: getName(), getSize(), printList()를 정의한 추상 클래스</li>
-        <li><code class="inline-code">File</code>: 이름과 크기를 가진 단일 객체</li>
-        <li><code class="inline-code">Directory</code>: Entry들을 포함할 수 있는 복합 객체</li>
-        <li>모든 Entry는 <code>printList()</code>로 자신의 경로와 크기를 출력합니다</li>
-      </ul>
+      <div style="font-family: 'Segoe UI', sans-serif; line-height: 1.8; font-size: 16px; color: #333;">
+
+        <h3 style="margin-top: 24px;">1. <code style="background-color: #f4f4f4; padding: 2px 4px; border-radius: 4px;">File</code> 클래스를 구현하시오</h3>
+        <ul style="list-style-type: disc; margin-left: 24px; padding-left: 0;">
+          <li><code>Entry</code>를 상속받는다.</li>
+          <li>이름(<code>name</code>)과 크기(<code>size</code>)를 가진다.</li>
+          <li>
+            <code>getName()</code>, <code>getSize()</code>, 
+            <code>printList(String prefix)</code>를 구현한다.
+          </li>
+          <li><code>printList()</code>는 파일 경로를 출력한다.</li>
+        </ul>
+      
+        <h3 style="margin-top: 32px;">2. <code style="background-color: #f4f4f4; padding: 2px 4px; border-radius: 4px;">Directory</code> 클래스를 구현하시오</h3>
+        <ul style="list-style-type: disc; margin-left: 24px;">
+          <li><code>Entry</code>를 상속받는다.</li>
+          <li>디렉터리 이름(<code>name</code>)과 내부 Entry 목록(<code>List&lt;Entry&gt;</code>)을 가진다.</li>
+          <li><code>add(Entry entry)</code>로 하위 항목을 추가할 수 있어야 한다.</li>
+          <li><code>getSize()</code>는 내부의 모든 항목의 크기를 합산한 결과를 반환해야 한다.</li>
+          <li><code>printList(String prefix)</code>는 현재 디렉터리 이름과 내부 항목들을 재귀적으로 출력한다.</li>
+        </ul>
+      
+        <h3 style="margin-top: 32px;">3. 사용자 정의 예외 <code style="background-color: #f4f4f4; padding: 2px 4px; border-radius: 4px;">FileTreatmentException</code>을 구현하시오</h3>
+        <ul style="list-style-type: disc; margin-left: 24px;">
+          <li>
+            <code>Entry</code>에서 <code>add()</code> 메서드를 호출할 경우 발생시킨다
+            (파일에는 <code>add</code>할 수 없기 때문).
+          </li>
+        </ul>
+      
+      </div>
+      
+      
+      
+
     </section>
   
     <section class="section">
-      <h2 class="section-title">🖥 실행 예시</h2>
-      <pre class="code-box"><code>/root (31200)
-    /root/bin (30000)
-      /root/bin/vi (10000)
-      /root/bin/latex (20000)
-    /root/tmp (0)
-    /root/usr (1500)
-      /root/usr/Kim (300)
-        /root/usr/Kim/diary.html (100)
-        /root/usr/Kim/Composite.java (200)
-      /root/usr/Lee (300)
-        /root/usr/Lee/memo.tex (300)
-      /root/usr/Kang (900)
-        /root/usr/Kang/game.doc (400)
-        /root/usr/Kang/junk.mail (500)
-  </code></pre>
+      <h2 class="section-title">🖥 실행 결과</h2>
+      <figure>
+        <img src="img/menu9_4.png" style="width: 40%;">
+    </figure>
     </section>
   
     <section class="section">

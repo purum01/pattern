@@ -1,6 +1,6 @@
 <h1 style="text-align: center;">Factory Method Pattern  </h1>
 
-<h3>다형성 사용</h3>
+<h3>✅ IRuleConfigParserFactory 및 구체 팩터리 클래스 구현</h3>
 <pre><code id="source-code" class="language-java">
     public interface IRuleConfigParserFactory {
         IRuleConfigParser createParser();
@@ -36,7 +36,7 @@
 </code></pre>
 
 
-<h3>팩터리 객체 생성의 결합</h3>
+<h3>✅ 조건문으로 팩터리 인스턴스 선택</h3>
 <pre><code id="source-code" class="language-java">
     public class RuleConfigSource {
         public RuleConfig load(String ruleConfigFilePath) {
@@ -70,7 +70,7 @@
     }
 </code></pre>    
 
-<h3>Factory의  Factory</h3>
+<h3>✅ 팩터리의 팩터리 (팩터리 클래스들을 Map으로 관리)</h3>
 <pre><code id="source-code" class="language-java">
     public class RuleConfigSource {
         public RuleConfig load(String ruleConfigFilePath) {

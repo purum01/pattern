@@ -10,6 +10,7 @@
             height: 100%;
             overflow: hidden; /* body 자체는 스크롤 안함 */
         }
+       
         .container {
             display: flex;
             height: 100%;
@@ -36,6 +37,7 @@
             list-style-type: none;
             padding: 0;
         }
+     
         li {
             margin-bottom: 10px;
             cursor: pointer;
@@ -45,7 +47,7 @@
             background-color: gray;
         }
         .nested {
-            margin-left: 20px;
+            margin-left: 30px;
             display: none;
         }
         .nested > li:hover {
@@ -141,20 +143,20 @@
             <li id="menu0" onclick="toggleNested(this)">8. 팩토리 메서드 패턴
                 <ul class="nested">
                     <li onclick="event.stopPropagation(); showContent('menu8_0');">GoF 정의</li>   
-                    <li onclick="event.stopPropagation(); showContent('menu8_1');">단순 팩터리 </li>                                                                                     
-                    <li onclick="event.stopPropagation(); showContent('menu8_2');">팩터리 메서드 패턴</li>                                                                                     
-                    <li onclick="event.stopPropagation(); showContent('menu8_3');">추상 팩터리 패턴</li>                                                                                     
-                    <li onclick="event.stopPropagation(); showContent('menu8_4');">적용 대상</li>                                                                                     
+                    <li onclick="event.stopPropagation(); showContent('menu8_1');">단순 팩토리 패턴 </li>                                                                                     
+                    <li onclick="event.stopPropagation(); showContent('menu8_2');">팩토리 메서드 패턴</li>                                                                                     
+                    <li onclick="event.stopPropagation(); showContent('menu8_3');">추상 팩토리 패턴</li>                                                                                     
+                    <li onclick="event.stopPropagation(); showContent('menu8_4');">팩토리 메서드 패턴 역할</li>                                                                                     
                     <li onclick="event.stopPropagation(); showContent('menu8_5');">DI 컨테이너</li>                                                                                     
                     <li onclick="event.stopPropagation(); showContent('menu8_6');">DI 컨테이너 구현</li>                                                                                     
-                    <li onclick="event.stopPropagation(); showContent('menu8_7');">팩터리 메서드 패턴 실습</li>                                                                                     
+                    <li onclick="event.stopPropagation(); showContent('menu8_7');">팩토리 메서드 패턴 실습</li>                                                                                     
                 </ul>
             </li>            
             <li id="menu0" onclick="toggleNested(this)">9. 컴퍼지트 패턴
                 <ul class="nested">
                     <li onclick="event.stopPropagation(); showContent('menu9_0');">GoF 정의</li>   
-                    <li onclick="event.stopPropagation(); showContent('menu9_1');">디렉터리 트리</li>   
-                    <li onclick="event.stopPropagation(); showContent('menu9_2');">휴먼 트리</li>   
+                    <li onclick="event.stopPropagation(); showContent('menu9_1');">파일 시스템</li>   
+                    <li onclick="event.stopPropagation(); showContent('menu9_2');">조직도 구성</li>   
                     <li onclick="event.stopPropagation(); showContent('menu9_3');">컴퍼지트 패턴 실습</li>   
                 </ul>
             </li>            
@@ -190,7 +192,7 @@
                     <li onclick="event.stopPropagation(); showContent('menu13_5');">프록시 패턴 실습</li>                   
                 </ul>
             </li>            
-            <li id="menu0" onclick="toggleNested(this)">📂 완성 예제 보기
+            <li id="menu0" onclick="toggleNested(this)">📂 실습 코드
                 <ul class="nested">
                     <li onclick="event.stopPropagation(); showContent('menu14_1');">전략 패턴</li>   
                     <li onclick="event.stopPropagation(); showContent('menu14_2');">싱글턴 패턴</li>   

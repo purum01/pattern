@@ -1,11 +1,7 @@
 <h1 style="text-align: center;">파일 시스템 </h1>
 
-<h3>✅ 요구 사항</h3>
-<ul>
-    <li>- 디렉터리 다음의 하위 디렉터리나 파일을 동적으로 추가하거나 삭제할 수 있다.</li>
-    <li>- 지정된 디렉터리에 있는 파일의 수를 확인한다.</li>
-    <li>- 지정된 디렉터리의 있는 파일의 크기를 합산한다.</li>
-</ul>    
+<h3>✅ 파일 시스템 노드 클래스 (FileSystemNode) 구현 예제</h3>
+    
 <pre><code id="source-code" class="language-java">
     public class FileSystemNode {
         private String path;
@@ -48,7 +44,7 @@
     }
 </code></pre>    
 
-<h3>재귀 트리 탐색 알고리즘 - 전체 디렉터리 구조 탐색</h3>
+<h3>✅ 파일 개수 및 전체 크기 계산 메서드 구현 (countNumOfFiles, countSizeOfFiles)</h3>
 <pre><code id="source-code" class="language-java">
     public int countNumOfFiles() {
         if (isFile) {
@@ -79,7 +75,7 @@
     }
 </code></pre>   
 
-<h3>확장성 고려 - File, Directory 클래스 분리</h3>
+<h3>✅ 파일과 디렉터리를 계층적으로 표현한 구조 – FileSystemNode, File, Directory 클래스 설계</h3>
 <pre><code id="source-code" class="language-java">
     // 공통 부모 클래스
     public abstract class FileSystemNode {
@@ -160,21 +156,13 @@
         }
     }
 </code></pre>   
-<h3></h3>
+<h3>✅ 트리 구조의 파일 시스템 구성 및 파일 수 계산 예제</h3>
+<figure>
+    <img src="img/menu9_3.png" style="width: 20%;">
+</figure>
 <pre><code id="source-code" class="language-java">
     public class Demo {
         public static void main(String[] args) {
-            /*
-             * /
-             * /jp
-             * /jp/a.txt
-             * /jp/b.txt
-             * /jp/movies
-             * /jp/movies/c.avi
-             * /jpub
-             * /jpub/docs
-             * /jpub/docs/d.txt
-             */
     
             Directory fileSystemTree = new Directory("/");
     

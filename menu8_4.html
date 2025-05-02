@@ -1,98 +1,108 @@
+<style>
+    .page {
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #f9fafb;
+        padding: 40px;
+        color: #374151;
+        line-height: 1.6;
+    }
 
-    <style>
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background-color: #f9fafb;
-            padding: 40px;
-            color: #374151;
-            line-height: 1.6;
-        }
-        h1 {
-            font-size: 28px;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #111827;
-        }
-        h2 {
-            font-size: 22px;
-            margin-top: 36px;
-            color: #1f2937;
-        }
-        h3 {
-            font-size: 18px;
-            margin-top: 28px;
-            color: #1f2937;
-        }
-        p {
-            font-size: 16px;
-            margin-top: 8px;
-        }
-        ul {
-            font-size: 16px;
-            margin-top: 8px;
-            padding-left: 20px;
-        }
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-            background-color: #ffffff;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-        th, td {
-            padding: 12px 18px;
-            text-align: left;
-            border-bottom: 1px solid #e5e7eb;
-            font-size: 15px;
-        }
-        th {
-            background-color: #f1f5f9;
-            font-weight: 700;
-            color: #374151;
-        }
-        td {
-            color: #374151;
-        }
-        tr:last-child td {
-            border-bottom: none;
-        }
-        table tbody tr:hover {
-            background-color: #f9fafb;
-        }
-        .summary {
-            margin-top: 36px;
-            font-size: 18px;
-            text-align: center;
-            font-weight: bold;
-            color: #111827;
-        }
-    </style>
+    .heading1 {
+        font-size: 28px;
+        margin-bottom: 20px;
+        text-align: center;
+        color: #111827;
+    }
 
+    .heading2 {
+        font-size: 22px;
+        margin-top: 36px;
+        color: #1f2937;
+    }
 
-    <h1>📚 팩터리 패턴의 적용 대상</h1>
+    .heading3 {
+        font-size: 18px;
+        margin-top: 28px;
+        color: #1f2937;
+    }
 
-    <h2>✅ 팩터리 패턴을 고려해야 하는 경우</h2>
-    <p>객체 생성 과정이 복잡하거나, 객체 생성 프로세스를 캡슐화하고 싶을 때 적용할 수 있습니다.</p>
+    .paragraph {
+        font-size: 16px;
+        margin-top: 8px;
+    }
 
-    <h2>주요 상황</h2>
+    .list {
+        font-size: 16px;
+        margin-top: 8px;
+        padding-left: 20px;
+    }
 
-    <h3>1. 객체 설정 복잡성/유사성 문제</h3>
-    <ul>
+    .styled-table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .styled-table th,
+    .styled-table td {
+        padding: 12px 18px;
+        text-align: left;
+        border-bottom: 1px solid #e5e7eb;
+        font-size: 15px;
+    }
+
+    .styled-table th {
+        background-color: #f1f5f9;
+        font-weight: 700;
+        color: #374151;
+    }
+
+    .styled-table td {
+        color: #374151;
+    }
+
+    .styled-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .styled-table tbody tr:hover {
+        background-color: #f9fafb;
+    }
+
+    .summary {
+        margin-top: 36px;
+        font-size: 18px;
+        text-align: center;
+        font-weight: bold;
+        color: #111827;
+    }
+</style>
+
+<div class="page">
+    <h2 class="heading2">✅ 팩터리 패턴을 고려해야 하는 경우</h2>
+    <p class="paragraph">객체 생성 과정이 복잡하거나, 객체 생성 프로세스를 캡슐화하고 싶을 때 적용할 수 있습니다.</p>
+
+    <h2 class="heading2">주요 상황</h2>
+
+    <h3 class="heading3">1. 객체 설정 복잡성/유사성 문제</h3>
+    <ul class="list">
         <li>규칙 설정 클래스처럼 객체 설정 코드가 <strong>복잡</strong>하거나 <strong>유사</strong>한 경우 → 팩터리 패턴 사용.</li>
         <li>클래스마다 객체 설정 코드가 복잡하면 유지보수가 어려워짐.</li>
         <li><strong>팩터리 메서드 패턴</strong>을 통해 객체 생성/설정 분리 → 클래스 복잡도 감소.</li>
     </ul>
 
-    <h3>2. 생성할 객체가 상황(흐름)에 따라 달라질 때</h3>
-    <ul>
+    <h3 class="heading3">2. 생성할 객체가 상황(흐름)에 따라 달라질 때</h3>
+    <ul class="list">
         <li>상황(흐름)에 따라 생성할 객체가 달라질 경우.</li>
         <li>클래스 내부 if-else/switch를 없애고, <strong>팩터리 클래스</strong>를 통해 관리.</li>
     </ul>
 
-    <h2>✨ 팩터리 패턴의 4가지 역할</h2>
-    <table>
+    <h2 class="heading2">✨ 팩터리 패턴의 4가지 역할</h2>
+    <table class="styled-table">
         <thead>
             <tr>
                 <th>번호</th>
@@ -123,3 +133,4 @@
         ✅ "생성 과정이 복잡하거나, 상황에 따라 다른 객체를 만들어야 할 때, 팩터리 패턴을 사용하라."
     </div>
 
+</div>

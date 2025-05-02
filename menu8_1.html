@@ -1,6 +1,6 @@
 <h1 style="text-align: center;">단순 팩터리 패턴 </h1>
 
-<h3>설정 파일 확장자에따른 객체 생성</h3>
+<h3>✅ 초기 형태</h3>
 <pre><code id="source-code" class="language-java">
     public class RuleConfigSource {
         public RuleConfig load(String ruleConfigFilePath) {
@@ -34,7 +34,7 @@
 </code></pre>
 
 
-<h3>createParser() 함수로 캡슐화</h3>
+<h3>✅ createParser() 메서드로 분리</h3>
 <pre><code id="source-code" class="language-java">
     public RuleConfig load(String ruleConfigFilePath) {
         String ruleConfigFileExtension = getFileExtension(ruleConfigFilePath);
@@ -70,7 +70,7 @@
         return parser;
     }
 </code></pre>    
-<h3>클래스 분리</h3>
+<h3>✅ 팩터리 클래스 분리</h3>
 <pre><code id="source-code" class="language-java">
     public class RuleConfigSource {
         public RuleConfig load(String ruleConfigFilePath) {
@@ -111,7 +111,7 @@
     }
 </code></pre>    
 
-<h3>객체 재사용</h3>
+<h3>✅ 캐싱 적용</h3>
 <pre><code id="source-code" class="language-java">
     public class RuleConfigParserFactory {
         private static final Map<String, IRuleConfigParser> cachedParsers = new HashMap<>();
