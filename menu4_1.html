@@ -1,9 +1,14 @@
 <h3>모바일 게임 서버에 커맨드 패턴 적용</h3>
+
+<figure style="text-align: center;">
+    <img src="img/menu4_1.png" style="width: 50%;">
+</figure>
+
+
 <pre><code id="source-code" class="language-java">
     public interface Command{
         void execute();
     }
-
     public class GotDiamondCommand implements Command{}
 
         // 멤버 변수와 코드 정의 생략
@@ -58,3 +63,35 @@
         }
     }
 </code></pre>    
+
+<div style="max-width: 700px; margin: 40px auto; font-family: 'Segoe UI', sans-serif;">
+    <h2 style="font-size: 24px;">🎯 <strong>이 구조의 장점</strong></h2>
+  
+    <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+      <thead>
+        <tr style="background-color: #f9f9f9; text-align: left; border-bottom: 2px solid #ddd;">
+          <th style="padding: 12px;">항목</th>
+          <th style="padding: 12px;">설명</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom: 1px solid #eee;">
+          <td style="padding: 12px;">명령 캡슐화</td>
+          <td style="padding: 12px;">행동 로직을 <code>Command</code> 객체로 분리함으로써 유연하게 관리 가능</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+          <td style="padding: 12px;">비동기적 처리</td>
+          <td style="padding: 12px;">이벤트를 즉시 실행하지 않고 큐에 쌓아 순차적으로 처리</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #eee;">
+          <td style="padding: 12px;">실행 시점 제어</td>
+          <td style="padding: 12px;"><code>MAX_HANDLED_REQ_COUNT_PER_LOOP</code>로 부하 조절 가능</td>
+        </tr>
+        <tr>
+          <td style="padding: 12px;">확장성</td>
+          <td style="padding: 12px;">새로운 명령을 추가할 때 if-else만 수정하거나 Map으로도 확장 가능</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  

@@ -1,4 +1,19 @@
 <link href="exam.css"   rel="stylesheet">
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+  }
+  th {
+    background-color: #f0f0f0;
+  }
+</style>
 <div class="assignment">
     <h1 class="title">상태 패턴(State Pattern) 적용하여 리팩토링하기</h1>
   
@@ -13,7 +28,41 @@
         시각에 따라 자동으로 상태(State)를 변경하도록 구현하세요.
       </div>
     </section>
-  
+    <h2>🛠️ 실습 조건</h2>
+    <ol>
+      <li>모든 상태는 <code>State</code> 인터페이스를 구현해야 합니다.</li>
+      <li>상태에 따라 버튼 행동이 다르게 동작해야 합니다.</li>
+      <li>시간이 09~17시가 아니면 야간 상태로 전환합니다.</li>
+    </ol>
+
+    <table>
+      <thead>
+        <tr>
+          <th>상태</th>
+          <th>시간 변화</th>
+          <th>금고 사용</th>
+          <th>비상벨</th>
+          <th>일반 통화</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>주간</td>
+          <td>09~17시 유지, 이외는 야간 전환</td>
+          <td>기록 로그</td>
+          <td>보안센터 호출</td>
+          <td>보안센터 호출</td>
+        </tr>
+        <tr>
+          <td>야간</td>
+          <td>09~17시 진입 시 주간 전환</td>
+          <td>비상 로그 기록</td>
+          <td>보안센터 호출</td>
+          <td>통화 녹음</td>
+        </tr>
+      </tbody>
+    </table>
+
     <section class="section">
       <h2 class="section-title">🛠 리팩토링 지침</h2>
       <ul class="list">
@@ -45,61 +94,87 @@
         <h3 class="file-title">SafeFrame.java</h3>
         <button class="copy-button" onclick="copyCode('safeframe-code')">복사하기</button>
         <pre class="code-box"><code id="safeframe-code">package state;
-  
-  import java.awt.*;
-  import java.awt.event.*;
-  
-  public class SafeFrame extends Frame {
-      private TextField textClock = new TextField(60);
-      private TextArea textScreen = new TextArea(10, 60);
-      private Button buttonUse = new Button("금고사용");
-      private Button buttonAlarm = new Button("비상벨");
-      private Button buttonPhone = new Button("일반 통화");
-      private Button buttonExit = new Button("종료");
-  
-      public SafeFrame(String title) {
-          super(title);
-          setBackground(Color.lightGray);
-          setLayout(new BorderLayout());
-  
-          add(textClock, BorderLayout.NORTH);
-          textClock.setEditable(false);
-  
-          add(textScreen, BorderLayout.CENTER);
-          textScreen.setEditable(false);
-  
-          Panel panel = new Panel();
-          panel.add(buttonUse);
-          panel.add(buttonAlarm);
-          panel.add(buttonPhone);
-          panel.add(buttonExit);
-          add(panel, BorderLayout.SOUTH);
-  
-          pack();
-          setVisible(true);
-  
-          buttonUse.addActionListener(e -> {
-              int hour = getCurrentHour();
-              if (hour &lt; 9 || hour &gt;= 17) {
-                  textScreen.append("야간 금고 사용 기록\n");
-              } else {
-                  textScreen.append("주간 금고 사용 기록\n");
-              }
-          });
-  
-          buttonAlarm.addActionListener(e -> textScreen.append("비상벨 작동\n"));
-          buttonPhone.addActionListener(e -> textScreen.append("전화 연결\n"));
-          buttonExit.addActionListener(e -> System.exit(0));
-      }
-  
-      public void setClock(int hour) {
-          textClock.setText("현재 시각은 " + (hour &lt; 10 ? "0" + hour : hour) + ":00");
-      }
-  
-      private int getCurrentHour() {
-          return Integer.parseInt(textClock.getText().replaceAll("\\D", ""));
-      }
-  }
+package state;
+
+import java.awt.*;
+import java.awt.event.*;
+
+public class SafeFrame extends Frame implements ActionListener {
+    private TextField textClock = new TextField(60);
+    private TextArea textScreen = new TextArea(10, 60);
+    private Button buttonUse = new Button("금고사용");
+    private Button buttonAlarm = new Button("비상벨");
+    private Button buttonPhone = new Button("일반 통화");
+    private Button buttonExit = new Button("종료");
+
+    private int hour = 0;
+
+    public SafeFrame(String title) {
+        super(title);
+        setBackground(Color.lightGray);
+        setLayout(new BorderLayout());
+        add(textClock, BorderLayout.NORTH);
+        textClock.setEditable(false);
+        add(textScreen, BorderLayout.CENTER);
+        textScreen.setEditable(false);
+        Panel panel = new Panel();
+        panel.add(buttonUse);
+        panel.add(buttonAlarm);
+        panel.add(buttonPhone);
+        panel.add(buttonExit);
+        add(panel, BorderLayout.SOUTH);
+        pack();
+        show();
+        buttonUse.addActionListener(this);
+        buttonAlarm.addActionListener(this);
+        buttonPhone.addActionListener(this);
+        buttonExit.addActionListener(this);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == buttonUse) {
+            if (hour >= 9 && hour < 17) {
+                recordLog("주간 금고 사용");
+            } else {
+                recordLog("비상:야간의금고사용");
+            }
+        } else if (e.getSource() == buttonAlarm) {
+            if (hour >= 9 && hour < 17) {
+                callSecurityCenter("주간 비상벨");
+            } else {
+                callSecurityCenter("비상벨(야간)");
+            }
+        } else if (e.getSource() == buttonPhone) {
+            if (hour >= 9 && hour < 17) {
+                callSecurityCenter("주간 일반 통화");
+            } else {
+                recordLog("야간의통화녹음");
+            }
+        } else if (e.getSource() == buttonExit) {
+            System.exit(0);
+        }
+    }
+
+    public void setClock(int hour) {
+        this.hour = hour;
+        String clockstring = "현재 시각은 ";
+        if (hour < 10) {
+            clockstring += "0" + hour + ":00";
+        } else {
+            clockstring += hour + ":00";
+        }
+        System.out.println(clockstring);
+        textClock.setText(clockstring);
+    }
+
+    public void callSecurityCenter(String msg) {
+        textScreen.append("call! " + msg + "\n");
+    }
+
+    public void recordLog(String msg) {
+        textScreen.append("record ... " + msg + "\n");
+    }
+}
   </code></pre>
       </div>
   
@@ -107,20 +182,25 @@
       <div class="file-box">
         <h3 class="file-title">Main.java</h3>
         <button class="copy-button" onclick="copyCode('main-code')">복사하기</button>
-        <pre class="code-box"><code id="main-code">package state;
-  
-  public class Main {
-      public static void main(String[] args) {
-          SafeFrame frame = new SafeFrame("State Sample");
-          for (int hour = 0; hour &lt; 24; hour++) {
-              frame.setClock(hour);
-              try {
-                  Thread.sleep(1000);
-              } catch (InterruptedException e) {}
-          }
-      }
-  }
-  </code></pre>
+        <pre class="code-box"><code id="main-code">
+package state;
+
+public class Main {
+    public static void main(String[] args) {
+        SafeFrame frame = new SafeFrame("State Pattern 실습용");
+        while (true) {
+            for (int hour = 0; hour < 24; hour++) {
+                frame.setClock(hour);
+                try {
+                    Thread.sleep(1000); // 1초마다 시간 변경
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+</code></pre>
       </div>
     </section>
   </div>

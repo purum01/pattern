@@ -1,11 +1,31 @@
 <link href="card.css" rel="stylesheet">
-
+<style>
+  table {
+    width: 80%;
+    margin: 40px auto;
+    border-collapse: collapse;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+  }
+  th, td {
+    padding: 12px 20px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background-color: #f9fafb;
+    font-weight: bold;
+  }
+  tr:hover {
+    background-color: #f1f5f9;
+  }
+</style>
 <div class="card">
   <h1>Strategy Pattern</h1>
   <p>
     "알고리즘 클래스 컬렉션을 정의하고, 각 알고리즘을 개별적으로 캡슐화하여, 
     이를 서로 교환 가능하게 만드는 것이며, 전략 패턴은 이를 사용하는 클라이언트와는 
-    독립적으로 알고리즘을 변경할 수 있다.""
+    독립적으로 알고리즘을 변경할 수 있다."
   </p>
 
   <div class="info">
@@ -17,19 +37,66 @@
         클라이언트가 실행 중에도 알고리즘을 자유롭게 교체할 수 있도록 만든다.
       </div>
     </div>
-    <div class="info-row">
-      <div class="info-title">이유</div>
-      <div class="info-content">
-        코드 중복 줄이기,<br>
-        적으로 알고리즘 선택 가능,<br>
-        클라이언트 코드 수정 없이 알고리즘 추가/변경 가능
-      </div>
-    </div>
-    <div class="info-row">
-      <div class="info-title">활용</div>
-      <div class="info-content">
-        정렬 방법 선택하기 (QuickSort, MergeSort 등),경로 탐색 전략 변경하기 (최단거리, 최저비용 등),"if-else 지옥"을 우아하게 없애기 
-      </div>
-    </div>
   </div>
 </div>
+
+
+<h3>🔵 전략  패턴을 사용하는 이유</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>이유</th>
+          <th>설명</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>행동(알고리즘)을 유연하게 교체</td>
+          <td>실행 중에도 알고리즘(전략)을 자유롭게 바꿀 수 있음</td>
+        </tr>
+        <tr>
+          <td>조건문 제거 및 코드 간결화</td>
+          <td>많은 if-else나 switch문 대신 전략 객체로 분리</td>
+        </tr>
+        <tr>
+          <td>OCP(Open-Closed Principle) 준수</td>
+          <td>기능 확장 시 기존 코드를 수정하지 않고 새로운 전략만 추가</td>
+        </tr>
+        <tr>
+          <td>중복 제거 및 응집도 향상</td>
+          <td>알고리즘을 클래스로 분리해 코드 재사용성과 테스트 용이성 향상</td>
+        </tr>
+      </tbody>
+    </table>    
+    
+<h3>🟠 전략  패턴의 대표적인 활용 사례</h3>
+<table>
+  <thead>
+    <tr>
+      <th>활용 분야</th>
+      <th>구체적 설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>정렬 알고리즘 선택</td>
+      <td>사용자가 선택한 정렬 기준에 따라 BubbleSort, QuickSort, MergeSort 등을 전략으로 교체</td>
+    </tr>
+    <tr>
+      <td>결제 방식 처리</td>
+      <td>CreditCard, PayPal, KakaoPay 등 다양한 결제 방식 전략을 선택적으로 적용</td>
+    </tr>
+    <tr>
+      <td>인증 로직</td>
+      <td>SNS 로그인, 이메일 로그인, OTP 로그인 등 인증 방식을 전략으로 분리</td>
+    </tr>
+    <tr>
+      <td>게임 캐릭터 행동</td>
+      <td>공격 방식(검, 총, 마법) 등을 전략 객체로 교체 가능</td>
+    </tr>
+    <tr>
+      <td>로깅 출력 방식</td>
+      <td>콘솔 출력, 파일 로그, 원격 로그 전송 등의 전략을 바꿔 적용</td>
+    </tr>
+  </tbody>
+</table>

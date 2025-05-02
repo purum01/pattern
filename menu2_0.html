@@ -1,5 +1,25 @@
 <link href="card.css" rel="stylesheet">
-
+<style>
+  table {
+    width: 80%;
+    margin: 40px auto;
+    border-collapse: collapse;
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+  }
+  th, td {
+    padding: 12px 20px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background-color: #f9fafb;
+    font-weight: bold;
+  }
+  tr:hover {
+    background-color: #f1f5f9;
+  }
+</style>
 <div class="card">
   <h1>Singleton Pattern</h1>
   <p>
@@ -14,11 +34,66 @@
         그 유일한 인스턴스를 어디서든 접근할 수 있도록 만든다.
       </div>
     </div>
-    <div class="info-row">
-      <div class="info-title">활용</div>
-      <div class="info-content">
-        설정 정보 관리, 데이터베이스 연결, 로그 기록
-      </div>
-    </div>
+   
   </div>
 </div>
+
+<h3>🔵 싱글턴 패턴을 사용하는 이유</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>이유</th>
+          <th>설명</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>하나의 인스턴스만 유지</td>
+          <td>애플리케이션에서 오직 하나의 객체만 존재해야 할 때 사용</td>
+        </tr>
+        <tr>
+          <td>글로벌 접근 지점 제공</td>
+          <td>어디서든 동일한 인스턴스에 접근 가능 (static 메서드로 제공)</td>
+        </tr>
+        <tr>
+          <td>자원 절약</td>
+          <td>객체 생성을 반복하지 않으므로 메모리와 생성 비용 절감</td>
+        </tr>
+        <tr>
+          <td>상태 공유</td>
+          <td>여러 클래스가 공통된 설정 또는 데이터를 공유해야 할 때 유용</td>
+        </tr>
+      </tbody>
+    </table>    
+    
+<h3>🟠 싱글턴 패턴의 대표적인 활용 사례</h3>
+<table>
+  <thead>
+    <tr>
+      <th>활용 분야</th>
+      <th>구체적 설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>설정 정보 클래스 (Configuration)</td>
+      <td>앱 전체에서 공통 설정을 읽을 때 (예: DB URL, API 키)</td>
+    </tr>
+    <tr>
+      <td>로그 처리기 (Logger)</td>
+      <td>로그는 중앙에서 일관되게 출력돼야 하므로 하나만 유지</td>
+    </tr>
+    <tr>
+      <td>스레드 풀 / 커넥션 풀</td>
+      <td>하나의 자원 풀에서 여러 클라이언트가 공유</td>
+    </tr>
+    <tr>
+      <td>캐시 관리자</td>
+      <td>자주 사용되는 데이터를 메모리에 올려놓고 여러 곳에서 사용</td>
+    </tr>
+    <tr>
+      <td>OS 리소스 관리자</td>
+      <td>프린터, 그래픽 카드 등 OS 자원은 단일 인스턴스로 관리됨</td>
+    </tr>
+  </tbody>
+</table>

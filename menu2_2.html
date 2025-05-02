@@ -1,6 +1,6 @@
 <h1 style="text-align: center;">싱글턴 패턴 구현 </h1>
 
-<h3>즉시 초기화(eager initialization)</h3>
+<h3>1. 즉시 초기화(eager initialization)</h3>
 <pre><code id="source-code" class="language-java">
     public class IdGenerator {
         private AtomicLong id = new AtomicLong(0);
@@ -17,7 +17,7 @@
     }
         
 </code></pre>
-<h3>늦은 초기화(lazy initialization)</h3>
+<h3>2. 늦은 초기화(lazy initialization)</h3>
 <pre><code id="source-code" class="language-java">
     public class IdGenerator {
         private AtomicLong id = new AtomicLong(0);
@@ -37,7 +37,7 @@
         }
     }
 </code></pre>        
-<h3>이중 잠금(double-checked locking)</h3>
+<h3>3. 이중 잠금(double-checked locking)</h3>
 <pre><code id="source-code" class="language-java">
     public class IdGenerator {
         private AtomicLong id = new AtomicLong(0);
@@ -61,7 +61,7 @@
         }
     }
 </code></pre>   
-<h3>홀더에 의한 초기화(initialization on demand holder idiom)</h3>
+<h3>4. 홀더에 의한 초기화(initialization on demand holder idiom)</h3>
 <pre><code id="source-code" class="language-java">
     public class IdGenerator {
         private AtomicLong id = new AtomicLong(0);
@@ -81,7 +81,7 @@
         }
     }
 </code></pre>  
-<h3>열거(enumeration)</h3>
+<h3>5. 열거(enumeration)</h3>
 <pre><code id="source-code" class="language-java">
     public enum IdGenerator {
         INSTANCE;

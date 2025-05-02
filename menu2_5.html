@@ -1,7 +1,7 @@
 <h1 style="text-align: center;">싱글턴 패턴의 대안 </h1>
 
 
-<h3>정적 메서드 사용</h3>
+<h3>1. 정적 메서드 사용</h3>
 <pre><code id="source-code" class="language-java">
     public class IdGenerator {
         private static AtomicLong id = new AtomicLong(0);
@@ -14,7 +14,7 @@
     // 사용 예제
     long id = IdGenerator.getId();
 </code></pre>    
-<h3>의존성 주입</h3>
+<h3>2. 의존성 주입</h3>
 <pre><code id="source-code" class="language-java">
     // 의존성 주입
     public demofunction(IdGenerator idGenerator) {

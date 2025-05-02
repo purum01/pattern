@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>상태 패턴 실습 안내</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 40px;
+      color: #333;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #1f2937;
+    }
+    h2 {
+      margin-top: 40px;
+      color: #111827;
+    }
+    ul, ol {
+      padding-left: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+    th {
+      background-color: #f0f0f0;
+    }
+    code {
+      background: #f3f3f3;
+      padding: 2px 4px;
+      border-radius: 4px;
+    }
+    .file-list {
+      margin-top: 10px;
+      background: #f7f7f7;
+      padding: 10px 20px;
+      border-radius: 8px;
+      border: 1px solid #e0e0e0;
+    }
+    .file-list li {
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 상태 패턴 실습 안내</h1>
+
+    <h2>🎯 실습 목표</h2>
+    <ul>
+      <li>상태(State)에 따라 동작이 달라지는 객체를 설계하고 구현합니다.</li>
+      <li>조건문 대신 상태 객체에 행동을 위임합니다.</li>
+      <li>OCP(개방-폐쇄 원칙)를 고려한 유연한 설계를 경험합니다.</li>
+    </ul>
+
+    <h2>📁 제공 파일 목록</h2>
+    <ul class="file-list">
+      <li><code><a href="SafeFrame.java" download>SafeFrame.java</a></code> - 버튼 기반 GUI</li>
+      <li><code><a href="Main.java" download>Main.java</a></code> - 프로그램 진입점 (시각 시뮬레이션)</li>
+      <li><code><a href="Context.java" download>Context.java</a></code> - 상태 전환/로그 인터페이스</li>
+      <li><code><a href="State.java" download>State.java</a></code> - 상태 객체 인터페이스</li>
+      <li><code><a href="DayState.java" download>DayState.java</a></code> - 낮 상태 구현</li>
+      <li><code><a href="NightState.java" download>NightState.java</a></code> - 밤 상태 구현</li>
+    </ul>
+
+    <h2>🛠️ 실습 조건</h2>
+    <ol>
+      <li>모든 상태는 <code>State</code> 인터페이스를 구현해야 합니다.</li>
+      <li>상태에 따라 버튼 행동이 다르게 동작해야 합니다.</li>
+      <li>시간이 09~17시가 아니면 야간 상태로 전환합니다.</li>
+    </ol>
+
+    <table>
+      <thead>
+        <tr>
+          <th>상태</th>
+          <th>시간 변화</th>
+          <th>금고 사용</th>
+          <th>비상벨</th>
+          <th>일반 통화</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>주간</td>
+          <td>09~17시 유지, 이외는 야간 전환</td>
+          <td>기록 로그</td>
+          <td>보안센터 호출</td>
+          <td>보안센터 호출</td>
+        </tr>
+        <tr>
+          <td>야간</td>
+          <td>09~17시 진입 시 주간 전환</td>
+          <td>비상 로그 기록</td>
+          <td>보안센터 호출</td>
+          <td>통화 녹음</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>✅ 결과 확인 방법</h2>
+    <ul>
+      <li>콘솔 로그 및 텍스트 화면에서 상태 전이와 반응을 확인합니다.</li>
+      <li>예시: <code>[야간]에서[주간]로 상태가 변화했습니다.</code></li>
+    </ul>
+
+    <h2>💡 추가 도전 과제</h2>
+    <ul>
+      <li>저녁 상태 또는 휴일 상태 추가</li>
+      <li>버튼 동작을 커스터마이징 해보기</li>
+      <li>GUI 디자인 개선</li>
+    </ul>
+  </div>
+</body>
+</html>
