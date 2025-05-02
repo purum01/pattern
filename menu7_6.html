@@ -1,7 +1,7 @@
 <link href="exam.css"   rel="stylesheet">
 
 <div class="assignment">
-    <h1 class="title">템플릿 메서드 패턴(Template Method Pattern) 구현 실습</h1>
+    <h1 class="title">Template Method Pattern 적용하여 리팩토링하기</h1>
   
     <section class="section">
       <h2 class="section-title">📋 실습 목표</h2>
@@ -14,38 +14,85 @@
         <code class="inline-code">open()</code>, <code class="inline-code">print()</code>, <code class="inline-code">close()</code>는 하위 클래스에서 구현하세요.
       </div>
     </section>
-  
+
+    
     <section class="section">
       <h2 class="section-title">🛠 구현 지침</h2>
-      <ul class="list">
-        <li><code class="inline-code">AbstractDisplay</code>: 템플릿 메서드(<code>display()</code>)를 구현한 추상 클래스</li>
-        <li><code class="inline-code">CharDisplay</code>: 문자 하나를 출력하는 하위 클래스</li>
-        <li><code class="inline-code">StringDisplay</code>: 문자열을 출력하는 하위 클래스</li>
-        <li>하위 클래스는 <code class="inline-code">open()</code>, <code class="inline-code">print()</code>, <code class="inline-code">close()</code>를 재정의해야 합니다</li>
-      </ul>
-    </section>
-  
-    <section class="section">
-      <h2 class="section-title">🖥 실행 예시</h2>
-      <pre class="code-box"><code>&lt;&lt;HHHHH&gt;&gt;
-  +----+
-  |HAHA|
-  |HAHA|
-  |HAHA|
-  |HAHA|
-  |HAHA|
-  +----+</code></pre>
-    </section>
-  
-    <section class="section">
-      <h2 class="section-title">📂 파일 구조</h2>
-      <pre class="code-box"><code>/template/
-    AbstractDisplay.java   ← 제공됨
-    Main.java              ← 제공됨
-    CharDisplay.java       ← 직접 구현
-    StringDisplay.java     ← 직접 구현
-  </code></pre>
-    </section>
+
+      <div style="font-family: 'Segoe UI', sans-serif; max-width: 800px; margin: 30px auto;">
+
+        <h2>
+          <span style="display: inline-block; background-color: #2196f3; color: white; border-radius: 5px; padding: 2px 8px; font-size: 16px; margin-right: 8px;">1</span>
+          <code style="font-size: 18px;">CharDisplay</code> 클래스
+        </h2>
+      
+        <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+          <thead>
+            <tr style="background-color: #f2f2f2;">
+              <th style="text-align: left; padding: 8px;">메서드</th>
+              <th style="text-align: left; padding: 8px;">설명</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 8px;"><code>open()</code></td>
+              <td style="padding: 8px;"><code>&lt;&lt;</code> 문자열을 출력함 <em>(줄바꿈 없이)</em></td>
+            </tr>
+            <tr style="background-color: #f9f9f9;">
+              <td style="padding: 8px;"><code>print()</code></td>
+              <td style="padding: 8px;">생성자에서 전달받은 <strong>문자 1개를</strong> 출력함 <em>(줄바꿈 없이)</em></td>
+            </tr>
+            <tr>
+              <td style="padding: 8px;"><code>close()</code></td>
+              <td style="padding: 8px;"><code>&gt;&gt;</code> 문자열을 출력하고 줄을 바꿈</td>
+            </tr>
+          </tbody>
+        </table>
+        <figure>
+          <img src="img/menu7_1.png" style="width: 70%;">
+      </figure>
+      </div>
+
+
+      <div style="font-family: 'Segoe UI', sans-serif; max-width: 800px; margin: 30px auto;">
+
+        <h2>
+          <span style="display: inline-block; background-color: #2196f3; color: white; border-radius: 5px; padding: 2px 8px; font-size: 16px; margin-right: 8px;">2</span>
+          <code style="font-size: 18px;">StringDisplay</code> 클래스
+        </h2>
+      
+        <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
+          <thead>
+            <tr style="background-color: #f2f2f2;">
+              <th style="text-align: left; padding: 8px;">메서드</th>
+              <th style="text-align: left; padding: 8px;">설명</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 8px;"><code>open()</code></td>
+              <td style="padding: 8px;">
+                <code>+</code> 로 시작하고, 문자열 길이만큼 <code>-</code> 출력 후 <code>+</code> 로 마무리, 줄바꿈
+              </td>
+            </tr>
+            <tr style="background-color: #f9f9f9;">
+              <td style="padding: 8px;"><code>print()</code></td>
+              <td style="padding: 8px;"><code>|문자열|</code> 형태로 출력, 줄바꿈 포함</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px;"><code>close()</code></td>
+              <td style="padding: 8px;">
+                <code>open()</code>과 동일하게 <code>+-----+</code> 형태의 테두리 출력, 줄바꿈 포함
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <figure>
+          <img src="img/menu7_2.png" style="width: 70%;">
+      </figure>
+      </div>
+   </section>
+
   
     <section class="section">
       <h2 class="section-title">🗂 제공 파일</h2>

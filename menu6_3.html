@@ -1,13 +1,4 @@
-
-<h3>동일한 상위 객체로 인한 데커레이터 클래스 중첩 사용 </h3>
-<pre><code id="source-code" class="language-java">
-    InputStream in = new FileInputStream("test.txt");    // 첫 번째 중첩
-    InputStream bin = new BufferedInputStream(in);       // 두 번째 중첩
-    DataInputStream din = new DataInputStream(bin);      // 세 번째 중첩
-    int data = din.readInt();
-</code></pre>    
-
-<h3>원본 클래스의 기능 향상이 목적</h3>
+<h3>프록시 패턴과 데코레이터 패턴의 구조적 차이와 설계 목적</h3>
 <pre><code id="source-code" class="language-java">
     // 프록시 패턴의 코드 구조 (다음 인터페이스도 추상 클래스로 대체 가능)
     public interface IA {
@@ -52,69 +43,4 @@
             // 기능 향상 코드
         }
     }
-</code></pre>    
-<h3>상위 객체에 위임</h3>
-<pre><code id="source-code" class="language-java">
-    public class BufferedInputStream extends InputStream {
-        protected volatile InputStream in;
-    
-        protected BufferedInputStream(InputStream in) {
-            this.in = in;
-        }
-    
-        // f() 함수는 개선할 필요가 없으므로, InputStream 클래스의 in 객체 f() 함수를 적용
-        public void f() {
-            in.f(); // in 객체에 실행을 위임
-        }
-    }
-</code></pre>    
-<h3></h3>
-<pre><code id="source-code" class="language-java">
-    public class FilterInputStream extends InputStream {
-        protected volatile InputStream in;
-    
-        protected FilterInputStream(InputStream in) {
-            this.in = in;
-        }
-        public int read() throws IOException {
-            return in.read();
-        }
-        
-        public int read(byte b[]) throws IOException {
-            return read(b, 0, b.length);
-        }
-        
-        public int read(byte b[], int off, int len) throws IOException {
-            return in.read(b, off, len);
-        }
-        
-        public long skip(long n) throws IOException {
-            return in.skip(n);
-        }
-        
-        public int available() throws IOException {
-            return in.available();
-        }
-        
-        public void close() throws IOException {
-            in.close();
-        }
-        
-        public synchronized void mark(int readlimit) {
-            in.mark(readlimit);
-        }
-        
-        public synchronized void reset() throws IOException {
-            in.reset();
-        }
-        
-        public boolean markSupported() {
-            return in.markSupported();
-        }
-    }        
-</code></pre>    
-
-<h3></h3>
-<pre><code id="source-code" class="language-java">
-
 </code></pre>    

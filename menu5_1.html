@@ -1,4 +1,28 @@
-<h1 style="text-align: center;">옵서버 패턴의 코드 구현 </h1>
+<div style="font-family: 'Segoe UI', sans-serif; max-width: 700px; margin: 40px auto;">
+
+    <h2 style="font-size: 22px; margin-bottom: 10px;">
+      ✅ <strong>느슨한 결합 (Loose Coupling) 이란?</strong>
+    </h2>
+    <ul style="padding-left: 20px; line-height: 1.8;">
+      <li>객체들이 <strong>상호작용은 하지만 서로 직접 의존하지 않는 구조</strong>를 의미</li>
+      <li>옵서버 패턴은 대표적인 느슨한 결합 예시</li>
+      <li>인터페이스를 통해 간접 연결되므로 <strong>유연성과 확장성</strong>이 높음</li>
+    </ul>
+  
+    <hr style="margin: 30px 0;">
+  
+    <h2 style="font-size: 22px; margin-bottom: 10px;">
+      ✅ <strong>옵서버 패턴에서 느슨한 결합의 특징 요약</strong>
+    </h2>
+    <ol style="line-height: 1.8; padding-left: 20px;">
+      <li><strong>Subject</strong>와 <strong>Observer</strong>는 <strong>인터페이스로 연결</strong>되어 있어 직접 연결이 아님</li>
+      <li><strong>Observer</strong>를 <strong>런타임에 동적으로 추가</strong> 가능함</li>
+      <li><strong>Subject</strong>는 어떤 <strong>Observer</strong>가 연결되어 있는지 몰라도 동작 가능</li>
+      <li>서로 독립적이기 때문에 <strong>재사용성, 확장성, 유지보수성</strong>이 뛰어남</li>
+      <li>한 쪽이 변경되어도 다른 쪽에 <strong>큰 영향을 주지 않음</strong></li>
+    </ol>
+  </div>
+
 
 <pre><code id="source-code" class="language-java">
     import java.util.ArrayList;
@@ -61,3 +85,5 @@
     }
 
 </code></pre>
+
+  
