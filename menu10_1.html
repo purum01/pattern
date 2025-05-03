@@ -1,6 +1,4 @@
-<h1 style="text-align: center;">생성자를 위한 객체 생성 </h1>
-
-<h3>✅ 리소스 설정을 위한 ResoucePoolConfig의 멤버변수</h3>
+<h3>✅ 복잡한 설정을 가진 객체 생성을 위한 생성자 방식 예제 (ResourcePoolConfig)</h3>
 <style>
     table {
         width: 60%;
@@ -104,3 +102,14 @@
 <pre><code id="source-code" class="language-java">
 ResourcePoolConfig config = new ResourcePoolConfig("dbconnectionpool", 16, null, 8, null, false, true, 10, 20, false, true);
 </code></pre>   
+
+<section class="section">
+    <h3 class="section-title">🛠 생성자를 사용한 객체 생성 방식의 한계점</h3>
+    <div style="font-family: 'Segoe UI', sans-serif; line-height: 1.8; font-size: 16px; color: #333;">
+      <ul style="list-style-type: disc; margin-left: 24px; padding-left: 0;">
+        <li>설정 가능한 항목이 많아질수록 생성자의 매개변수도 많아져 코드 가독성이 떨어진다.</li>
+        <li>어떤 인자가 어떤 설정을 의미하는지 명확하지 않다.</li>
+        <li>선택적 인자 처리가 복잡해진다.</li>
+      </ul>
+    </div>
+</section>

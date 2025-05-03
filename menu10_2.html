@@ -1,4 +1,4 @@
-<h1 style="text-align: center;">Setter 메서드를 사용한 멤버 변수 설정 </h1>
+<h3>✅ setter 메서드를 이용한 객체 생성 및 설정 방식 (ResourcePoolConfig)</h3>
 
 <pre><code id="source-code" class="language-java">
     public class ResourcePoolConfig {
@@ -51,119 +51,18 @@
     config.setMaxIdle(8);
 </code></pre>    
 
-<style>
-    table {
-        width: 80%;
-        border-collapse: collapse;
-        margin-top: 30px;
-        font-family: Arial, sans-serif;
-    }
-    th, td {
-        border-bottom: 1px solid #ddd;
-        padding: 12px 15px;
-        text-align: left;
-    }
-    th {
-        background-color: #f9f9f9;
-    }
-</style>
-<br>
-<br>
-<h3>✅ 빌터 패턴을 이용한 매개변수 검증</h3>
-<table>
-<thead>
-    <tr>
-        
-        <th>Builder 패턴을 사용해야 하는 세 가지 문제점</th>
-    </tr>
-</thead>
-<tbody>
-    <tr>
-        
-        <td>필수 매개변수(name)가 있음에도 불구하고, setter 메서드 방식은 누락될 수 있어 객체 일관성이 깨진다.</td>
-    </tr>
-    <tr>
-        
-        <td>설정 항목 간 의존성(maxTotal, maxIdle, minIdle 등)이 있어 일부 값만 설정되면 안 되는데, setter 방식은 이 의존성 규칙을 강제할 수 없다.</td>
-    </tr>
-    <tr>
-        
-        <td>객체를 불변(immutable)으로 만들고 싶은데, setter 메서드를 사용하면 수정이 가능해져서 불변성을 유지할 수 없다.</td>
-    </tr>
-</tbody>
-</table>
-
-<pre><code id="source-code" class="language-java">
-    public class ResourcePoolConfig {
-        private String name;
-        private int maxTotal;
-        private int maxIdle;
-        private int minIdle;
-    
-        private ResourcePoolConfig(Builder builder) {
-            this.name = builder.name;
-            this.maxTotal = builder.maxTotal;
-            this.maxIdle = builder.maxIdle;
-            this.minIdle = builder.minIdle;
-        }
-    
-        // getter 메서드는 생략...
-    
-        public static class Builder {
-            private static final int DEFAULT_MAX_TOTAL = 8;
-            private static final int DEFAULT_MAX_IDLE = 8;
-            private static final int DEFAULT_MIN_IDLE = 0;
-    
-            private String name;
-            private int maxTotal = DEFAULT_MAX_TOTAL;
-            private int maxIdle = DEFAULT_MAX_IDLE;
-            private int minIdle = DEFAULT_MIN_IDLE;
-    
-            public Builder setName(String name) {
-                if (StringUtils.isBlank(name)) {
-                    throw new IllegalArgumentException("name should not be empty.");
-                }
-                this.name = name;
-                return this;
-            }
-    
-            public Builder setMaxTotal(int maxTotal) {
-                if (maxTotal <= 0) {
-                    throw new IllegalArgumentException("maxTotal should be positive.");
-                }
-                this.maxTotal = maxTotal;
-                return this;
-            }
-    
-            public Builder setMaxIdle(int maxIdle) {
-                if (maxIdle < 0) {
-                    throw new IllegalArgumentException("maxIdle should not be negative.");
-                }
-                this.maxIdle = maxIdle;
-                return this;
-            }
-    
-            public Builder setMinIdle(int minIdle) {
-                if (minIdle < 0) {
-                    throw new IllegalArgumentException("minIdle should not be negative.");
-                }
-                this.minIdle = minIdle;
-                return this;
-            }
-    
-            public ResourcePoolConfig build() {
-                // 필수 항목, 의존성, 제약 조건 체크
-                if (StringUtils.isBlank(name)) {
-                    throw new IllegalArgumentException("name should not be empty.");
-                }
-                if (maxIdle > maxTotal) {
-                    throw new IllegalArgumentException("maxIdle cannot be greater than maxTotal.");
-                }
-                if (minIdle > maxIdle) {
-                    throw new IllegalArgumentException("minIdle cannot be greater than maxIdle.");
-                }
-                return new ResourcePoolConfig(this);
-            }
-        }
-    }
-</code></pre>    
+<section class="section">
+    <h3 class="section-title">👍  장점</h3>
+    <div style="font-family: 'Segoe UI', sans-serif; line-height: 1.8; font-size: 16px; color: #333;">
+      <ul style="list-style-type: disc; margin-left: 24px; padding-left: 0;">
+        <li>생성자가 복잡해지지 않는다.</li>
+        <li>필요한 값만 설정할 수 있어 간결하다.</li>        
+      </ul>
+    </div>
+    <h3 class="section-title">👎  단점</h3>
+    <div style="font-family: 'Segoe UI', sans-serif; line-height: 1.8; font-size: 16px; color: #333;">
+      <ul style="list-style-type: disc; margin-left: 24px; padding-left: 0;">
+        <li>불변(immutable) 객체가 아니기 때문에, 생성 후 상태 변경이 가능해지고 오류 가능성이 높다.</li>
+      </ul>
+    </div>
+</section>
