@@ -1,0 +1,208 @@
+<h3>✅ 사용중인 외부 시스템을 교체해야 할 경우 </h3>
+<pre><코드4><code id="source-code" class="language-java">
+    // 외부 시스템 A
+    public interface IA {
+        void fa();
+    }
+    
+    public class A implements IA {
+        @Override
+        public void fa() {
+            // 실제 구현
+            System.out.println("A 시스템의 fa() 실행");
+        }
+    }
+    
+    // 외부 시스템 B
+    public class B {
+        public void fb() {
+            // 실제 구현
+            System.out.println("B 시스템의 fb() 실행");
+        }
+    }
+    
+    // 어댑터: B 시스템을 IA 인터페이스에 맞게 변환
+    public class BAdaptor implements IA {
+        private B b;
+    
+        public BAdaptor(B b) {
+            this.b = b;
+        }
+    
+        @Override
+        public void fa() {
+            b.fb();  // B의 fb()를 호출하여 fa()처럼 사용
+        }
+    }
+    
+    // 클라이언트 코드 (Demo 클래스)
+    public class Demo {
+        private IA a;
+    
+        public Demo(IA a) {
+            this.a = a;
+        }
+    
+        public void execute() {
+            a.fa();  // 인터페이스에 의존하여 실행
+        }
+    
+        public static void main(String[] args) {
+            // 기존 A 시스템 사용
+            Demo d1 = new Demo(new A());
+            d1.execute();
+    
+            // 외부 시스템 B로 교체하면서도 IA 인터페이스는 그대로 유지
+            Demo d2 = new Demo(new BAdaptor(new B()));
+            d2.execute();
+        }
+    }
+</code></pre>    
+
+<div style="font-family: 'Segoe UI', sans-serif;  margin-bottom: 40px;">
+  <table style="width: 100%; border-collapse: collapse; font-size: 1em; border: 1px solid #e0e0e0; border-radius: 6px; overflow: hidden;">
+    <thead style="background-color: #f7f7f7;">
+      <tr>
+        <th style="text-align: left; padding: 12px 16px; border-bottom: 1px solid #ccc;">어댑터 패턴 적용 효과</th>
+        <th style="text-align: left; padding: 12px 16px; border-bottom: 1px solid #ccc;">설명</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">클라이언트와 구현 분리</td>
+        <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">클라이언트는 오직 인터페이스에만 의존 (<strong>DIP 원칙</strong> 만족)</td>
+      </tr>
+      <tr style="background-color: #fafafa;">
+        <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">시스템 교체 용이</td>
+        <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">구현체만 교체하면 클라이언트 수정 없이 외부 시스템 변경 가능</td>
+      </tr>
+      <tr>
+        <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">코드 재사용</td>
+        <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">기존 <code>B</code> 클래스를 수정 없이 재사용 가능</td>
+      </tr>
+      <tr style="background-color: #fafafa;">
+        <td style="padding: 12px 16px;">테스트 편리</td>
+        <td style="padding: 12px 16px;">모의(Mock) 객체를 <code>IA</code> 인터페이스로 주입 가능</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+
+<br><hr><br>
+<h3>✅ 이전 버젼 인터페이스와 호환성이 필요한 경우 </h3>
+
+
+<pre><코드5><code id="source-code" class="language-java">
+    public class Collections {
+        public static Enumeration enumeration(final Collection c) {
+            return new Enumeration() {
+                Iterator i = c.iterator();
+    
+                public boolean hasMoreElements() {
+                    return i.hasNext();
+                }
+    
+                public Object nextElement() {
+                    return i.next();
+                }
+            };
+        }
+    }
+</code></pre>    
+<pre><코드5><code id="source-code" class="language-java">
+  List<String> list = new ArrayList<>();
+    list.add("one");
+    list.add("two");
+    
+    Enumeration e = Collections.enumeration(list);
+    while (e.hasMoreElements()) {
+        System.out.println(e.nextElement());
+    }
+</code></pre> 
+
+<ul>
+  <li>- 시스템을 업그레이드할 때 기존 인터페이스를 제거하지 않고,</li>
+  <li>- 새 인터페이스에 위임하는 방식으로 유지하면</li>
+  <li>- 기존 사용자 코드의 호환성과 업그레이드 유연성을 높일 수 있다.</li>
+</ul>
+
+<br><hr><br>
+<h3>✅ 다양한 형식의 데이터에 적응해야 할 경우 </h3>
+<pre><코드6><code id="source-code" class="language-java">
+  // 배열 그대로 사용
+  String[] namesArray = {"Larry", "Moe", "Curly"};
+  System.out.println(namesArray[0]); // Larry
+  
+  // 리스트로 변환해서 사용
+  List<String> namesList = Arrays.asList(namesArray);
+  System.out.println(namesList.get(0)); // Larry
+</code></pre>    
+<br><br>
+<div style="font-family: 'Segoe UI', sans-serif; margin-left:30px; max-width: 600px; margin-bottom: 40px;">
+  <h4>🌿두 시스템의 다른 신용 정보 데이터 포맷과 필드명</h4>
+  <table style="width: 100%; border-collapse: collapse; border: 1px solid #ddd;">
+    <thead style="background-color: #f8f8f8;">
+      <tr>
+        <th style="text-align: left; padding: 10px; border-bottom: 1px solid #ddd;">시스템 A</th>
+        <th style="text-align: left; padding: 10px; border-bottom: 1px solid #ddd;">시스템 B</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="padding: 10px; border-bottom: 1px solid #eee;"><code>creditScore: int</code></td>
+        <td style="padding: 10px; border-bottom: 1px solid #eee;"><code>score: double</code></td>
+      </tr>
+      <tr style="background-color: #fafafa;">
+        <td style="padding: 10px; border-bottom: 1px solid #eee;"><code>name: String</code></td>
+        <td style="padding: 10px; border-bottom: 1px solid #eee;"><code>fullName: String</code></td>
+      </tr>
+      <tr>
+        <td style="padding: 10px;"><code>birthDate: LocalDate</code></td>
+        <td style="padding: 10px;"><code>dob: String</code></td>
+      </tr>
+    </tbody>
+  </table>
+ 
+</div>
+
+
+<pre><코드7><code id="source-code" class="language-java">
+  // 통합 인터페이스
+  public class UnifiedCreditInfo {
+      private String name;
+      private int score;
+      private LocalDate birthDate;
+      // 생성자, getter, setter ...
+  }
+
+  //A 시스템의 어댑터
+  public class ACreditInfoAdapter {
+    public UnifiedCreditInfo adapt(ACreditData data) {
+        return new UnifiedCreditInfo(
+            data.getName(),
+            data.getCreditScore(),
+            data.getBirthDate()
+        );
+    }
+}
+  //B 시스템의 어댑터
+  public class BCreditInfoAdapter {
+    public UnifiedCreditInfo adapt(BCreditData data) {
+        return new UnifiedCreditInfo(
+            data.getFullName(),
+            (int) data.getScore(), // double → int
+            LocalDate.parse(data.getDob()) // 문자열 → 날짜
+        );
+    }
+  }
+  // 클라이어트 코드
+  UnifiedCreditInfo info = adapter.adapt(externalData);
+</code></pre>   
+<ul>
+  <li>- 어댑터 패턴은 인터페이스 뿐 아니라 데이터 형식이 다를 때도 적용할 수 있다.</li>
+  <li>- 배열, 리스트 등 다양한 저장 구조 간 변환에도 유용하다.</li>
+  <li>- 서로 다른 신용 정보 시스템 간 데이터를 동일한 형식으로 통합할 수 있다.</li>  
+</ul>

@@ -1,15 +1,15 @@
-<h1 style="text-align: center;">어댑터 패턴의 응용 </h1>
+<div style="padding: 20px; border: 1px solid #ddd; border-radius: 10px; background-color: #f9f9f9; font-family: Arial, sans-serif; line-height: 1.6;">
+    <ul style="list-style-type: disc; padding-left: 20px;">
+        <li>어댑터 패턴은 실제 클래스의 <strong>호환성 문제를 해결하는 보완 패턴</strong>으로 사용된다.</li>
+        <li><strong>객체 생성 비용이 크거나</strong> 생성 시간이 오래 걸릴 때 사용하면 효과적이다.</li>
+        <li>특히 <strong>인터페이스가 비호환</strong>이거나, <strong>인터페이스가 일치하지 않는 상황</li>
+        <li><strong>어댑터는 기존 코드를 재사용할 수 있게 해주며, 새로 구현하지 않아도 되기 때문에 <strong>효율적이다</strong>.</li>
+    </ul>
+</div>
+<br><hr><br>
+<h3>✅ 결함이 있는 인터페이스 설계가 캡슐화 된 경우 </h3>
 
-
-<hr>
-<h3>결함이 있는 인터페이스 설계가 캡슐화 된 경우 </h3>
-<ul>
-    <li>- 외부 시스템의 인터페이스에 결합도가 높고 정적 메서드가 많으면,
-        테스트 용이성에 부정적인 영향을 줄 수 있다.</li>
-    <li>- 어댑터 패턴을 사용해 외부 인터페이스를 캡슐화하고,</li>
-    <li>- 테스트 용이성과 사용성과 유지보수성이 높은 구조로 리팩토링할 수 있다.</li>
-</ul>
-<pre><code id="source-code" class="language-java">
+<pre><코드1><code id="source-code" class="language-java">
     public class CD {  // 이 클래스는 외부 SDK 코드이므로 직접 수정 불가
         ...
         public static void staticFunction1() { ... }
@@ -48,17 +48,41 @@
         }
     }
 </code></pre>    
-<hr>
-<h3>여러 클래스의 인터페이스 설계를 통합할 경우</h3>
-<ul>
-    <li>- 외부 시스템의 클래스마다 인터페이스 구조가 다르다면,
-        클라이언트 코드에서 일관되게 사용하기 어렵다.</li>
-    <li>- 어댑터 패턴을 사용해 다양한 인터페이스를 통일된 인터페이스로 래핑함으로써
-        사용성과 재사용성을 높일 수 있다.</li>
-    <li>예: 여러 필터 시스템을 하나의 공통 필터 인터페이스로 통합하여 사용.</li>
-</ul>
 
-<pre><code id="source-code" class="language-java">
+</ul>
+<div style="font-family: 'Segoe UI', sans-serif;  margin-bottom: 40px;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 1em; border: 1px solid #e0e0e0; border-radius: 6px; overflow: hidden;">
+      <thead style="background-color: #f7f7f7;">
+        <tr>
+          <th style="text-align: left; padding: 12px 16px; border-bottom: 1px solid #ccc;">장점</th>
+          <th style="text-align: left; padding: 12px 16px; border-bottom: 1px solid #ccc;">설명</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">수정 없이 외부 코드 활용</td>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #eee;"><code>CD</code>는 건드리지 않고 감싸서 사용</td>
+        </tr>
+        <tr style="background-color: #fafafa;">
+          <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">클라이언트와 인터페이스 호환</td>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #eee;"><code>ITarget</code> 인터페이스를 통해 일관된 접근 방식 제공</td>
+        </tr>
+        <tr>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">리팩토링 및 의미 명확화</td>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">복잡하거나 어색한 이름, 파라미터 등을 정리</td>
+        </tr>
+        <tr style="background-color: #fafafa;">
+          <td style="padding: 12px 16px;">성능 개선 여지</td>
+          <td style="padding: 12px 16px;">성능이 낮은 메서드는 재구현 가능</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
+<br><hr><br>
+<h3>✅ 여러 클래스의 인터페이스 설계를 통합할 경우</h3>
+
+<pre><코드2><code id="source-code" class="language-java">
     // A 시스템: 민감 단어 필터링 시스템 제공 인터페이스
     public class ASensitiveWordsFilter {
         // 텍스트 원문에서, 방송에서 *** 문자로 필터링할 단어를 반환
@@ -100,13 +124,39 @@
         }
     }
 </code></pre>    
-<ul>
-    <li>- 어댑터 패턴을 사용하면 모든 시스템 인터페이스를 통합된 인터페이스로 맞출 수 있다. </li>
-    <li>- 덕분에 코드를 쉽게 재사용하고, 확장성도 높일 수 있다.</li>
-    <li>- 새로운 민감 단어 필터링 시스템을 추가해도,
-        filterSensitiveWords() 함수의 코드를 수정할 필요가 없다.</li>
-</ul>
-<pre><code id="source-code" class="language-java">
+<div style="font-family: 'Segoe UI', sans-serif; width: 100%; margin-bottom: 40px;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 1em; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+      <thead style="background-color: #f7f9fb;">
+        <tr>
+          <th style="text-align: left; padding: 14px 16px; border-bottom: 1px solid #ddd;">문제</th>
+          <th style="text-align: left; padding: 14px 16px; border-bottom: 1px solid #ddd;">설명</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f0;">인터페이스 중복</td>
+          <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f0;">A, B, C 시스템 모두 필터링을 제공하지만 서로 다른 <strong>API 형식</strong> 사용</td>
+        </tr>
+        <tr style="background-color: #fafafa;">
+          <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f0;">클라이언트 결합도 높음</td>
+          <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f0;"><code>RiskManagement</code>가 각 시스템의 <strong>구체 클래스에 직접 의존</strong></td>
+        </tr>
+        <tr>
+          <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f0;">확장성 낮음</td>
+          <td style="padding: 14px 16px; border-bottom: 1px solid #f0f0f0;">새로운 필터 시스템이 추가되면 <code>RiskManagement</code>를 <strong>직접 수정해야 함</strong></td>
+        </tr>
+        <tr style="background-color: #fafafa;">
+          <td style="padding: 14px 16px;">테스트 어려움</td>
+          <td style="padding: 14px 16px;">내부에 <code>new</code>로 객체 생성되어 있어 <strong>DI(의존성 주입)</strong>이 어렵고 <strong>테스트도 어려움</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  
+<br><hr><br>
+
+<pre><코드3><code id="source-code" class="language-java">
     public interface ISensitiveWordsFilter {  // 인터페이스 정의 통합
         String filter(String text);
     }
@@ -141,102 +191,33 @@
     }
 </code></pre>  
 
+<div style="font-family: 'Segoe UI', sans-serif;  margin-bottom: 40px;">
+    <table style="width: 100%; border-collapse: collapse; font-size: 1em; border: 1px solid #e0e0e0; border-radius: 6px; overflow: hidden;">
+      <thead style="background-color: #f7f7f7;">
+        <tr>
+          <th style="text-align: left; padding: 12px 16px; border-bottom: 1px solid #ccc;">장점</th>
+          <th style="text-align: left; padding: 12px 16px; border-bottom: 1px solid #ccc;">설명</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">🎯 인터페이스 통일</td>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">모든 필터는 <code>ISensitiveWordsFilter</code>만 따르므로, 사용자가 일관된 방식으로 접근 가능</td>
+        </tr>
+        <tr style="background-color: #fafafa;">
+          <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">📍 확장성 우수</td>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">새로운 필터 시스템이 생기면, 어댑터 하나만 만들면 됨 (OCP 원칙 만족)</td>
+        </tr>
+        <tr>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">🧪 테스트 쉬움</td>
+          <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">필터 객체를 생성자나 메서드를 통해 주입할 수 있어 테스트 유연</td>
+        </tr>
+        <tr style="background-color: #fafafa;">
+          <td style="padding: 12px 16px;">🌿 어댑터 패턴의 좋은 사례</td>
+          <td style="padding: 12px 16px;">외부 시스템과의 인터페이스 불일치 문제 해결</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  
 
-<hr>
-<h3>사용중인 외부 시스템을 교체해야 할 경우 </h3>
-<pre><code id="source-code" class="language-java">
-    // 외부 시스템 A
-    public interface IA {
-        void fa();
-    }
-    
-    public class A implements IA {
-        @Override
-        public void fa() {
-            // 실제 구현
-            System.out.println("A 시스템의 fa() 실행");
-        }
-    }
-    
-    // 외부 시스템 B
-    public class B {
-        public void fb() {
-            // 실제 구현
-            System.out.println("B 시스템의 fb() 실행");
-        }
-    }
-    
-    // 어댑터: B 시스템을 IA 인터페이스에 맞게 변환
-    public class BAdaptor implements IA {
-        private B b;
-    
-        public BAdaptor(B b) {
-            this.b = b;
-        }
-    
-        @Override
-        public void fa() {
-            b.fb();  // B의 fb()를 호출하여 fa()처럼 사용
-        }
-    }
-    
-    // 클라이언트 코드 (Demo 클래스)
-    public class Demo {
-        private IA a;
-    
-        public Demo(IA a) {
-            this.a = a;
-        }
-    
-        public void execute() {
-            a.fa();  // 인터페이스에 의존하여 실행
-        }
-    
-        public static void main(String[] args) {
-            // 기존 A 시스템 사용
-            Demo d1 = new Demo(new A());
-            d1.execute();
-    
-            // 외부 시스템 B로 교체하면서도 IA 인터페이스는 그대로 유지
-            Demo d2 = new Demo(new BAdaptor(new B()));
-            d2.execute();
-        }
-    }
-</code></pre>    
-
-<hr>
-<h3>이전 버젼 인터페이스와 호환성이 필요한 경우 </h3>
-<ul>
-    <li>- 시스템을 업그레이드할 때 기존 인터페이스를 제거하지 않고,</li>
-    <li>- 새 인터페이스에 위임하는 방식으로 유지하면</li>
-    <li>- 기존 사용자 코드의 호환성과 업그레이드 유연성을 높일 수 있다.</li>
-</ul>
-
-<pre><code id="source-code" class="language-java">
-    public class Collections {
-        public static Enumeration enumeration(final Collection c) {
-            return new Enumeration() {
-                Iterator i = c.iterator();
-    
-                public boolean hasMoreElements() {
-                    return i.hasNext();
-                }
-    
-                public Object nextElement() {
-                    return i.next();
-                }
-            };
-        }
-    }
-</code></pre>    
-<hr>
-<h3>다양한 형식의 데이터에 적응해야 할 경우 </h3>
-<ul>
-    <li>- 어댑터 패턴은 인터페이스 뿐 아니라 데이터 형식이 다를 때도 적용할 수 있다.</li>
-    <li>- 예를 들어 서로 다른 신용 정보 시스템 간 데이터를 동일한 형식으로 통합할 필요가 있는 경우.</li>
-    <li>- 또한 배열, 리스트 등 다양한 저장 구조 간 변환에도 유용하다.</li>
-    <li>- 대표 예: Arrays.asList()는 배열을 리스트로 어댑팅하는 표준 메서드다.</li>
-</ul>
-<pre><code id="source-code" class="language-java">
-    List<String> stooges = Arrays.asList("Larry", "Moe", "Curly");
-</code></pre>    

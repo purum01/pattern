@@ -15,20 +15,58 @@
     </section>
   
     <section class="section">
-      <h2 class="section-title">🛠 구현 지침</h2>
+      <h2 class="section-title">🧾 제공 파일 목록</h2>
       <ul class="list">
-        <li><code class="inline-code">Print</code>: 원하는 인터페이스로, <code>printWeak()</code>, <code>printStrong()</code> 메서드 선언</li>
-        <li><code class="inline-code">Banner</code>: 기존 클래스. <code>showWithParen()</code>, <code>showWithAster()</code> 메서드를 가짐</li>
-        <li><code class="inline-code">PrintBanner</code>: <code>Banner</code>를 상속하고 <code>Print</code> 인터페이스를 구현 (상속 기반 어댑터)</li>
-        <li><code class="inline-code">AnotherPrintBanner</code>: <code>Banner</code>를 내부에 포함하고 <code>Print</code> 구현 (위임 기반 어댑터)</li>
-        <li><code class="inline-code">Main</code>에서는 <code>Print</code> 타입만을 사용하여 출력</li>
+        <li><code class="inline-code">Print</code>: 클라이언트가 기대하는 인터페이스 (printWeak(), printStrong() 선언)</li>
+        <li><code class="inline-code">Banner</code>: 기존 클래스. 원하는 출력은 showWithParen(), showWithAster()를 통해 제공</li>
+        <li><code class="inline-code">Main</code>:실행 클래스. Print 인터페이스만 보고 동작</li>
       </ul>
+    </section>
+    <section class="section">
+      <h2 class="section-title">🛠 구현 지침</h2>
+      <div style="font-family: 'Segoe UI', sans-serif; max-width: 800px; margin-bottom: 40px;">
+        <table style="width: 100%; border-collapse: collapse; font-size: 1em; border: 1px solid #ccc; border-radius: 6px; overflow: hidden;">
+          <thead style="background-color: #f4f4f4;">
+            <tr>
+              <th style="text-align: left; padding: 12px 16px; border-bottom: 1px solid #ddd;">구현 파일</th>
+              <th style="text-align: left; padding: 12px 16px; border-bottom: 1px solid #ddd;">구현 조건</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="padding: 12px 16px; border-bottom: 1px solid #eee;"><strong>1. PrintBanner.java</strong></td>
+              <td style="padding: 12px 16px; border-bottom: 1px solid #eee;">
+                <ul style="margin: 0; padding-left: 20px;">
+                  <li><code>Banner</code> 클래스를 <strong>상속</strong></li>
+                  <li><code>Print</code> 인터페이스를 <strong>구현</strong></li>
+                  <li>각 메서드에서 <code>Banner</code>의 메서드 호출</li>
+                </ul>
+              </td>
+            </tr>
+            <tr style="background-color: #fafafa;">
+              <td style="padding: 12px 16px;"><strong>2. AnotherPrintBanner.java</strong></td>
+              <td style="padding: 12px 16px;">
+                <ul style="margin: 0; padding-left: 20px;">
+                  <li><code>Banner</code>를 <strong>상속하지 않음</strong></li>
+                  <li><code>Banner</code>의 인스턴스를 <strong>내부에 포함 (합성)</strong></li>
+                  <li><code>Print</code> 인터페이스를 <strong>구현</strong></li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
     </section>
   
     <section class="section">
       <h2 class="section-title">🖥 실행 예시</h2>
-      <pre class="code-box"><code>(Hello)
-  *Hello*</code></pre>
+      <pre class="code-box"><code>
+        (Hello)
+        *Hello*
+        (World)
+        *World*
+      </code></pre>
     </section>
   
     <section class="section">
@@ -52,7 +90,8 @@
 <div class="file-box">
     <h3 class="file-title">Print.java</h3>
     <button class="copy-button" onclick="copyCode('print-code')">복사하기</button>
-    <pre class="code-box"><code id="print-code">package adapter;
+    <pre class="code-box"><code id="print-code">
+  package adapter;
   
   public interface Print {
       public void printWeak();
@@ -65,7 +104,8 @@
   <div class="file-box">
     <h3 class="file-title">Banner.java</h3>
     <button class="copy-button" onclick="copyCode('banner-code')">복사하기</button>
-    <pre class="code-box"><code id="banner-code">package adapter;
+    <pre class="code-box"><code id="banner-code">
+  package adapter;
   
   public class Banner {
       String string;
@@ -89,15 +129,23 @@
   <div class="file-box">
     <h3 class="file-title">Main.java</h3>
     <button class="copy-button" onclick="copyCode('main-code')">복사하기</button>
-    <pre class="code-box"><code id="main-code">package adapter;
-  
-  public class Main {
-      public static void main(String[] args) {
-          Print p = new PrintBanner("Hello");
-          p.printWeak();
-          p.printStrong();
+    <pre class="code-box"><code id="main-code">
+      package adapter;
+
+      public class Main {
+        public static void main(String[] args) {
+          // 상속 기반 어댑터
+          Print p1 = new PrintBanner("Hello");
+          p1.printWeak(); // (Hello)
+          p1.printStrong(); // *Hello*
+      
+          // 위임 기반 어댑터
+          Print p2 = new AnotherPrintBanner("World");
+          p2.printWeak(); // (World)
+          p2.printStrong(); // *World*
+        }
       }
-  }
+      
   </code></pre>
   </div>
   <script>
