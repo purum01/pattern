@@ -1,0 +1,150 @@
+<div style="font-family: 'Segoe UI', sans-serif; line-height: 1.6; background-color: #f9f9f9; padding: 20px; border: 1px solid #ccc;">
+  
+    <style>
+      .section-title {
+        color: #2c3e50;
+        font-size: 20px;
+        border-bottom: 2px solid #ccc;
+        padding-bottom: 5px;
+        margin-top: 40px;
+      }
+      .desc-box {
+        background-color: #e8f4fc;
+        border-left: 5px solid #3498db;
+        padding: 10px;
+        margin: 20px 0;
+      }
+      pre {
+        background-color: #fff;
+        border: 1px solid #ccc;
+        padding: 15px;
+        overflow-x: auto;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+        margin: 10px 0;
+      }
+    </style>
+  
+    <h2 class="section-title">문제 1. 타입 코드를 하위 클래스로 바꾸기</h2>
+    <div class="desc-box">
+      - 조건문(if, switch)이타입값으로구성되는경우, “타입코드를하위클래스로바꾸기” or “조건문을폴리모피즘으로바꾸기”리팩토링을적용한다.<br>
+      - 그리고manageES() 메소드이름은좀더이해하기쉽도록manageSalary()로수정한다.<br>
+    </div>
+
+    <h2 class="section-title">문제 2. 생성자 코드를 상위클래스로 끌어올리기</h2>
+    <div class="desc-box">
+      - MereClerk, Manager 클래스의생성자코드는name, salary 속성값을매개변수로받은값으로초기화하고있다.<br>
+      -이렇듯 하위 클래스의 생성자 코드가 비슷하면 “생성자코드를 상위클래스로 끌어올리기” 리팩토링을 적용하여 중복을 제거한다.<br>
+    </div>
+
+    <h2 class="section-title">문제 3. 메소드, 속성을 하위클래스로 내려보내기</h2>
+    <div class="desc-box">
+      - Employee 클래스의manager 속성과getManager() 메소드는MereCkerk클래스에서만사용한다. Manager의관리자는없는것으로가정했기때문이다.<br>
+      - 이럴경우“메소드나속성을하위클래스로내려보내기” 리팩토링을적용한다.<br>
+    </div>
+
+    <h2 class="section-title">문제 4. 메소드 추출하기</h2>
+    <div class="desc-box">
+      - 클라이언트에해당하는main() 메소드에는여러가지기능의코드가섞여있다.<br>
+      - 이코드들은직원들의급여를인상하는코드, 현재급여를출력하는코드, 사원의관리자이름을출력하는코드로나뉜다.<br>
+      - 현재급여를출력하는코드와사원의관리자이름을출력하는코드는별도의메소드로분리하면프로그램을쉽게이해할수있다. 이때“메소드추출“리팩토링을적용하면된다.
+    </div>
+
+    <h2 class="section-title">문제 5. 위임 감추기</h2>
+    <div class="desc-box">
+      - main() 메소드에 매니저의 이름을 얻기 위해 반환 객체 결합에 해당하는 clerk.getManager().getName() 을 사용한다. 이는 두개의 객체(MereClerk,Manager)와 결합된 것을 의미한다.<br>
+      - 이렇듯 특정 정보를 얻기 위해 여러개의 객체를 거치는 경우, “위임감추기” 리팩토링을적용한다.<br>
+      - MereClerk클래스에 getManager() 메소드대신 getManagerName() 메소드를 정의하여 매니저 이름을 바로 리턴하도록한다.
+    </div>
+
+    <link href="exam.css"   rel="stylesheet">
+    <script src="copy_button.js" ></script>
+    
+<div class="file-box">
+    <h3 class="file-title">CompanyExample.java</h3>
+    <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
+    <pre class="code-box"><code id="code1">
+        package refactoring.lab02;
+
+        /*
+         * 회사원의 봉급을 관리(인상, 인하)하는 프로그램을 만들자. 현재 회사에 3명의 직원이 있다고 가정한다.
+         * 그들 중 두 명은 사원이며 나머지 한 사람은 그들의 관리자이다.
+         * 참고로 현재는 회사가 작아서 관리자의 관리자는 없는 것으로 구현한다. 
+         * 이들의 현재 월급은 사원은 100만원, 관리자는 200만원이다. 
+         * 현재는 월급의 10%만큼 인상할 것이며, 관리자는 20만원을 더 올려준다. 
+         * 앞으로 이 회사에 더 많은 직원이 채용될 것이며, 그들의 월급도 관리되어야 한다. 
+        */
+        class Employee {
+            static final int CLERK = 1;
+            static final int MANAGER = 2;
+        
+            private String name;
+            private double salary;
+            private int type;
+            private Employee manager;
+        
+            public Employee(int type, String name, double salary, Employee manager) {
+                this.type = type;
+                this.name = name;
+                this.salary = salary;
+                this.manager = manager;
+            }
+        
+            public String getName() {
+                return this.name;
+            }
+        
+            public double getSalary() {
+                return this.salary;
+            }
+        
+            public Employee getManager() {
+                return manager;
+            }
+        
+            public void manageES(double rate) {
+                if (type == CLERK) {
+                    salary = salary + salary * (rate / 100);
+                } else if (type == MANAGER) {
+                    salary = salary + salary * (rate / 100);
+                    salary += 20; // 관리자는 20만원을 추가로 받는다.
+                }
+            }
+        }
+        
+        public class CompanyExample {
+            public static void main(String[] args) {
+        
+                Employee manager = new Employee(Employee.MANAGER, "홍길동", 200, null);
+                Employee mereClerk1 = new Employee(Employee.CLERK, "철수", 100, manager);
+                Employee mereClerk2 = new Employee(Employee.CLERK, "영희", 100, manager);
+        
+                System.out.println("현재 월급입니다.");
+        
+                System.out.println(mereClerk1.getName() + "의 현재 월급은 " + mereClerk1.getSalary() + " 만원 입니다.");
+                System.out.println(mereClerk2.getName() + "의 현재 월급은 " + mereClerk2.getSalary() + " 만원 입니다.");
+                System.out.println(manager.getName() + "의 현재 월급은 " + manager.getSalary() + " 만원 입니다.");
+        
+                System.out.println("");
+        
+                System.out.println("올린 후의 월급입니다.");
+        
+                mereClerk1.manageES(10);
+                System.out.println(mereClerk1.getName() + "의 현재 월급은 " + mereClerk1.getSalary() + " 만원 입니다.");
+        
+                mereClerk2.manageES(10);
+                System.out.println(mereClerk2.getName() + "의 현재 월급은 " + mereClerk2.getSalary() + " 만원 입니다.");
+        
+                manager.manageES(10);
+                System.out.println(manager.getName() + "의 현재 월급은 " + manager.getSalary() + " 만원 입니다.");
+        
+                System.out.println("");
+                System.out.println(mereClerk1.getName() + "의 매니저는 " + mereClerk1.getManager().getName() + "이다.");
+                System.out.println(mereClerk2.getName() + "의 매니저는 " + mereClerk2.getManager().getName() + "이다.");
+        
+            }
+        }
+        
+        
+    </code></pre>
+</div>
