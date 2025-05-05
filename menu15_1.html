@@ -1,29 +1,30 @@
+<style>
+    .section-title {
+      color: #2c3e50;
+      font-size: 20px;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+      margin-top: 40px;
+    }
+    .desc-box {
+      background-color: #e8f4fc;
+      border-left: 5px solid #3498db;
+      padding: 10px;
+      margin: 20px 0;
+    }
+    pre {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      padding: 15px;
+      overflow-x: auto;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      margin: 10px 0;
+    }
+  </style>
+<h1 style="text-align: center;">리팩토링 실습 1 </h1>
 <div style="font-family: 'Segoe UI', sans-serif; line-height: 1.6; background-color: #f9f9f9; padding: 20px; border: 1px solid #ccc;">
-  
-    <style>
-      .section-title {
-        color: #2c3e50;
-        font-size: 20px;
-        border-bottom: 2px solid #ccc;
-        padding-bottom: 5px;
-        margin-top: 40px;
-      }
-      .desc-box {
-        background-color: #e8f4fc;
-        border-left: 5px solid #3498db;
-        padding: 10px;
-        margin: 20px 0;
-      }
-      pre {
-        background-color: #fff;
-        border: 1px solid #ccc;
-        padding: 15px;
-        overflow-x: auto;
-        font-family: 'Courier New', monospace;
-        font-size: 14px;
-        margin: 10px 0;
-      }
-    </style>
+     
   
     <h2 class="section-title">문제 1. 상위 클래스 추출하기 (Extract Superclass)</h2>
     <div class="desc-box">
@@ -135,7 +136,7 @@
             }
         }
       </pre>
-      
+
       - PrintCartridge 클래스로 중복되는 로직을 이동시키고  InkjetPrinter와 LaserPrinter 클래스를 적절히 수정한다.
       <pre>
         class PrintCartridge {
