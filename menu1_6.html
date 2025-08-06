@@ -43,8 +43,8 @@
                 <li>Player를 생성할 때 원하는 <code class="inline-code">Strategy</code> 구현체를 생성해서 넘깁니다.</li>
             </ul>
     
-            <pre class="code-box"><code>Player player1 = new Player("홍", new RandomStrategy(seed1));
-Player player2 = new Player("강", new ProbStrategy(seed2));</code></pre>
+            <pre class="code-box"><code>Player player1 = new Player("홍길동", new RandomStrategy(seed1));
+Player player2 = new Player("이순신", new ProbStrategy(seed2));</code></pre>
 
             <h3 class="subsection-title">5. 리팩터링 후 구조는 다음과 같습니다.</h3>
             <pre class="code-box"><code>/strategy/
@@ -75,14 +75,14 @@ Player player2 = new Player("강", new ProbStrategy(seed2));</code></pre>
     <pre class="code-box"><code id="hand-code">package strategy;
 
 public class Hand {
-    public static final int HANDVALUE_GUU = 0;
-    public static final int HANDVALUE_CHO = 1;
-    public static final int HANDVALUE_PAA = 2;
+    public static final int HANDVALUE_ROCK = 0;
+    public static final int HANDVALUE_SCISSORS = 1;
+    public static final int HANDVALUE_PAPER = 2;
 
     private static final Hand[] hand = {
-        new Hand(HANDVALUE_GUU),
-        new Hand(HANDVALUE_CHO),
-        new Hand(HANDVALUE_PAA),
+        new Hand(HANDVALUE_ROCK),
+        new Hand(HANDVALUE_SCISSORS),
+        new Hand(HANDVALUE_PAPER),
     };
 
     private static final String[] name = {"주먹", "가위", "보"};
