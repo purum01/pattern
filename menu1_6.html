@@ -46,7 +46,7 @@
             <pre class="code-box"><code>Player player1 = new Player("홍길동", new RandomStrategy(seed1));
 Player player2 = new Player("이순신", new ProbStrategy(seed2));</code></pre>
 
-            <h3 class="subsection-title">5. 리팩터링 후 구조는 다음과 같습니다.</h3>
+            <h3 class="subsection-title">5. 리팩토링 후 구조는 다음과 같습니다.</h3>
             <pre class="code-box"><code>/strategy/
         Hand.java
         Strategy.java
@@ -183,8 +183,8 @@ public class Player {
 
 public class Main {
     public static void main(String[] args) {
-        Player player1 = new Player("홍", "random");
-        Player player2 = new Player("강", "winning");
+        Player player1 = new Player("홍갈동", "random");
+        Player player2 = new Player("이순신", "winning");
 
         for (int i = 0; i &lt; 10000; i++) {
             Hand nextHand1 = player1.nextHand();
