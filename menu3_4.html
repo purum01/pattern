@@ -93,44 +93,66 @@
       <div class="file-box">
         <h3 class="file-title">SafeFrame.java</h3>
         <button class="copy-button" onclick="copyCode('safeframe-code')">복사하기</button>
-        <pre class="code-box"><code id="safeframe-code">package state;
-package state;
+        <pre class="code-box"><code id="safeframe-code">
+package test.state;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class SafeFrame extends Frame implements ActionListener {
-    private TextField textClock = new TextField(60);
-    private TextArea textScreen = new TextArea(10, 60);
-    private Button buttonUse = new Button("금고사용");
-    private Button buttonAlarm = new Button("비상벨");
-    private Button buttonPhone = new Button("일반 통화");
-    private Button buttonExit = new Button("종료");
+public class SafeFrame extends JFrame implements ActionListener {
+    private JTextField textClock = new JTextField(60);
+    private JTextArea textScreen = new JTextArea(10, 60);
+    private JButton buttonUse = new JButton("금고사용");
+    private JButton buttonAlarm = new JButton("비상벨");
+    private JButton buttonPhone = new JButton("일반 통화");
+    private JButton buttonExit = new JButton("종료");
 
     private int hour = 0;
 
     public SafeFrame(String title) {
         super(title);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBackground(Color.lightGray);
         setLayout(new BorderLayout());
-        add(textClock, BorderLayout.NORTH);
+
+        // 폰트 지정 (한글 깨짐 방지)
+        Font font = new Font("맑은 고딕", Font.PLAIN, 14);
+        textClock.setFont(font);
+        textScreen.setFont(font);
+        buttonUse.setFont(font);
+        buttonAlarm.setFont(font);
+        buttonPhone.setFont(font);
+        buttonExit.setFont(font);
+
+        // 텍스트 필드 상단
         textClock.setEditable(false);
-        add(textScreen, BorderLayout.CENTER);
+        add(textClock, BorderLayout.NORTH);
+
+        // 텍스트 에어리어 중앙
         textScreen.setEditable(false);
-        Panel panel = new Panel();
+        add(new JScrollPane(textScreen), BorderLayout.CENTER);
+
+        // 버튼 패널 하단
+        JPanel panel = new JPanel();
         panel.add(buttonUse);
         panel.add(buttonAlarm);
         panel.add(buttonPhone);
         panel.add(buttonExit);
         add(panel, BorderLayout.SOUTH);
-        pack();
-        show();
+
+        // 이벤트 등록
         buttonUse.addActionListener(this);
         buttonAlarm.addActionListener(this);
         buttonPhone.addActionListener(this);
         buttonExit.addActionListener(this);
+
+        pack();
+        setLocationRelativeTo(null); // 화면 중앙 배치
+        setVisible(true);
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == buttonUse) {
             if (hour >= 9 && hour < 17) {
@@ -174,6 +196,7 @@ public class SafeFrame extends Frame implements ActionListener {
     public void recordLog(String msg) {
         textScreen.append("record ... " + msg + "\n");
     }
+
 }
   </code></pre>
       </div>
