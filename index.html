@@ -73,6 +73,13 @@
 <div class="container">
     <div class="side-menu" >
         <ul id="menu">
+            <li id="menu0" onclick="toggleNested(this)">0. Clean Code
+                <ul class="nested">
+                    <li onclick="event.stopPropagation(); showContent('menu15_3');">클린 코드 PDF</li>   
+                    <li onclick="event.stopPropagation(); showContent('menu15_4');">상속과 위임 실습</li>   
+                    <li onclick="event.stopPropagation(); showContent('menu15_5');">객체지향 설계 실습</li>   
+            </ul>
+            </li>
             <li id="menu0" onclick="toggleNested(this)">1. 전략 패턴
                 <ul class="nested">
                     <li onclick="event.stopPropagation(); showContent('menu1_0');">GoF 정의</li>   
