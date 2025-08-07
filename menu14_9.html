@@ -6,55 +6,49 @@
     <h3 class="file-title">Product.java</h3>
     <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
     <pre class="code-box"><code id="code1">
-package factory;
-
 public abstract class Product {
     public abstract void use();
 }
 </code></pre>
 </div>
+<!-- Factory.java -->
+<div class="file-box">
+    <h3 class="file-title">Factory.java</h3>
+    <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
+    <pre class="code-box"><code id="code1">
+public abstract class Factory {
+	public final Product create(String info) {
+		Product p = createProduct(info);
+		registerProduct(p);
+		return p;
+	}
+	protected abstract Product createProduct(String info);
+	protected abstract void registerProduct(Product product);
+}
+</code></pre>
+</div>
+
 <!-- IDCard.java -->
 <div class="file-box">
     <h3 class="file-title">IDCard.java</h3>
-    <button class="copy-button" onclick="copyCode('code2')">복사하기</button>
-    <pre class="code-box"><code id="code2">
-package factory;
-
+    <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
+    <pre class="code-box"><code id="code1">
 public class IDCard extends Product {
     private String owner;
 
     public IDCard(String owner) {
-        System.out.println(owner + "의 카드를 만듭니다.");
         this.owner = owner;
+        System.out.println("IDCard를 만듭니다: " + owner);
     }
 
+    @Override
     public void use() {
-        System.out.println(owner + "의 카드를 사용합니다.");
+        System.out.println("IDCard를 사용합니다: " + owner);
     }
 
     public String getOwner() {
         return owner;
     }
-}
-    </code></pre>
-</div>  
-
-<!-- Factory.java -->
-<div class="file-box">
-    <h3 class="file-title">Factory.java</h3>
-    <button class="copy-button" onclick="copyCode('code3')">복사하기</button>
-    <pre class="code-box"><code id="code3">
-package factory;
-
-public abstract class Factory {
-    public final Product create(String owner) {
-        Product p = createProduct(owner);
-        registerProduct(p);
-        return p;
-    }
-
-    protected abstract Product createProduct(String owner);
-    protected abstract void registerProduct(Product product);
 }
 </code></pre>
 </div>
@@ -63,50 +57,100 @@ public abstract class Factory {
 <!-- IDCardFactory.java -->
 <div class="file-box">
     <h3 class="file-title">IDCardFactory.java</h3>
-    <button class="copy-button" onclick="copyCode('code4')">복사하기</button>
-    <pre class="code-box"><code id="code4">
-package factory;
-
-import java.util.*;
-
+    <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
+    <pre class="code-box"><code id="code1">
 public class IDCardFactory extends Factory {
-    private List<String> owners = new ArrayList<>();
+	private List<String> owners = new ArrayList<>();
 
-    protected Product createProduct(String owner) {
-        return new IDCard(owner);
+	@Override
+	protected Product createProduct(String owner) {
+		return new IDCard(owner);
+	}
+
+	@Override
+	protected void registerProduct(Product product) {
+		IDCard card = (IDCard) product;
+		owners.add(card.getOwner());
+	}
+
+	public List<String> getOwners() {
+		return owners;
+	}
+}
+</code></pre>
+</div>
+
+
+<!-- Membership.java -->
+<div class="file-box">
+    <h3 class="file-title">Membership.java</h3>
+    <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
+    <pre class="code-box"><code id="code1">
+public class Membership extends Product {
+	private String grade;
+
+	public Membership(String grade) {
+		this.grade = grade;
+		System.out.println("Membership 생성됨: 등급 " + grade);
+	}
+
+	@Override
+	public void use() {
+		System.out.println("Membership 사용: 등급 " + grade);
+	}
+
+	public String getGrade() {
+		return grade;
+	}
+}
+</code></pre>
+</div>
+
+<!-- MembershipFactory.java -->
+<div class="file-box">
+    <h3 class="file-title">MembershipFactory.java</h3>
+    <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
+    <pre class="code-box"><code id="code1">
+ublic class MembershipFactory extends Factory {
+    private List<String> grades = new ArrayList<>();
+
+    @Override
+    protected Product createProduct(String grade) {
+        return new Membership(grade);
     }
 
+    @Override
     protected void registerProduct(Product product) {
-        owners.add(((IDCard) product).getOwner());
+        Membership m = (Membership) product;
+        grades.add(m.getGrade());
     }
 
-    public List<String> getOwners() {
-        return owners;
+    public List<String> getGrades() {
+        return grades;
     }
 }
-        
 </code></pre>
 </div>
 
-<!-- IDCardFactory.java -->
+<!-- Main.java -->
 <div class="file-box">
     <h3 class="file-title">Main.java</h3>
-    <button class="copy-button" onclick="copyCode('code5')">복사하기</button>
-    <pre class="code-box"><code id="code5">
-package factory;
-
+    <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
+    <pre class="code-box"><code id="code1">
 public class Main {
     public static void main(String[] args) {
-        Factory factory = new IDCardFactory();
-        Product card1 = factory.create("홍길동");
-        Product card2 = factory.create("이순신");
-        Product card3 = factory.create("유관순");
+        Factory idFactory = new IDCardFactory();
+        Product card1 = idFactory.create("홍길동");
+        Product card2 = idFactory.create("이순신");
         card1.use();
         card2.use();
-        card3.use();
-    }
-} 
-</code></pre>
-</div>       
-</div>
 
+        Factory memberFactory = new MembershipFactory();
+        Product m1 = memberFactory.create("GOLD");
+        Product m2 = memberFactory.create("VIP");
+        m1.use();
+        m2.use();
+    }
+}
+</code></pre>
+</div>

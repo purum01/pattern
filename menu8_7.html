@@ -3,90 +3,195 @@
 
 
 <div class="assignment">
-    <h1 class="title">Factory Method Pattern 적용하여 리팩토링하기</h1>
+    <h1 class="title">Factory Method Pattern 실습</h1>
   
     <section class="section">
-      <h2 class="section-title">📋 실습 목표</h2>
+      <h2 class="section-title">📋 문제 상황</h2>
       <p class="paragraph">
-        객체 생성을 하위 클래스에 위임하여, 상위 클래스는 생성 방식과 무관하게 동작할 수 있도록 <strong>팩토리 메서드 패턴</strong>을 구현합니다.
+        여러분은 다양한 카드를 발급해주는 시스템을 설계하려고 합니다. <br>
+         - 한쪽에서는 이름이 적힌 ID 카드를 만들어 사용자의 출입을 관리하고 있습니다.<br>
+         - 다른 쪽에서는 멤버십 카드를 발급해 회원 등급(GOLD, VIP 등)에 따라 혜택을 제공하고자 합니다.<br>
+         - 하지만 이 두 카드의 생성 방식은 다르고, 발급 후 등록 처리 방식도 각각 다릅니다.<br>
+        → 그렇다고 해서 카드마다 새로운 클래스를 직접 생성하는 방식으로 개발을 계속하면 유지보수가 어렵고 코드 중복이 많아질 수 있습니다.<br>
       </p>
-      <div class="highlight-box">
-        상위 클래스 <code>Factory</code>는 템플릿 메서드 역할을 하며,<br>
-        실제 인스턴스 생성은 하위 클래스 <code>IDCardFactory</code>에서 수행합니다.
-      </div>
     </section>
-  
-    <section class="section">
-      <h2 class="section-title">🛠 구현 지침</h2>
-      <ul class="list">
-        <li><code class="inline-code">Product</code>: 추상 클래스. <code>use()</code> 메서드 정의</li>
-        <li><code class="inline-code">Factory</code>: 추상 클래스. <code>create()</code>, <code>createProduct()</code>, <code>registerProduct()</code></li>
-        <li><code class="inline-code">IDCard</code>: <code>Product</code>를 상속. 이름(owner)을 포함하고 출력</li>
-        <li><code class="inline-code">IDCardFactory</code>: <code>Factory</code> 상속. 실제 IDCard 인스턴스를 생성 및 등록</li>
-        <li><code class="inline-code">Main</code>: Factory를 통해 IDCard를 생성 및 사용</li>
-      </ul>
+    <section>
+      <h2 class="section-title">📌 우리가 해결하고자 하는 문제</h2>
+      <p class="paragraph">  
+        - 다양한 유형의 카드(IDCard, Membership)를 동일한 방식으로 생성하고 사용할 수 있을까? <br>
+        - 제품 생성의 책임을 클라이언트가 아닌 팩토리 클래스에 위임할 수 있을까?<br>
+        - 새로운 카드 유형이 추가되더라도 기존 코드를 수정하지 않고 확장 가능한 구조를 만들 수 있을까?<br>
+      </p>
     </section>
-  
-    <section class="section">
-      <h2 class="section-title">🖥 실행 예시</h2>
-      <pre class="code-box"><code>
-  홍길동의 카드를 만듭니다.
-  이순신의 카드를 만듭니다.
-  유관순의 카드를 만듭니다.
-  홍길동의 카드를 사용합니다.
-  이순신의 카드를 사용합니다.
-  유관순의 카드를 사용합니다.
-  </code></pre>
+    <section>
+      <h2 class="section-title">🛠️ 여러분이 해야 할 일</h2>
+      <p class="paragraph">  
+        - 카드의 공통 기능을 추상화한 Product 클래스를 정의합니다.<br>
+        - 카드 발급 공장을 추상화한 Factory 클래스를 구현합니다.<br>
+        - 실제로 동작하는 IDCard 와 Membership 클래스를 구현합니다.<br>
+        - 각각의 카드에 맞는 공장 클래스(IDCardFactory, MembershipFactory)를 정의합니다.<br>
+        - Main 클래스에서 이 공장들을 통해 카드를 발급하고 사용하는 시나리오를 테스트합니다.<br>
+      </p>
     </section>
-  
+
     <section class="section">
       <h2 class="section-title">📂 파일 구조</h2>
-      <pre class="code-box"><code>/factory/
-    Product.java
-    Factory.java
-    IDCard.java
-    IDCardFactory.java
-    Main.java
+      <pre class="code-box"><code>
+exercise.factorymethod
+ ┣ framework
+ ┃ ┣ Product.java
+ ┃ ┗ Factory.java
+ ┣ idcard
+ ┃ ┣ IDCard.java
+ ┃ ┗ IDCardFactory.java
+ ┣ membership
+ ┃ ┣ Membership.java
+ ┃ ┗ MembershipFactory.java
+ ┗ Main.java
+
   </code></pre>
     </section>
-  
-  
-  <section class="section">
-    <h2 class="section-title">📌 UML 다이어그램</h2>
-    <img src="img/menu8_1.png">
-</section>
+
+    <section class="section">
+      <h2 class="section-title">🛠 실습 조건</h2>
+      <ul class="list">
+        <li>Product.java <br>
+            - abstract class 로 선언한다. <br>
+            - public abstract void use() 메서드를 선언한다. <br>
+            - 이 클래스는 <code>exercise.factorymethod.framework</code> 패키지에 포함되어야 한다.<br>
+        </li><br>
+
+        <li>Factory.java<br>
+          - abstract class로 선언한다. <br>
+          - create(String info) 메서드는 final로 선언하여 재정의할 수 없도록 한다.<br>
+          - create(String info) 메서드는 다음 로직을 포함한다:<br>
+            <ol>
+              <li>createProduct(String info) 메서드를 호출하여 제품을 생성한다.</li>
+              <li>registerProduct(Product product) 메서드를 호출하여 제품을 등록한다.</li>
+              <li>생성된 제품을 반환한다.</li>
+            </ol>
+          - protected abstract Product createProduct(String info) 메서드를 선언한다.<br>
+          - protected abstract void registerProduct(Product product) 메서드를 선언한다.<br>
+          - 이 클래스는 <code>exercise.factorymethod.framework</code> 패키지에 포함되어야 한다.<br>
+        </li><br>
+
+      <li>IDCard.java <br>
+        - <code>Product</code> 클래스를 상속받아 구현한다.<br>
+        - <code>private String owner</code> 필드를 선언한다.<br>
+        - <code>public IDCard(String owner)</code> 생성자를 정의한다.<br>
+        <ol>
+          <li>매개변수로 받은 이름을 <code>owner</code> 필드에 저장한다.</li>
+          <li>"IDCard를 만듭니다: [이름]" 을 출력한다.</li>
+        </ol>
+         
+        - <code>public void use()</code> 메서드를 오버라이딩한다.
+        <ol>
+          <li>"IDCard를 사용합니다: [이름]" 을 출력한다.</li>
+        </ol>            
+                
+        - <code>public String getOwner()</code> 메서드를 정의하여 
+        <ol>
+          <li><code>owner</code> 값을 반환한다.</li>
+        </ol>            
+
+        - 이 클래스는 <code>exercise.factorymethod.idcard</code> 패키지에 포함되어야 한다.<br>
+        </li><br>
+
+        <li>IDCardFactory.java<br>
+          - <code>Factory</code> 클래스를 상속받아 구현한다.<br>
+          - <code>private List&lt;String&gt; owners</code> 필드를 선언하고, <code>new ArrayList&lt;&gt;()</code>로 초기화한다.<br>
+          - <code>protected Product createProduct(String owner)</code> 메서드를 오버라이딩한다.
+          <ol>
+            <li><code>new IDCard(owner)</code>를 반환한다.</li> 
+          </ol>
+          - <code>protected void registerProduct(Product product)</code> 메서드를 오버라이딩한다.<br>
+          <ol>
+             <li>전달받은 <code>Product</code>를 <code>IDCard</code>로 캐스팅한다.</li>
+             <li>소유자 이름을 <code>owners</code> 리스트에 추가한다.</li>
+          </ol>
+          - <code>public List&lt;String&gt; getOwners()</code> 메서드를 정의하여, 등록된 소유자 목록을 반환한다.<br>
+          - 이 클래스는 <code>exercise.factorymethod.idcard</code> 패키지에 포함되어야 한다.<br>
+        </li><br>
+        
+        <li>Membership.java <br>
+          - <code>Product</code> 클래스를 상속받아 구현한다.<br>
+          - <code>private String grade</code> 필드를 선언한다.<br>
+          - <code>public Membership(String grade)</code> 생성자를 정의한다.<br>
+          <ol>    
+            <li>매개변수로 받은 등급을 <code>grade</code> 필드에 저장한다.</li>
+            <li>"Membership 생성됨: 등급 [grade]" 를 출력한다.</li> 
+          </ol>
+          - <code>public void use()</code> 메서드를 오버라이딩한다.<br>
+          <ol>
+            <li>"Membership 사용: 등급 [grade]" 를 출력한다.</li> 
+          </ol>
+          - <code>public String getGrade()</code> 메서드를 정의한다.
+          <ol>
+            <li><code>grade</code> 값을 반환한다.</li>  
+          </ol>
+          - 이 클래스는 <code>exercise.factorymethod.membership</code> 패키지에 포함되어야 한다.<br>
+        </li><br>
+
+        <li>MembershipFactory.java <br>
+          - <code>Factory</code> 클래스를 상속받아 구현한다.<br>
+          - <code>private List&lt;String&gt; grades</code> 필드를 선언하고, <code>new ArrayList&lt;&gt;()</code>로 초기화한다.<br>
+          - <code>protected Product createProduct(String grade)</code> 메서드를 오버라이딩한다.<br>
+          <ol>
+            <li><code>new Membership(grade)</code>를 반환한다.</li> 
+          </ol>
+        
+       
+          - <code>protected void registerProduct(Product product)</code> 메서드를 오버라이딩한다.<br>
+          <ol>
+            <li>전달받은 <code>Product</code>를 <code>Membership</code>로 캐스팅한다.</li>
+            <li>등급을 <code>grades</code> 리스트에 추가한다.</li>  
+          </ol>
+
+          - <code>public List&lt;String&gt; getGrades()</code> 메서드를 정의하여, 등록된 회원 등급 목록을 반환한다.<br>
+          - 이 클래스는 <code>exercise.factorymethod.membership</code> 패키지에 포함되어야 한다.<br>
+        </li><br>
+
+      </ul>
+    </section>
 
 <section class="section">
     <h2 class="section-title">🗂 제공 파일</h2>
 <div class="file-box">
-    <h3 class="file-title">Product.java</h3>
+    <h3 class="file-title">Main.java</h3>
     <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
     <pre class="code-box"><code id="code1">
-package factory;
 
-public abstract class Product {
-    public abstract void use();
+public class Main {
+    public static void main(String[] args) {
+        Factory idFactory = new IDCardFactory();
+        Product card1 = idFactory.create("홍길동");
+        Product card2 = idFactory.create("이순신");
+        card1.use();
+        card2.use();
+
+        Factory memberFactory = new MembershipFactory();
+        Product m1 = memberFactory.create("GOLD");
+        Product m2 = memberFactory.create("VIP");
+        m1.use();
+        m2.use();
+    }
 }
 </code></pre>
 </div>          
-<div class="file-box">
-    <h3 class="file-title">Factory.java</h3>
-    <button class="copy-button" onclick="copyCode('code2')">복사하기</button>
-    <pre class="code-box"><code id="code2">
-package factory;
-
-public abstract class Factory {
-    public final Product create(String owner) {
-        Product p = createProduct(owner);
-        registerProduct(p);
-        return p;
-    }
-
-    protected abstract Product createProduct(String owner);
-    protected abstract void registerProduct(Product product);
-}
-        
-</code></pre>
-</div>
 </section>
+
+<section class="section">
+      <h2 class="section-title">🖥 실행 결과</h2>
+      <pre class="code-box"><code>
+IDCard를 만듭니다: 홍길동
+IDCard를 만듭니다: 이순신
+IDCard를 사용합니다: 홍길동
+IDCard를 사용합니다: 이순신
+Membership 생성됨: 등급 GOLD
+Membership 생성됨: 등급 VIP
+Membership 사용: 등급 GOLD
+Membership 사용: 등급 VIP
+  </code></pre>
+</section>
+
 </div>
