@@ -1,147 +1,63 @@
 <link href="exam.css"   rel="stylesheet">
 
+<style>
+table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #333; /* 실선 테두리 */
+      padding: 16px 20px;     /* 열 간 간격 넓힘 */
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+</style>
 <div class="assignment">
-    <h1 class="title">Proxy Pattern 적용하여 리팩토링하기</h1>
+    <h1 class="title">무거운 객체의 사용을 제어하는 대리인 만들기</h1>
   
     <section class="section">
-      <h2 class="section-title">📋 실습 목표</h2>
+      <h2 class="section-title">🎯 문제 상황</h2>
       <p class="paragraph">
-        인스턴스의 생성을 지연시키거나 접근 제어를 하기 위해 <strong>프록시 패턴</strong>을 구현합니다.<br>
-        실제 객체와 동일한 인터페이스를 사용하며, <code>Printer</code> 객체의 생성을 <code>PrinterProxy</code>를 통해 지연시킵니다.
+          여러분은 어떤 원격 출력 시스템(프린터 서비스)을 설계하고 있습니다.이 프린터는 다음과 같은 특성을 가지고 있습니다:<br>
+          - 초기화 비용이 매우 큰 리소스를 사용합니다.(예: 네트워크 프린터 연결, 대용량 글꼴 로딩 등)<br>
+          - 그래서 실제 프린터 객체는 필요할 때까지 생성하지 않는 것이 이상적입니다.<br>
+          - 하지만 클라이언트는 다음처럼 단순한 인터페이스를 통해 프린터를 사용하길 원합니다:<br>
+          <pre>
+            <code class="language-java">
+Printable p = new PrinterProxy("Alice");
+System.out.println("이름은 현재 " + p.getPrinterName() + "입니다.");
+p.setPrinterName("Bob");
+p.print("Hello, world.");  // 여기서 진짜 Printer가 만들어짐
+            </code>
+          </pre>
+          - 여기서 중요한 점은:<br>
+          <ol>
+            <li>get/set 메서드는 프린터 객체 없이도 동작해야 함</li>
+            <li>print() 를 호출할 때에만 실제 Printer 객체가 생성되도록 하고 싶음</li>
+          </ol>
+          이러한 요구사항을 만족시키기 위해 Proxy 디자인 패턴을 적용합니다.<br>
       </p>
-      <div class="highlight-box">
-        <code class="inline-code">Printable</code> 인터페이스를 통해 <code>Printer</code>와 <code>PrinterProxy</code>가 동일한 기능을 가지며,<br>
-        프록시 객체는 실제 객체 생성을 나중에 수행합니다 (지연 초기화).
-      </div>
     </section>
-  
     <section class="section">
-      <h2 class="section-title">🛠 구현 지침</h2>
-      <div style="font-family: 'Segoe UI', sans-serif; max-width: 900px; border-left: 5px solid #4CAF50; background-color: #f9f9f9; padding: 30px 40px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); line-height: 1.7;">
-        <h3 style="margin-top: 0;">1. <code>Printer.java</code></h3>
-        
-        <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
-          <thead>
-            <tr style="background-color: #efefef;">
-              <th style="text-align: left; padding: 8px;">구현 요소</th>
-              <th style="text-align: left; padding: 8px;">조건</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="padding: 8px;">클래스 이름</td>
-              <td style="padding: 8px;"><code>Printer</code></td>
-            </tr>
-            <tr>
-              <td style="padding: 8px;">구현 대상</td>
-              <td style="padding: 8px;"><code>Printable</code> 인터페이스</td>
-            </tr>
-            <tr>
-              <td style="padding: 8px;">주요 기능</td>
-              <td style="padding: 8px;">
-                - 생성 시 무거운 작업 시뮬레이션 출력 수행<br>
-                - 이름 설정, 이름 반환, 내용 출력 기능 포함
-              </td>
-            </tr>
-            <tr>
-              <td style="padding: 8px;">생성자</td>
-              <td style="padding: 8px;">
-                - 기본 생성자: 무거운 작업 수행<br>
-                - 이름을 매개변수로 받는 생성자도 존재
-              </td>
-            </tr>
-            <tr>
-              <td style="padding: 8px;">메서드</td>
-              <td style="padding: 8px;">
-                - <code>setPrinterName(String name)</code>: 프린터 이름 설정<br>
-                - <code>getPrinterName()</code>: 이름 반환<br>
-                - <code>print(String text)</code>: 내용 출력<br>
-                - <code>heavyJob(String msg)</code>: 인스턴스 생성 시 무거운 작업을 시뮬레이션하는 private 메서드
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      
-        <div style="margin-top: 20px; background: #e8f5e9; padding: 12px 20px; border-left: 5px solid #4CAF50; border-radius: 5px;">
-          ✅ <strong>참고 사항:</strong><br>
-          <code>heavyJob()</code> 메서드에서는 "Printer의 인스턴스를 생성 중..." 메시지와 함께 점(<code>.</code>)을 5개 출력하고<br>
-          <strong>"완료"</strong>를 출력합니다.
-        </div>
-      </div>
-      <div style="font-family: 'Segoe UI', sans-serif; max-width: 900px; border-left: 5px solid #4CAF50; background-color: #f9f9f9; padding: 30px 40px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); line-height: 1.7;">
-        <h3 style="margin-top: 0;">2. <code>PrinterProxy.java</code></h3>
-        
-        <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
-          <thead>
-            <tr style="background-color: #efefef;">
-              <th style="text-align: left; padding: 8px;">구현 요소</th>
-              <th style="text-align: left; padding: 8px;">조건</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="padding: 8px;">클래스 이름</td>
-              <td style="padding: 8px;"><code>PrinterProxy</code></td>
-            </tr>
-            <tr>
-              <td style="padding: 8px;">구현 대상</td>
-              <td style="padding: 8px;"><code>Printable</code> 인터페이스</td>
-            </tr>
-            <tr>
-              <td style="padding: 8px;">주요 기능</td>
-              <td style="padding: 8px;">
-                - 진짜 Printer 인스턴스를 생성하지 않고 프록시로 동작<br>
-                - 필요한 시점에만 실제 <code>Printer</code> 객체를 생성하여 연결
-              </td>
-            </tr>
-            <tr>
-              <td style="padding: 8px;">필드</td>
-              <td style="padding: 8px;">
-                - <code>name</code>: <code>String</code><br>
-                - <code>real</code>: <code>Printer</code> (null로 시작)
-              </td>
-            </tr>
-            <tr>
-              <td style="padding: 8px;">생성자</td>
-              <td style="padding: 8px;">
-                - 기본 생성자<br>
-                - 이름을 매개변수로 받는 생성자
-              </td>
-            </tr>
-            <tr>
-              <td style="padding: 8px;">메서드</td>
-              <td style="padding: 8px;">
-                - <code>setPrinterName(String name)</code>: 이름 저장 및 real 객체 존재 시 설정<br>
-                - <code>getPrinterName()</code>: 저장된 이름 반환<br>
-                - <code>print(String text)</code>: real이 null이면 Printer를 생성한 후 출력<br>
-                - <code>realize()</code>: real이 null일 경우 Printer를 생성하는 private 메서드
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      
-        <div style="margin-top: 20px; background: #e8f5e9; padding: 12px 20px; border-left: 5px solid #4CAF50; border-radius: 5px;">
-          ✅ <strong>참고 사항:</strong><br>
-          • 실제 <code>Printer</code> 객체는 <code>print()</code> 호출 시에만 생성되도록 하며, <code>realize()</code> 메서드를 통해 초기화합니다.
-        </div>
-      </div>
-      
-    </section>
-
-
-
-  
+      <h2 class="section-title">📌 우리가 해결하고자 하는 문제</h2>
+      <p class="paragraph">
+          - 리소스 사용 비용이 높은 객체를 반드시 필요할 때만 생성하고 싶다.<br>
+          - 사용자는 기존 인터페이스(Printable) 그대로 사용하길 원한다.<br>
+          - 클라이언트가 사용하는 객체가 실제 객체인지, 대리인(프록시)인지 모르게 하고 싶다.<br>    
+      </p>
+    </section> 
     <section class="section">
-      <h2 class="section-title">🖥 실행 예시</h2>
-      <pre class="code-box"><code>
-      이름은 현재 Alice입니다.
-      이름은 현재 Bob입니다.
-      Printer의 인스턴스를 생성 중 (Bob).....완료.
-      === Bob ===
-      Hello, world.
-</code></pre>
-    </section>
-  
+      <h2 class="section-title">💡 해결 전략: Proxy 패턴 적용</h2>
+      <p class="paragraph">
+         - Proxy 패턴은 진짜 객체 앞에 대리 객체(Proxy)를 두어 실제 객체의 생명주기나 접근 방식을 제어하는 패턴입니다.<br>
+         - 이 실습에서는 PrinterProxy 라는 프록시 클래스를 만들어 실제 Printer 객체의 생성과 호출을 지연(lazy loading) 시킵니다.
+      </p>
+    </section> 
+
+
     <section class="section">
       <h2 class="section-title">📂 파일 구조</h2>
       <pre class="code-box"><code>/proxy/
@@ -157,6 +73,169 @@
         <img src="img/menu13_1.png">
     </section>
 
+
+
+
+    <section class="section">
+      <h2 class="section-title">🛠 구현 지침</h2>
+      <h2>Printer.java</h2>
+  <table>
+    <tr>
+      <th>구분</th>
+      <th>조건</th>
+    </tr>
+
+    <tr>
+      <td><strong>클래스 선언</strong></td>
+      <td>
+        클래스명: <code>Printer</code><br>
+        <code>Printable</code> 인터페이스를 <code>implements</code> 해야 함
+      </td>
+    </tr>
+
+    <tr>
+      <td><strong>인스턴스 변수</strong></td>
+      <td><code>private String name;</code> : 프린터 이름 저장용</td>
+    </tr>
+    
+    <tr>
+      <td><strong>기본 생성자</strong></td>
+      <td>
+        <code>public Printer()</code><br>
+        - <code>heavyJob("Printer의 인스턴스를 생성 중")</code> 호출
+      </td>
+    </tr>
+
+    <tr>
+      <td><strong>이름을 받는 생성자</strong></td>
+      <td>
+        <code>public Printer(String name)</code><br>
+        - 전달받은 <code>name</code>을 필드에 저장<br>
+        - <code>heavyJob("Printer의 인스턴스를 생성 중 (" + name + ")")</code> 호출
+      </td>
+    </tr>
+
+    <tr>
+      <td><strong>setPrinterName()</strong></td>
+      <td>
+        <code>public void setPrinterName(String name)</code><br>
+        - <code>name</code> 필드에 값 설정
+      </td>
+    </tr>
+
+    <tr>
+      <td><strong>getPrinterName()</strong></td>
+      <td>
+        <code>public String getPrinterName()</code><br>
+        - 현재 프린터 이름 반환
+      </td>
+    </tr>
+
+    <tr>
+      <td><strong>print()</strong></td>
+      <td>
+        <code>public void print(String text)</code><br>
+        - 다음 형식으로 출력<br>
+        &nbsp;&nbsp;<code>=== [name] ===</code><br>
+        &nbsp;&nbsp;<code>text</code>
+      </td>
+    </tr>
+
+    <tr>
+      <td><strong>heavyJob()</strong></td>
+      <td>
+        <code>private void heavyJob(String msg)</code><br>
+        - 메시지 출력 후 <code>.</code>을 1초 간격으로 5번 출력<br>
+        - <code>Thread.sleep(1000)</code> 사용, 예외는 <code>try-catch</code>로 처리<br>
+        - 마지막에 <code>"완료."</code> 출력
+      </td>
+    </tr>
+  </table>
+
+  <h2>PrinterProxy.java</h2>
+<table>
+  <tr>
+    <th>구분</th>
+    <th>조건</th>
+  </tr>
+
+  <tr>
+    <td><strong>클래스 선언</strong></td>
+    <td>
+      클래스명: <code>PrinterProxy</code><br>
+      <code>Printable</code> 인터페이스를 <code>implements</code> 해야 함
+    </td>
+  </tr>
+
+  <tr>
+    <td><strong>인스턴스 변수</strong></td>
+    <td>
+      <code>private String name;</code> : 사용자 설정 이름 저장<br>
+      <code>private Printer real;</code> : 실제 프린터 인스턴스를 저장하는 필드
+    </td>
+  </tr>
+
+  <tr>
+    <td><strong>기본 생성자</strong></td>
+    <td>
+      <code>public PrinterProxy()</code><br>
+      - 아무 동작 없이 초기화
+    </td>
+  </tr>
+
+  <tr>
+    <td><strong>이름을 받는 생성자</strong></td>
+    <td>
+      <code>public PrinterProxy(String name)</code><br>
+      - 전달받은 <code>name</code>을 필드에 저장
+    </td>
+  </tr>
+
+  <tr>
+    <td><strong>setPrinterName()</strong></td>
+    <td>
+      <code>public synchronized void setPrinterName(String name)</code><br>
+      - <code>real</code>이 생성되어 있으면 <code>real.setPrinterName(name)</code>을 호출하여 실제 객체에도 반영<br>
+      - 자신의 <code>name</code> 필드에도 값을 저장
+    </td>
+  </tr>
+
+  <tr>
+    <td><strong>getPrinterName()</strong></td>
+    <td>
+      <code>public String getPrinterName()</code><br>
+      - 자신의 <code>name</code> 필드 값을 반환
+    </td>
+  </tr>
+
+  <tr>
+    <td><strong>print()</strong></td>
+    <td>
+      <code>public void print(String text)</code><br>
+      - 내부에서 <code>realize()</code> 메서드를 먼저 호출하여 실제 <code>Printer</code> 인스턴스를 생성<br>
+      - 이후 <code>real.print(text)</code>를 호출하여 출력 위임
+    </td>
+  </tr>
+
+  <tr>
+    <td><strong>realize()</strong></td>
+    <td>
+      <code>private synchronized void realize()</code><br>
+      - <code>real</code>이 <code>null</code>인 경우에만 <code>new Printer(name)</code>을 통해 실제 객체를 생성<br>
+      - 이미 존재하는 경우에는 아무 작업도 하지 않음
+    </td>
+  </tr>
+</table>
+
+
+      
+    </section>
+
+
+
+  
+
+  
     <section class="section">
       <h2 class="section-title">🗂 제공 파일</h2>
   
@@ -166,15 +245,13 @@
     <h3 class="file-title">Printable.java</h3>
     <button class="copy-button" onclick="copyCode('printable-code')">복사하기</button>
     <pre class="code-box"><code id="printable-code">
-      package proxy;
-
       public interface Printable {
-        // 이름의 설정
-        public void setPrinterName(String name);
-        // 이름의 취득
-        public String getPrinterName();
-        // 문자열 표시(프린트아웃)
-        public void print(String string);
+      
+          public void setPrinterName(String name);
+        
+          public String getPrinterName();
+        
+          public void print(String string);
       }
   </code></pre>
   </div>
@@ -184,8 +261,6 @@
     <h3 class="file-title">Main.java</h3>
     <button class="copy-button" onclick="copyCode('main-code')">복사하기</button>
     <pre class="code-box"><code id="main-code">
-      package proxy;
-
       public class Main {
           public static void main(String[] args) {
               Printable p = new PrinterProxy("Alice");
@@ -198,6 +273,17 @@
   </code></pre>
   </div>
   
+    <section class="section">
+      <h2 class="section-title">🖥 실행 예시</h2>
+      <pre class="code-box"><code>
+      이름은 현재 Alice입니다.
+      이름은 현재 Bob입니다.
+      Printer의 인스턴스를 생성 중 (Bob).....완료.
+      === Bob ===
+      Hello, world.
+</code></pre>
+    </section>
+
   <script>
     function copyCode(id) {
       const codeElement = document.getElementById(id);
