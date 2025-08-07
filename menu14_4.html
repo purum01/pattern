@@ -6,16 +6,12 @@
     <h3 class="file-title">Display.java</h3>
     <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
     <pre class="code-box"><code id="code1">
-package decorator;
+public interface Display {
+    int getColumns();                // 한 줄의 문자 수
+    int getRows();                   // 줄 수
+    String getRowText(int row);      // row번째 줄의 문자열
 
-public abstract class Display {
-    public Display() {}
-
-    public abstract int getColumns();
-    public abstract int getRows();
-    public abstract String getRowText(int row);
-
-    public void show() {
+    default void show() {
         for (int i = 0; i < getRows(); i++) {
             System.out.println(getRowText(i));
         }
@@ -29,32 +25,30 @@ public abstract class Display {
     <h3 class="file-title">StringDisplay.java</h3>
     <button class="copy-button" onclick="copyCode('code2')">복사하기</button>
     <pre class="code-box"><code id="code2">
-package decorator;
+public class StringDisplay implements Display {
+    private String text;
 
-public class StringDisplay extends Display {
-    String string;
-    public StringDisplay(String string ){
-        super();
-        this.string = string;
+    public StringDisplay(String text) {
+        this.text = text;
     }
-    
-    public StringDisplay() {
-        
-    }
+
+    @Override
     public int getColumns() {
-        return string.getBytes().length;			
+        return text.length();
     }
-    
+
+    @Override
     public int getRows() {
-        return 1;			
+        return 1;
     }
-    
+
+    @Override
     public String getRowText(int row) {
-        if(row==0){
-            return string;
+        if (row == 0) {
+            return text;
         } else {
-            return null;
-        }			
+            throw new IndexOutOfBoundsException();
+        }
     }
 }
 </code></pre>
@@ -65,21 +59,12 @@ public class StringDisplay extends Display {
     <h3 class="file-title">Border.java</h3>
     <button class="copy-button" onclick="copyCode('code3')">복사하기</button>
     <pre class="code-box"><code id="code3">
-package decorator;
+public abstract class Border implements Display {
+    protected Display display; // 장식할 대상
 
-////abstract로 정의, Display의 하위로 정의한다
-public abstract class Border extends Display {
-    ////public Display display;
-    public Display display;
-
-    ////생성자에서 멤버변수를 설정한다.
-    public Border(Display display) {
-        super();
+    protected Border(Display display) {
         this.display = display;
     }
-    
-    ////디폴트 생성자도 넣어둔다.
-    public Border(){}
 }
 </code></pre>
 </div>
@@ -89,44 +74,33 @@ public abstract class Border extends Display {
     <h3 class="file-title">FullBorder.java</h3>
     <button class="copy-button" onclick="copyCode('code4')">복사하기</button>
     <pre class="code-box"><code id="code4">
-package decorator;
-
 public class FullBorder extends Border {
-    
-    public FullBorder() {
-        
-    }
-    public int getColumns() {
-        return 1 + display.getColumns() + 1;			
-    }
-    public int getRows() {
-        return 1 + display.getRows() + 1;			
-    }
-    
-    public String getRowText(int row) {
-        if (row == 0)
-        {
-            return "+" + makeLine('-', display.getColumns()) + "+";
-        }
-        else if (row == display.getRows() +1)
-        {
-            return "+" + makeLine('-', display.getColumns()) + "+";
-        }
-        else {
-            return "|" + display.getRowText(row - 1) + "|";
-        }			
-    }
-    
-    String makeLine(char ch,int count){
-        StringBuffer buf = new StringBuffer();
-        for(int i = 0; i < count; i++) {
-            buf.append(ch);
-        }
-        return buf.toString();
-    }
-    
-    public FullBorder(Display display){
+
+    public FullBorder(Display display) {
         super(display);
+    }
+
+    @Override
+    public int getColumns() {
+        return 1 + display.getColumns() + 1;
+    }
+
+    @Override
+    public int getRows() {
+        return 1 + display.getRows() + 1;
+    }
+
+    @Override
+    public String getRowText(int row) {
+        if (row == 0 || row == getRows() - 1) {
+            return "+" + makeLine('-', display.getColumns()) + "+";
+        } else {
+            return "|" + display.getRowText(row - 1) + "|";
+        }
+    }
+
+    private String makeLine(char ch, int count) {
+        return String.valueOf(ch).repeat(count);
     }
 }
 </code></pre>
@@ -137,31 +111,30 @@ public class FullBorder extends Border {
     <h3 class="file-title">SideBorder.java</h3>
     <button class="copy-button" onclick="copyCode('code5')">복사하기</button>
     <pre class="code-box"><code id="code5">
-package decorator;
-
 public class SideBorder extends Border {
-    char borderChar;
-    public SideBorder() {
-        
+    private char borderChar;
+
+    public SideBorder(Display display, char ch) {
+        super(display);
+        this.borderChar = ch;
     }
-    
+
+    @Override
     public int getColumns() {
-        return 1+ display.getColumns()+ 1;			
+        return 1 + display.getColumns() + 1;
     }
-    
+
+    @Override
     public int getRows() {
-        return display.getRows();			
+        return display.getRows();
     }
-    
+
+    @Override
     public String getRowText(int row) {
-        return borderChar+ display.getRowText(row)+ borderChar;			
-    }
-    
-    public SideBorder(Display theDisplay,char ch){
-        super(theDisplay);
-        this.borderChar= ch;
+        return borderChar + display.getRowText(row) + borderChar;
     }
 }
+
 </code></pre>
 </div>
 
@@ -170,40 +143,35 @@ public class SideBorder extends Border {
     <h3 class="file-title">UpDownBorder.java</h3>
     <button class="copy-button" onclick="copyCode('code6')">복사하기</button>
     <pre class="code-box"><code id="code6">
-package decorator;
-
 public class UpDownBorder extends Border {
-    char ch;
-    
-    public UpDownBorder(Display theDisplay, char ch) {
-        super(theDisplay);
-        this.ch= ch;
+    private char borderChar;
+
+    public UpDownBorder(Display display, char ch) {
+        super(display);
+        this.borderChar = ch;
     }
-    public UpDownBorder() {
-        
-    }
-    
+
+    @Override
     public int getColumns() {
         return display.getColumns();
     }
-    
+
+    @Override
     public int getRows() {
-        return 1+ display.getRows()+ 1;
+        return 1 + display.getRows() + 1;
     }
-    
+
+    @Override
     public String getRowText(int row) {
-        if(row== 0 || row== getRows()-1){
-            return makeLine(ch, getColumns());
+        if (row == 0 || row == getRows() - 1) {
+            return repeat(borderChar, getColumns());
         } else {
-            return display.getRowText(row-1);
+            return display.getRowText(row - 1);
         }
     }
-    String makeLine(char ch,int count){
-        StringBuffer buf = new StringBuffer();
-        for(int i = 0; i < count; i++) {
-            buf.append(ch);
-        }
-        return buf.toString();
+
+    private String repeat(char ch, int count) {
+        return String.valueOf(ch).repeat(count);
     }
 }
 </code></pre>
@@ -214,16 +182,15 @@ public class UpDownBorder extends Border {
     <h3 class="file-title">Main.java</h3>
     <button class="copy-button" onclick="copyCode('code7')">복사하기</button>
     <pre class="code-box"><code id="code7">
-package decorator;
-
 public class Main {
     public static void main(String[] args) {
-        Display b1 = new StringDisplay("Hello, world.");
-        Display b2 = new SideBorder(b1, '#');
-        Display b3 = new FullBorder(b2);
-        Display b4 = new FullBorder(b3);
-        Display b5 = new UpDownBorder(b4, '~');
-        b5.show();
+        Display d = new UpDownBorder(
+                        new FullBorder(
+                            new SideBorder(
+                                new StringDisplay("Hello, world."),
+                                '#')),
+                        '~');
+        d.show();
     }
 }
 </code></pre>
