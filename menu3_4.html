@@ -24,8 +24,7 @@
         <strong>조건문을 사용한 방식</strong>을 <strong>상태 패턴(State Pattern)</strong>으로 리팩토링하세요.
       </p>
       <div class="highlight-box">
-        조건 분기(<code>if</code>) 대신 상태 객체에 행동을 위임하고,<br>
-        시각에 따라 자동으로 상태(State)를 변경하도록 구현하세요.
+        조건 분기(<code>if</code>) 대신 상태 객체에 행동을 위임하고, 시각에 따라 자동으로 상태(State)를 변경하도록 구현하세요.
       </div>
     </section>
     <h2>🛠️ 실습 조건</h2>
@@ -48,17 +47,17 @@
       <tbody>
         <tr>
           <td>주간</td>
-          <td>09~17시 유지, 이외는 야간 전환</td>
-          <td>기록 로그</td>
-          <td>보안센터 호출</td>
-          <td>보안센터 호출</td>
+          <td>09~17시 유지 → 주간 유지<br> 그 외 시간 → 야간으로 전환</td>
+          <td>금고 사용 기록 로그 출력</td>
+          <td>보안센터에 직접 연결</td>
+          <td>보안센터에 직접 연결</td>
         </tr>
         <tr>
           <td>야간</td>
-          <td>09~17시 진입 시 주간 전환</td>
-          <td>비상 로그 기록</td>
-          <td>보안센터 호출</td>
-          <td>통화 녹음</td>
+          <td>09~17시 진입 시 → 주간으로 전환</td>
+          <td>비상상황 로그 기록 (경고)</td>
+          <td>보안센터에 자동 호출</td>
+          <td>녹음 시작 - 추후 확인</td>
         </tr>
       </tbody>
     </table>
@@ -116,15 +115,6 @@ public class SafeFrame extends JFrame implements ActionListener {
         setBackground(Color.lightGray);
         setLayout(new BorderLayout());
 
-        // 폰트 지정 (한글 깨짐 방지)
-        Font font = new Font("맑은 고딕", Font.PLAIN, 14);
-        textClock.setFont(font);
-        textScreen.setFont(font);
-        buttonUse.setFont(font);
-        buttonAlarm.setFont(font);
-        buttonPhone.setFont(font);
-        buttonExit.setFont(font);
-
         // 텍스트 필드 상단
         textClock.setEditable(false);
         add(textClock, BorderLayout.NORTH);
@@ -156,21 +146,21 @@ public class SafeFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == buttonUse) {
             if (hour >= 9 && hour < 17) {
-                recordLog("주간 금고 사용");
+                recordLog("금고 사용 기록: 주간 중 사용");
             } else {
-                recordLog("비상:야간의금고사용");
+                recordLog("경고: 야간에 금고 사용 - 비상 로그 기록");
             }
         } else if (e.getSource() == buttonAlarm) {
             if (hour >= 9 && hour < 17) {
-                callSecurityCenter("주간 비상벨");
+                callSecurityCenter("비상벨! 보안센터에 즉시 연결");
             } else {
-                callSecurityCenter("비상벨(야간)");
+                callSecurityCenter("비상벨! 보안센터에 자동 호출");
             }
         } else if (e.getSource() == buttonPhone) {
             if (hour >= 9 && hour < 17) {
-                callSecurityCenter("주간 일반 통화");
+                callSecurityCenter("보안센터에 일반 통화 연결");
             } else {
-                recordLog("야간의통화녹음");
+                recordLog("야간 통화 시도 - 통화 내용 녹음 중");
             }
         } else if (e.getSource() == buttonExit) {
             System.exit(0);
@@ -196,7 +186,6 @@ public class SafeFrame extends JFrame implements ActionListener {
     public void recordLog(String msg) {
         textScreen.append("record ... " + msg + "\n");
     }
-
 }
   </code></pre>
       </div>
