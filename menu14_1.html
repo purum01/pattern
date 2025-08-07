@@ -23,14 +23,14 @@ public interface Strategy {
 ckage strategy;
 
 public class Hand {
-    public static final int HANDVALUE_GUU = 0;
-    public static final int HANDVALUE_CHO = 1;
-    public static final int HANDVALUE_PAA = 2;
+    public static final int HANDVALUE_ROCK = 0;
+    public static final int HANDVALUE_SCISSORS  = 1;
+    public static final int HANDVALUE_PAPER  = 2;
 
     public static final Hand[] hand = {
-        new Hand(HANDVALUE_GUU),
-        new Hand(HANDVALUE_CHO),
-        new Hand(HANDVALUE_PAA),
+        new Hand(HANDVALUE_ROCK ),
+        new Hand(HANDVALUE_SCISSORS ),
+        new Hand(HANDVALUE_PAPER ),
     };
 
     private static final String[] name = { "주먹", "가위", "보" };
