@@ -4,17 +4,77 @@
     <h1 class="title">Composite Pattern 적용하여 리팩토링하기</h1>
   
     <section class="section">
-      <h2 class="section-title">📋 실습 목표</h2>
+      <h2 class="section-title">🎯 문제 상황</h2>
       <p class="paragraph">
-        파일과 디렉터리를 같은 방식으로 다루기 위해 <strong>컴퍼지트 패턴</strong>을 구현합니다.<br>
-        단일 객체(파일)와 복합 객체(디렉터리)를 동일한 인터페이스로 다룰 수 있어야 합니다.
+        여러분은 컴퓨터에서 파일과 디렉터리를 다루는 간단한 파일 탐색기 시스템을 개발하고자 합니다.<br>
+        - 파일 탐색기에서는 파일과 디렉터리를 트리 구조로 표현합니다.<br>
+        - 디렉터리는 파일을 포함할 수 있으며, 다른 디렉터리도 포함할 수 있습니다.<br>
+        - 파일은 이름과 크기를 가지고 있지만, 다른 항목을 포함하지는 않습니다.<br>
+        - 여기서 디렉터리와 파일은 서로 다른 역할을 가지고 있지만, 둘 다 사용자에게는 "하나의 항목" 으로 보여집니다.<br>
+        → 이러한 구조를 단순화하고 동일한 방식으로 다루기 위해 Composite 디자인 패턴을 도입합니다.<br>
       </p>
+    </section>
+
+
+    <section class="section">
+      <h2 class="section-title">📌 우리가 해결하고자 하는 문제</h2>
+      <p class="paragraph">
+        - 파일과 디렉터리를 동일한 방식으로 순회하고 출력할 수 있을까?<br>
+        - 디렉터리 안에 또 다른 디렉터리나 파일을 재귀적으로 구성할 수 있을까?<br>
+        - 파일과 디렉터리를 하나의 공통 타입으로 다루면서도, 서로 다른 동작을 정의할 수 있을까?<br>
+      </p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">🛠️ 여러분이 해야 할 일</h2>
+      <p class="paragraph">
+        - Entry라는 공통 추상 클래스를 정의하여 File과 Directory의 공통 인터페이스를 만든다.<br>
+        - File 클래스는 이름과 크기를 가지며, 항목을 추가할 수 없다.<br>
+        - Directory 클래스는 내부에 Entry를 여러 개 가질 수 있으며, 디렉터리나 파일을 재귀적으로 추가할 수 있다.<br>
+        - 파일과 디렉터리를 재귀적으로 출력하는 기능을 구현한다.<br>
+        - 출력 예시는 다음과 같은 트리 구조로 나타난다:<br>
+        <pre class="code-box">
+    /root (3000)
+    /root/readme.txt (1000)
+    /root/bin (2000)
+    /root/bin/hello.exe (1500)
+    /root/bin/run.sh (500) </pre>        
+          
+      </p>
+    </section>
+
+    <section class="section">
+      <h2 class="section-title">💡 이 실습을 통해 배우는 것</h2>
+      <p class="paragraph">
+        - Composite 패턴을 통해 부분-전체 관계(part-whole hierarchy) 를 객체지향적으로 표현하는 방법을 익힌다.<br>
+        - 공통 상위 클래스를 통해 서로 다른 객체를 동일한 방식으로 처리하는 다형성을 경험한다.<br>
+        - 재귀 구조를 코드로 구현하고 트리 형태의 자료구조를 다루는 감각을 익힌다.<br>
+        - 디자인 패턴을 활용하여 코드의 확장성과 유연성을 높이는 방법을 학습한다.<br>
+      </p>
+    </section>    
+
+
+    <section class="section">
+      <h2 class="section-title">📂 파일 구조</h2>
+      <pre class="code-box"><code>/composite/
+    Entry.java        ← 제공됨
+    File.java         ← 구현 대상
+    Directory.java    ← 구현 대상
+    FileTreatmentException.java ← 예외 클래스
+    Main.java         ← 제공됨
+  </code></pre>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">📌 UML 다이어그램</h2>
+        <img src="img/menu9_1.png">
       <div class="highlight-box">
         <code class="inline-code">Entry</code>는 파일과 디렉터리의 공통 추상 클래스입니다.<br>
         <code class="inline-code">File</code>은 실제 파일, <code class="inline-code">Directory</code>는 자식 Entry를 포함할 수 있습니다.
-      </div>
+      </div>        
     </section>
-  
+
+    
     <section class="section">
       <h2 class="section-title">🛠 구현 지침</h2>
       <div style="font-family: 'Segoe UI', sans-serif; line-height: 1.8; font-size: 16px; color: #333;">
@@ -54,30 +114,6 @@
 
     </section>
   
-    <section class="section">
-      <h2 class="section-title">🖥 실행 결과</h2>
-      <figure>
-        <img src="img/menu9_4.png" style="width: 40%;">
-    </figure>
-    </section>
-  
-    <section class="section">
-      <h2 class="section-title">📂 파일 구조</h2>
-      <pre class="code-box"><code>/composite/
-    Entry.java        ← 제공됨
-    File.java         ← 구현 대상
-    Directory.java    ← 구현 대상
-    FileTreatmentException.java ← 예외 클래스
-    Main.java         ← 제공됨
-  </code></pre>
-    </section>
-
-    <section class="section">
-        <h2 class="section-title">📌 UML 다이어그램</h2>
-        <img src="img/menu9_1.png">
-    </section>
-
-
 
 <section class="section">
 <h2 class="section-title">🗂 제공 파일</h2>
@@ -142,6 +178,17 @@ public class Main {
 </code></pre>
 </div>
 </section>
+
+
+    <section class="section">
+      <h2 class="section-title">🖥 실행 결과</h2>
+      <figure>
+        <img src="img/menu9_4.png" style="width: 40%;">
+    </figure>
+    </section>
+
+
+
 </div>
 </div>
 <script>
