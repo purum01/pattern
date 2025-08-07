@@ -6,27 +6,19 @@
     <h3 class="file-title">AbstractDisplay.java</h3>
     <button class="copy-button" onclick="copyCode('code1')">복사하기</button>
     <pre class="code-box"><code id="code1">
-package template;
+public abstract class AbstractDisplay {
+	public abstract void open();
+	public abstract void print();
+	public abstract void close();
 
-public abstract class AbstractDisplay { // 추상 클래스 AbstractDisplay
-    // 하위 클래스에 구현을 맡기는 추상메소드(1) open
-    public abstract void open();
-    // 하위 클래스에 구현을 맡기는 추상메소드(2) print
-    public abstract void print();
-    // 하위 클래스에 구현을 맡기는 추상메소드(3) close
-    public abstract void close();
-    // 추상 클래스에서 구현하고 있는 메소드 display
-    public void display() {
-        // 우선 open하고...
-        open();
-        // 5번print를 반복하고...
-            for(int i=0;i<5;i++){
-                print();
-            }
-        // 마지막으로 close한다. 이것이 display 메소드에서 구현되어 있는 내용
-            close();
-    }
-}        
+	public void display() {
+		open();
+		for (int i = 0; i < 5; i++) {
+			print();
+		}
+		close();
+	}
+}       
 </code></pre>
 </div>
 
@@ -35,29 +27,24 @@ public abstract class AbstractDisplay { // 추상 클래스 AbstractDisplay
     <h3 class="file-title">CharDisplay.java</h3>
     <button class="copy-button" onclick="copyCode('code2')">복사하기</button>
     <pre class="code-box"><code id="code2">
-package template;
+public class CharDisplay extends AbstractDisplay {
+	private char ch; // 표시해야 할 문자
 
-public class CharDisplay extends AbstractDisplay {  // CharDisplay는 AbstractDisplay의 하위 클래스
-    private char ch;                                // 표시해야 할 문자
-    //// 생성자에서 넘어온 문자ch를 필드에 기억해 둔다.
-    public CharDisplay(char ch){
-        this.ch= ch;
-    }
-    //// open() 메서드 구현하기. 상위 클래스에서는 추상메소드였다. 여기서 오버라이드 해서 구현.
-    public void open(){
-        // 시작 문자열로서 "<<"를 표시한다.
-        System.out.print("<<");
-    }
-    //// print메소드로 여기서 구현한다. 이것이 display에서 반복해서 호출된다.
-    public void print() {
-        // 필드에 기억해둔 문자 1개를 표시
-        System.out.print(ch);
-    }
-    //// close메소드도 여기서 구현
-    public void close() {
-        // 종료문자열 ">>"를 표시.
-        System.out.println(">>");
-    }
+	public CharDisplay(char ch) {
+		this.ch = ch;
+	}
+
+	public void open() {
+		System.out.print("<<");
+	}
+
+	public void print() {
+		System.out.print(ch);
+	}
+
+	public void close() {
+		System.out.println(">>");
+	}
 }
 </code></pre>
 </div>
@@ -67,36 +54,34 @@ public class CharDisplay extends AbstractDisplay {  // CharDisplay는 AbstractDi
     <h3 class="file-title">StringDisplay.java</h3>
     <button class="copy-button" onclick="copyCode('code3')">복사하기</button>
     <pre class="code-box"><code id="code3">
-package template;
+public class StringDisplay extends AbstractDisplay {
+	private String string; // 표시해야 할 문자열
+	private int width; // 바이트 단위로 계산한 문자열의 폭
 
-public class StringDisplay extends AbstractDisplay {    // StringDisplay도 AbstractDisplay의 하위 클래스
-    private String string;                              // 표시해야 할 문자열
-    private int width;                                  // 바이트 단위로 계산한 문자열의 폭
-    public StringDisplay(String string) {               // 생성자에서 넘어온 문자열 string을
-        //// 필드에 기억
-        this.string= string;
-        //// 그리고 바이트 단위의 폭도 필드에 기억해 두고 나중에 사용한다.
-        width= string.length();
-    }
-    public void open() {                                // 오버라이드해서 정의한 open메소드
-        //// 이 클래스의 메소드 printLine에서 선을 그리고 있다.
-        printLine();
-    }
-    public void print() {                               // print메소드는
-        //// 필드에 기억해 둔 문자열의 전후에 "|"를 붙여서 표시.
-        System.out.println("|"+string+"|");
-    }
-    public void close() {                               // close메소드는 
-        //// open과 같이 printLine메소드에서 선을 그리고 있다.
-        printLine();
-    }
-    private void printLine() {                          // open과 close로부터 호출되는 printLine메소드다 private이기 때문에 이 클래스 내에서만 사용된다.
-        System.out.print("+");                          // 사각틀의 모퉁이를 표현하는 "+"마크를 표시.
-        for (int i = 0; i < width; i++) {               // width개의 "-"표시해서
-            System.out.print("-");                      // 사각틀로서 이용한다.
-        }
-        System.out.println("+");                        // 사각틀의 모퉁이를 표현하는 "+"마크를 표시
-    }
+	public StringDisplay(String string) {
+		this.string = string;
+		width = string.length();
+	}
+
+	public void open() {
+		printLine();
+	}
+
+	public void print() {
+		System.out.println("|" + string + "|");
+	}
+
+	public void close() {
+		printLine();
+	}
+
+	private void printLine() {
+		System.out.print("+");
+		for (int i = 0; i < width; i++) { //
+			System.out.print("-");
+		}
+		System.out.println("+");
+	}
 }
 </code></pre>
 </div>
@@ -106,22 +91,14 @@ public class StringDisplay extends AbstractDisplay {    // StringDisplay도 Abst
     <h3 class="file-title">Main.java</h3>
     <button class="copy-button" onclick="copyCode('code4')">복사하기</button>
     <pre class="code-box"><code id="code4">
-package template;
-
-import java.io.IOException;
-
-public class Main 
-{
-    public static void main(String[] args) throws IOException {
-
-        AbstractDisplay d1= new CharDisplay('H');////CharDisplay를 생성한다.
-        AbstractDisplay d2= new StringDisplay("HAHA");////StringDisplay를 생성한다.
-        ////d1의 display()를 실행한다.
-        d1.display();
-        ////d2의 display()를 실행한다.
-        d2.display();
-    } 
-}   
+public class Main {
+	public static void main(String[] args) throws IOException {
+		AbstractDisplay d1 = new CharDisplay('H');
+		AbstractDisplay d2 = new StringDisplay("HAHA");
+		d1.display();
+		d2.display();
+	}
+}  
 </code></pre>
 </div>
 </div>
