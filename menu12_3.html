@@ -1,19 +1,78 @@
 <link href="exam.css"   rel="stylesheet">
 <div class="assignment">
-    <h1 class="title">Adapter Pattern 적용하여 리팩토링하기</h1>
+    <h1 class="title">인터페이스가 다른 기존 클래스를 재사용하고 싶을 때</h1>
   
+
     <section class="section">
-      <h2 class="section-title">📋 실습 목표</h2>
+      <h2 class="section-title">🎯 문제 상황</h2>
       <p class="paragraph">
-        기존 클래스를 수정하지 않고 새로운 인터페이스에 맞게 사용할 수 있도록 <strong>어댑터 패턴</strong>을 구현합니다.<br>
-        상속 방식과 위임 방식의 차이를 비교해보며 적용 능력을 키웁니다.
+          - 여러분은 어떤 외부 라이브러리로부터 Banner 라는 클래스를 제공받았습니다.<br>
+          - 이 클래스는 showWithParen()과 showWithAster() 라는 메서드를 통해 문자열을 괄호나 별표로 꾸며서 출력해줍니다.<br>
+          - 하지만 지금 작성 중인 애플리케이션은 아래와 같은 인터페이스 규칙을 따르고 있습니다:<br>
+              <pre class="code-box"><code>
+            public interface Print {
+                public void printWeak();
+                public void printStrong();
+            }
+            </code></pre>
+          - 즉, 애플리케이션에서는 Print 인터페이스를 구현한 객체만 사용할 수 있습니다.<br>
+          → 그런데 Banner 클래스는 Print 인터페이스를 구현하지 않았기 때문에 바로 사용할 수 없습니다.<br>
+
+          - 이 상황에서 여러분은 다음과 같은 고민에 빠지게 됩니다:<br>
       </p>
-      <div class="highlight-box">
-        <code class="inline-code">Banner</code> 클래스는 수정하지 않고,<br>
-        <code class="inline-code">Print</code> 인터페이스에 맞게 출력 동작을 변환하는 어댑터 클래스를 만들어야 합니다.
-      </div>
+    </section
+
+    <section class="section">
+      <h2 class="section-title">📌 우리가 해결하고자 하는 문제</h2>
+      <p class="paragraph">
+          - 이미 있는 Banner 클래스를 그대로 재사용하고 싶은데 인터페이스가 맞지 않는다.<br>
+          - 그렇다고 Banner 클래스를 직접 수정하는 것은 위험하거나 불가능하다.<br>
+          - 새로운 인터페이스(Print)에 맞게 기존 클래스를 포장(wrapping) 해서 사용하고 싶다.<br>
+      </p>
+    </section
+
+    <section class="section">
+      <h2 class="section-title">💡 해결 전략: 어댑터(Adapter) 만들기</h2>
+      <p class="paragraph">
+        어댑터 패턴(Adapter Pattern) 은 이런 문제를 해결하기 위한 디자인 패턴입니다.<br>
+        - 새로운 인터페이스(Print)를 구현한 중간 클래스를 만들고,<br>
+        - 내부에서 기존 클래스(Banner)를 호출 방식만 다르게 감싸서 사용합니다.<br>
+        - 즉, 서로 다른 인터페이스 간의 호환성 문제를 해결해줍니다.<br>
+      </p>
+    </section
+
+    <section class="section">
+      <h2 class="section-title">🛠️ 여러분이 해야 할 일</h2>
+      <p class="paragraph">
+          - 기존 클래스인 Banner 를 수정하지 않고 그대로 둔다.<br>
+          - 새로운 인터페이스인 Print 를 정의한다.<br>
+          - Print 인터페이스를 구현하는 PrintBanner 클래스를 어댑터로 작성한다.<br>
+          - 이 클래스는 내부적으로 Banner 를 가지고 있어야 한다.<br>
+            <ol>
+              <li>printWeak() → showWithParen() 을 호출</li>
+              <li>printStrong() → showWithAster() 를 호출</li>
+            </ol>
+           - Main 클래스에서 Print 타입으로 PrintBanner 를 사용하고, 출력 결과를 확인한다.<br>
+      </p>
+    </section
+    
+
+    <section class="section">
+      <h2 class="section-title">📂 파일 구조</h2>
+      <pre class="code-box"><code>/adapter/
+    Print.java                ← 제공됨
+    Banner.java               ← 제공됨
+    PrintBanner.java          ← 구현 대상 (상속 방식)
+    AnotherPrintBanner.java   ← 구현 대상 (위임 방식)
+    Main.java                 ← 제공됨
+  </code></pre>
     </section>
-  
+    <section class="section">
+        <h2 class="section-title">📌 UML 다이어그램</h2>
+        <img src="img/menu12_1.png">
+    </section>
+
+
     <section class="section">
       <h2 class="section-title">🧾 제공 파일 목록</h2>
       <ul class="list">
@@ -60,30 +119,7 @@
       
     </section>
   
-    <section class="section">
-      <h2 class="section-title">🖥 실행 예시</h2>
-      <pre class="code-box"><code>
-        (Hello)
-        *Hello*
-        (World)
-        *World*
-      </code></pre>
-    </section>
-  
-    <section class="section">
-      <h2 class="section-title">📂 파일 구조</h2>
-      <pre class="code-box"><code>/adapter/
-    Print.java                ← 제공됨
-    Banner.java               ← 제공됨
-    PrintBanner.java          ← 구현 대상 (상속 방식)
-    AnotherPrintBanner.java   ← 구현 대상 (위임 방식)
-    Main.java                 ← 제공됨
-  </code></pre>
-    </section>
-    <section class="section">
-        <h2 class="section-title">📌 UML 다이어그램</h2>
-        <img src="img/menu12_1.png">
-    </section>
+
     <section class="section">
       <h2 class="section-title">🗂 제공 파일</h2>
   
@@ -92,9 +128,7 @@
     <h3 class="file-title">Print.java</h3>
     <button class="copy-button" onclick="copyCode('print-code')">복사하기</button>
     <pre class="code-box"><code id="print-code">
-  package adapter;
-  
-  public interface Print {
+    public interface Print {
       public void printWeak();
       public void printStrong();
   }
@@ -106,9 +140,7 @@
     <h3 class="file-title">Banner.java</h3>
     <button class="copy-button" onclick="copyCode('banner-code')">복사하기</button>
     <pre class="code-box"><code id="banner-code">
-  package adapter;
-  
-  public class Banner {
+    public class Banner {
       String string;
   
       public Banner(String string) {
@@ -131,8 +163,6 @@
     <h3 class="file-title">Main.java</h3>
     <button class="copy-button" onclick="copyCode('main-code')">복사하기</button>
     <pre class="code-box"><code id="main-code">
-      package adapter;
-
       public class Main {
         public static void main(String[] args) {
           // 상속 기반 어댑터
@@ -149,6 +179,20 @@
       
   </code></pre>
   </div>
+
+    <section class="section">
+      <h2 class="section-title">🖥 실행 예시</h2>
+      <pre class="code-box"><code>
+        (Hello)
+        *Hello*
+        (World)
+        *World*
+      </code></pre>
+    </section>
+  
+
+
+
   <script>
     function copyCode(id) {
       const codeElement = document.getElementById(id);
