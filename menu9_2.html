@@ -151,6 +151,23 @@
             }
         }
     }
+
+    // ======================== main 메서드 테스트 ========================
+    public class MainTest {
+        public static void main(String[] args) {
+
+            // 루트 조직 구성
+            Department rootDepartment = new Department(1001L);
+            buildOrganization(demo, rootDepartment);
+
+            // 총 급여 출력
+            double totalSalary = rootDepartment.calculateSalary();
+            System.out.println("전체 조직 총 급여: " + totalSalary);
+        }
+    }
+        
+
+
 </code></pre>
 
 
